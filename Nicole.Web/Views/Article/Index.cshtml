@@ -1,0 +1,14 @@
+﻿@model Nicole.Web.Models.ArticleModel
+@{
+    //ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_ArticleLayout.cshtml";
+}
+<div class="page-header">
+    <h3>@Model.Title</h3>
+    <p class="text-right help-block" style="margin-bottom: 0px;">浏览:@Model.ViewCount 次</p>
+</div>
+<div>
+    @Html.Raw(Model.Body)
+</div>
+
+

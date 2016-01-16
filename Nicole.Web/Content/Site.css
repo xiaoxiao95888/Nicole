@@ -1,0 +1,174 @@
+﻿body {
+    padding-top: 70px;
+    padding-bottom: 20px;
+    font-family: "Helvetica Neue", Helvetica, Arial,"Microsoft YaHei", sans-serif;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+/*.modal input,
+select
+textarea
+input-group {
+    max-width: 280px;
+}*/
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+/*
+ * 自定义
+ */
+.form-signin {
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+.ctl td {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 2px;
+}
+
+caption {
+    color: #777;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    text-align: left;
+}
+
+dt, dd {
+    line-height: 2;
+}
+
+.noborder td {
+    border-top: none !important;
+}
+
+.item-box {
+    padding: 45px 15px 15px;
+}
+
+.formbox {
+    max-width: 309px;
+}
+
+.list-group-item .glyphicon {
+    padding: 0 10px 0 0;
+}
+
+.panel-heading .glyphicon {
+    padding: 0 10px 0 0;
+}
+
+.panel .progress {
+    float: right;
+    max-width: 50%;
+    width: 100%;
+}
+
+.panel-default nav {
+    padding: 0px 10px 0px 10px;
+}
+
+.list-glyphicon {
+    float: right;
+    padding: 0px !important;
+    margin: 0px 0px 0px 10px;
+}
+
+.text-weak {
+    color: #eee;
+}
+.pre-scrollable-max700 {
+    max-height: 690px;
+    overflow-y: scroll;
+}
+.pre-scrollable-max500 {
+    max-height: 490px;
+    overflow-y: scroll;
+}
+.pre-scrollable-max200 {
+    max-height: 190px;
+    overflow-y: scroll;
+}
+@media only screen and (max-width: 800px) {
+    
+    /* Force table to not be like tables anymore */
+	#no-more-tables table, 
+	#no-more-tables thead, 
+	#no-more-tables tbody, 
+	#no-more-tables th, 
+	#no-more-tables td, 
+	#no-more-tables tr { 
+		display: block; 
+	}
+ 
+	/* Hide table headers (but not display: none;, for accessibility) */
+	#no-more-tables thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+ 
+	#no-more-tables tr { border-bottom: 0px solid #eee;  }
+ 
+	#no-more-tables td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 30%; 
+		white-space: normal;
+		text-align:left;
+	}
+ 
+	#no-more-tables td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 10px;
+		left: 16px;
+		width: 25%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+		text-align:left;
+		font-weight: bold;
+	}
+ 
+	/*
+	Label the data
+	*/
+	#no-more-tables td:before { content: attr(data-title); }
+}

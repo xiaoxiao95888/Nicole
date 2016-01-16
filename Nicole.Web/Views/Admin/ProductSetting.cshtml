@@ -1,0 +1,28 @@
+﻿@Scripts.Render("~/bundles/ProductSetting")
+<h2 class="page-header">
+    @ViewBag.Title
+</h2>
+
+
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th>型号</th>
+            <th>电压</th>
+            <th>容量</th>
+            <th>脚距</th>
+            <th>等级</th>
+            <th>料号</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach:viewModel.ProductTypes">
+        <tr>
+            <td data-bind="text:Name"></td>
+            <td data-bind="text:Voltage"></td>
+            <td data-bind="text:Capacity"></td>
+            <td data-bind="text:Pitch"></td>
+            <td data-bind="text:Level"></td>
+            <td data-bind="text:PartNumbers"></td>
+        </tr>
+    </tbody>
+</table>
