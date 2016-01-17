@@ -8,16 +8,16 @@ using Nicole.Library.Models;
 
 namespace Nicole.Service.Services
 {
-    public class ProductTypeService : BaseService, IProductTypeService
+    public class ProductService : BaseService, IProductService
     {
-        public ProductTypeService(NicoleDataContext dbContext)
+        public ProductService(NicoleDataContext dbContext)
             : base(dbContext)
         {
         }
 
         public void Delete(Guid id)
         {
-            var item = GetProductType(id);
+            var item = GetProduct(id);
             if (item != null)
             {
                 item.IsDeleted = true;
@@ -25,19 +25,19 @@ namespace Nicole.Service.Services
             }
         }
 
-        public IQueryable<ProductType> GeProductTypes()
+        public IQueryable<Product> GetProducts()
         {
-            return DbContext.ProductTypes.Where(n => !n.IsDeleted);
+            return DbContext.Products.Where(n => !n.IsDeleted);
         }
 
-        public ProductType GetProductType(Guid id)
+        public Product GetProduct(Guid id)
         {
-            return DbContext.ProductTypes.FirstOrDefault(n => n.Id == id);
+            return DbContext.Products.FirstOrDefault(n => n.Id == id);
         }
 
-        public void Insert(ProductType productType)
+        public void Insert(Product product)
         {
-            DbContext.ProductTypes.Add(productType);
+            DbContext.Products.Add(product);
             Update();
         }
 

@@ -1,6 +1,7 @@
 ﻿using Nicole.Library.Models.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,14 +14,13 @@ namespace Nicole.Library.Models
     public class StandardCost : IDtStamped
     {
         public Guid Id { get; set; }
+
+        public Guid? ProductId { get; set; }
+        [ForeignKey("ProductId")]
         /// <summary>
-        /// 完整的料号
+        /// 产品
         /// </summary>
         public virtual Product Product { get; set; }
-        /// <summary>
-        /// 特殊设计
-        /// </summary>
-        public string SpecificDesign { get; set; }
         /// <summary>
         /// 成本
         /// </summary>

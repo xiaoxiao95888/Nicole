@@ -28,8 +28,6 @@ namespace Nicole.Service
 
         public IDbSet<Product> Products { get; set; }
 
-        public IDbSet<ProductType> ProductTypes { get; set; }
-
         public IDbSet<StandardCost> StandardCosts { get; set; }
 
         IDbSet<TEntity> IDataContext.Set<TEntity>()

@@ -64,14 +64,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CodeFirstDbContext.cs" />
-    <Compile Include="Migrations\201601161806584_Initial.cs" />
-    <Compile Include="Migrations\201601161806584_Initial.Designer.cs">
-      <DependentUpon>201601161806584_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201601161817148_Initial1.cs" />
-    <Compile Include="Migrations\201601161817148_Initial1.Designer.cs">
-      <DependentUpon>201601161817148_Initial1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,14 +77,6 @@
       <Project>{EAD2DBEC-F621-4176-802A-09D7FA970844}</Project>
       <Name>Nicole.Library</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201601161806584_Initial.resx">
-      <DependentUpon>201601161806584_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201601161817148_Initial1.resx">
-      <DependentUpon>201601161817148_Initial1.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

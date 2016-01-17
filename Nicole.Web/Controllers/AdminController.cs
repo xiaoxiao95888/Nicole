@@ -16,8 +16,9 @@ namespace Nicole.Web.Controllers
         {
             return View();
         }
-        public ActionResult StandardCost()
+        public ActionResult StandardCostSetting()
         {
+            ViewBag.Title = _leftNavigationsService.GetLeftNavigation(HttpContext.Request.Path).Name;
             return View();
         }
         public ActionResult ProductSetting()

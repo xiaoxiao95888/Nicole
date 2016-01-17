@@ -20,6 +20,16 @@ var Helper = {
             show: true
         });
     },
+    ShowMessageDialog: function (message,title) {
+        var dialog = $("#Dialog");
+        dialog.find(".modal-title").text(title);
+        dialog.find(".modal-body").empty();
+        dialog.find(".modal-body").append(message);
+        dialog.modal({
+            keyboard: false,
+            show: true
+        });
+    },
     ShowConfirmationDialog: function (parm) {
         var dialog = $("#Confirmation");
         dialog.find(".modal-title").text("提示");

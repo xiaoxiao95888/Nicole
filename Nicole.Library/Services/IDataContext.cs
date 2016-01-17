@@ -17,7 +17,7 @@ namespace Nicole.Library.Services
         IDbSet<Order> Orders { get; set; }
         IDbSet<Position> Positions { get; set; }
         IDbSet<Product> Products { get; set; }
-        IDbSet<ProductType> ProductTypes { get; set; }
+        //IDbSet<ProductType> ProductTypes { get; set; }
         IDbSet<StandardCost> StandardCosts { get; set; }
        
         int SaveChanges();

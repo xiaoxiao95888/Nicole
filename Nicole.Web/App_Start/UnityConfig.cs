@@ -25,8 +25,9 @@ namespace Nicole.Web
         public static void RegisterTypes(IUnityContainer container)
         {
             container.RegisterType<IAccountService, AccountService>();
-            //ProductTypeService
-            container.RegisterType<IProductTypeService, ProductTypeService>();
+            //StandardCostService
+            container.RegisterType<IStandardCostService, StandardCostService>();
+            container.RegisterType<IProductService, ProductService>();
             container.RegisterType<ILeftNavigationsService, LeftNavigationService>();
             container.RegisterType<IEmployeePostionService, EmployeePostionService>();
 
