@@ -21,7 +21,7 @@ namespace Nicole.Library.Models
         /// <summary>
         /// 申请人
         /// </summary>
-        [ForeignKey("ProductId")]
+        [ForeignKey("PositionId")]
         public virtual Position Position { get; set; }
         /// <summary>
         /// 报价

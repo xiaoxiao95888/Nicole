@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<table class="table table-responsive">
+<table class="table table-responsive table-bordered">
     <thead>
         <tr>
             <th>客户</th>
@@ -28,17 +28,17 @@
     <tbody data-bind="foreach:viewModel.Page.EnquiryModels">
         <tr>
             <td data-bind="text:CustomerModel.Name"></td>
-            <td data-bind="text:PartNumber"></td>
-            <td data-bind="text:ProductType"></td>
-            <td data-bind="text:Voltage"></td>
-            <td data-bind="text:Capacity"></td>
-            <td data-bind="text:Pitch"></td>
-            <td data-bind="text:Level"></td>
+            <td data-bind="text:ProductModel.PartNumber"></td>
+            <td data-bind="text:ProductModel.ProductType"></td>
+            <td data-bind="text:ProductModel.Voltage"></td>
+            <td data-bind="text:ProductModel.Capacity"></td>
+            <td data-bind="text:ProductModel.Pitch"></td>
+            <td data-bind="text:ProductModel.Level"></td>
             <td>
-                <a href="#" data-bind="click:EnquiryManager.viewModel.ShowSpecificDesign,visible:SpecificDesign()!=null">查看</a>
+                <a href="#" data-bind="click:EnquiryManager.viewModel.ShowSpecificDesign,visible:ProductModel.SpecificDesign()!=null">查看</a>
             </td>
             <td data-bind="text:Price"></td>
-            <td data-bind="time:CreatedTime"></td>
+            <td data-bind="time:UpdateTime"></td>
         </tr>
     </tbody>
 </table>
