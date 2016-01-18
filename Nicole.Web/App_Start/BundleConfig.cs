@@ -32,7 +32,7 @@ namespace Nicole.Web
                 "~/Scripts/knockout.mapping-latest.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Main").Include(
-                "~/Scripts/JS/Main.js"));            
+                "~/Scripts/JS/Main.js"));
 
             //moment
             bundles.Add(new ScriptBundle("~/bundles/moment").Include(
@@ -54,7 +54,10 @@ namespace Nicole.Web
             //StandardCostSetting
             bundles.Add(new StyleBundle("~/Content/StandardCostSetting").Include(
                 "~/Content/bootstrap-datetimepicker.min.css"));
-
+            //EnquiryManager
+            bundles.Add(new ScriptBundle("~/bundles/EnquiryManager").Include(
+        "~/Scripts/JS/EnquiryManager.js",
+        "~/Scripts/jquery.bootpag.min.js"));
         }
     }
 }

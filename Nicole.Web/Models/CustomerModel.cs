@@ -1,16 +1,11 @@
-﻿using Nicole.Library.Models.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace Nicole.Library.Models
+namespace Nicole.Web.Models
 {
-    /// <summary>
-    /// 客户
-    /// </summary>
-    public class Customer : IDtStamped
+    public class CustomerModel
     {
         public Guid Id { get; set; }
         public string Code { get; set; }

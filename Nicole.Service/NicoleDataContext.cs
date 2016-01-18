@@ -13,8 +13,7 @@ namespace Nicole.Service
         {
         }
         public IDbSet<Account> Accounts { get; set; }
-        public IDbSet<LeftNavigation> LeftNavigations { get; set; }
-        public IDbSet<CheckList> CheckLists { get; set; }
+        public IDbSet<LeftNavigation> LeftNavigations { get; set; }       
 
         public IDbSet<Customer> Customers { get; set; }
 
@@ -22,7 +21,7 @@ namespace Nicole.Service
 
         public IDbSet<EmployeePostion> EmployeePostions { get; set; }
 
-        public IDbSet<Order> Orders { get; set; }
+        public IDbSet<Enquiry> Enquiries { get; set; }
 
         public IDbSet<Position> Positions { get; set; }
 

@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Nicole.Library.Models
 {
-    public class CheckList : IDtStamped
+    public class Review : IDtStamped
     {
         public Guid Id { get; set; }
-        public virtual Order Order { get; set; }
+        //public virtual Enquiry Order { get; set; }
         /// <summary>
         /// 当前审核环节的审核人
         /// </summary>
