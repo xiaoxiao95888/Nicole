@@ -205,6 +205,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\API\BaseApiController.cs" />
+    <Compile Include="Controllers\API\CustomerCreateController.cs" />
     <Compile Include="Controllers\API\EnquiryManagerController.cs" />
     <Compile Include="Controllers\API\ProductSettingController.cs" />
     <Compile Include="Controllers\API\StandardCostSettingController.cs" />
@@ -225,9 +226,11 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BreadCrumbModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
+    <Compile Include="Models\CustomerModelSettingModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\EnquiryManagerModel.cs" />
     <Compile Include="Models\EnquiryModel.cs" />
+    <Compile Include="Models\Enum\CustomerType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LeftNavigationModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -279,6 +282,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\JS\CustomerCreate.js" />
     <Content Include="Scripts\JS\EnquiryManager.js" />
     <Content Include="Scripts\JS\Home.js" />
     <Content Include="Scripts\JS\Main.js" />
@@ -328,6 +332,9 @@
     <Content Include="Views\Admin\StandardCostSetting.cshtml" />
     <Content Include="Views\Admin\ProductSetting.cshtml" />
     <Content Include="Views\Enquiry\Index.cshtml" />
+    <Content Include="Views\Customer\Create.cshtml" />
+    <Content Include="Views\Customer\CustomerPosition.cshtml" />
+    <Content Include="Views\Customer\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -14,6 +14,7 @@ namespace Nicole.Library.Models
         public virtual Position Parent { get; set; }
         public virtual ICollection<EmployeePostion> EmployeePostions { get; set; }
         public virtual ICollection<LeftNavigation> LeftNavigations { get; set; }
+        public virtual ICollection<PositionCustomer> PositionCustomers { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsDeleted { get; set; }

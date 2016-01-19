@@ -4,13 +4,9 @@ using Nicole.Library.Services;
 using Nicole.Web.Infrastructure;
 using Nicole.Web.Models;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web;
-using System.Web.Http;
 
 namespace Nicole.Web.Controllers.API
 {
@@ -30,6 +26,8 @@ namespace Nicole.Web.Controllers.API
         public object Get()
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentUser = HttpContext.Current.User.Identity.GetUser();
+            var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
             var pageIndex = string.IsNullOrEmpty(HttpContext.Current.Request["pageIndex"])
                 ? 1
                 : Convert.ToInt32(HttpContext.Current.Request["pageIndex"]);
@@ -42,7 +40,7 @@ namespace Nicole.Web.Controllers.API
             var levelKey = HttpContext.Current.Request["LevelKey"] ?? string.Empty;
             var partNumberKey = HttpContext.Current.Request["PartNumberKey"] ?? string.Empty;
             var specificDesignKey = HttpContext.Current.Request["SpecificDesignKey"] ?? string.Empty;
-            var result = _enquiryService.GetEnquiries();
+            var result = _enquiryService.GetEnquiries().Where(n=>n.PositionId== positionId);
             if (!string.IsNullOrEmpty(customerNameKey))
             {
                 result = result.Where(n => n.Customer.Name.Contains(customerNameKey));
@@ -115,7 +113,7 @@ namespace Nicole.Web.Controllers.API
             var currentUser = HttpContext.Current.User.Identity.GetUser();
             var product = _productService.GetProducts().Where(n => n.PartNumber == model.ProductModel.PartNumber.Trim()).FirstOrDefault();
             var customer = _customerService.GetCustomers().Where(n => n.Code == model.CustomerModel.Code.Trim()).FirstOrDefault();
-            var position = _employeesService.GetEmployee(currentUser.EmpId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(p => p.Position).FirstOrDefault();
+            var position = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(p => p.Position).FirstOrDefault();
             if (product != null && customer != null && position != null)
             {
                 try

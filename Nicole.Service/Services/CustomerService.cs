@@ -17,12 +17,22 @@ namespace Nicole.Service.Services
 
         public void Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var item = GetCustomer(id);
+            if (item != null)
+            {
+                item.IsDeleted = true;
+                Update();
+            }
         }
 
         public Customer GetCustomer(Guid id)
         {
             return DbContext.Customers.FirstOrDefault(n => n.Id == id);
+        }
+
+        public IQueryable<string> GetCustomerCodes()
+        {
+            return DbContext.Customers.Select(n => n.Code);
         }
 
         public IQueryable<Customer> GetCustomers()
@@ -32,8 +42,22 @@ namespace Nicole.Service.Services
 
         public void Insert(Customer customer)
         {
-            DbContext.Customers.Add(customer);
-            Update();           
+            var constant = new[]{
+                "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
+                "V", "W", "X", "Y", "Z"};
+            var allCode = GetCustomerCodes();
+            var rand = new Random();
+            while (true)
+            {
+                var code = constant[rand.Next(0, 25)] + constant[rand.Next(0, 25)] + constant[rand.Next(0, 25)] + constant[rand.Next(0, 25)];
+                if (allCode.All(n => n != code))
+                {
+                    customer.Code = code;
+                    DbContext.Customers.Add(customer);
+                    Update();
+                    break;
+                }
+            }
         }
 
         public void Update()

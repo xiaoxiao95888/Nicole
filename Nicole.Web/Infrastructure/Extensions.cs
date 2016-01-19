@@ -39,7 +39,7 @@ namespace Nicole.Web.Infrastructure
 
                 Mapper.Reset();
                 Mapper.CreateMap<Account, UserModel>().ForMember(n=>n.AccountId,opt=>opt.MapFrom(src=>src.Id))
-                    .ForMember(n => n.EmpId, opt => opt.MapFrom(src => src.Employee.Id));
+                    .ForMember(n => n.EmployeeId, opt => opt.MapFrom(src => src.Employee.Id));
                 return Mapper.Map<Account, UserModel>(user);
             }
             catch (Exception ex)

@@ -14,5 +14,6 @@ namespace Nicole.Library.Services
         void Delete(Guid id);
         Customer GetCustomer(Guid id);
         IQueryable<Customer> GetCustomers();
+        IQueryable<string> GetCustomerCodes();
     }
 }

@@ -43,6 +43,7 @@ namespace Nicole.Service
                 if (dtStamped.State == EntityState.Added)
                 {
                     dtStamped.Entity.CreatedTime = DateTime.Now;
+                    dtStamped.Entity.UpdateTime = DateTime.Now;
                 }
 
                 if (dtStamped.State == EntityState.Modified)

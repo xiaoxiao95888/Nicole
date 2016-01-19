@@ -1,6 +1,8 @@
-﻿using Nicole.Library.Models.Interfaces;
+﻿using Nicole.Library.Models.Enum;
+using Nicole.Library.Models.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +30,21 @@ namespace Nicole.Library.Models
         /// </summary>
         public string ContactPerson { get; set; }
         public string TelNumber { get; set; }
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public CustomerType CustomerType { get; set; }
+        /// <summary>
+        /// 来源
+        /// </summary>
+        public string Origin { get; set; }
+        /// <summary>
+        /// 创建人
+        /// </summary>
+        public Guid? PositionId { get; set; }
+        [ForeignKey("PositionId")]
+        public virtual Position Position { get; set; }
+        public virtual ICollection<PositionCustomer> PositionCustomers { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsDeleted { get; set; }
