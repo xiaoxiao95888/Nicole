@@ -53,9 +53,14 @@ namespace Nicole.Web.Controllers.API
             var result =
                 _customerService.GetCustomers()
                     .Where(
-                        n => currentPosition.Parent == null || (
+                        n => (
                             n.PositionCustomers.Any(
-                                p => p.PositionId != null && subpositions.Contains(p.PositionId.Value))));
+                                p => p.PositionId != null && (subpositions.Any() ? subpositions.Contains(p.PositionId.Value) : p.PositionId == currentPosition.Id))));
+            if (currentPosition.Parent == null)
+            {
+                result =
+                _customerService.GetCustomers();
+            }
             if (!string.IsNullOrEmpty(codeKey))
             {
                 result = result.Where(n => n.Code.Contains(codeKey));
