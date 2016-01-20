@@ -61,6 +61,18 @@ namespace Nicole.Web
             //LeftNavigationSetting
             bundles.Add(new ScriptBundle("~/bundles/LeftNavigationSetting").Include(
               "~/Scripts/JS/LeftNavigationSetting.js"));
+            //CustomerCreate
+            bundles.Add(new ScriptBundle("~/bundles/CustomerCreate").Include(
+                "~/Scripts/JS/CustomerCreate.js",
+                "~/Scripts/jquery.bootpag.min.js"));
+            //CustomerSearch
+            bundles.Add(new ScriptBundle("~/bundles/CustomerSearch").Include(
+                "~/Scripts/JS/CustomerSearch.js",
+                "~/Scripts/jquery.bootpag.min.js"));
+            //CustomerPosition
+            bundles.Add(new ScriptBundle("~/bundles/CustomerPosition").Include(
+                "~/Scripts/JS/CustomerPosition.js",
+                "~/Scripts/jquery.bootpag.min.js"));
         }
     }
 }

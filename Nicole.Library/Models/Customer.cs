@@ -33,7 +33,7 @@ namespace Nicole.Library.Models
         /// <summary>
         /// 类型
         /// </summary>
-        public CustomerType CustomerType { get; set; }
+        public CustomerType? CustomerType { get; set; }
         /// <summary>
         /// 来源
         /// </summary>
@@ -44,6 +44,9 @@ namespace Nicole.Library.Models
         public Guid? PositionId { get; set; }
         [ForeignKey("PositionId")]
         public virtual Position Position { get; set; }
+        /// <summary>
+        /// 分配至角色
+        /// </summary>
         public virtual ICollection<PositionCustomer> PositionCustomers { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }

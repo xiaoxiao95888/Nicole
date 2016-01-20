@@ -1,5 +1,4 @@
 ﻿@Scripts.Render("~/bundles/CustomerCreate")
-@Styles.Render("~/Content/CustomerCreate")
 @*<h2 class="page-header">
         @ViewBag.Title
     </h2>*@
@@ -12,35 +11,35 @@
         </div>
     </div>
 </div>
-
 <table class="table table-responsive table-bordered">
     <thead>
         <tr>
             <th>编号</th>
-            <th>名称</th>            
+            <th>名称</th>
             <th>邮件</th>
             <th>联系人</th>
-            <th>电话</th>  
+            <th>电话</th>
             <th>类型</th>
+            <th>来源</th>
             <th>创建人</th>
-            <th>时间</th>
-            <th>操作</th>           
+            <th>创建时间</th>
+            <th>操作</th>
         </tr>
     </thead>
     <tbody data-bind="foreach:viewModel.Page.Models">
         <tr>
-            <td data-bind="date:Code"></td>
+            <td data-bind="text:Code"></td>
             <td data-bind="text:Name"></td>
             <td data-bind="text:Email"></td>
             <td data-bind="text:ContactPerson"></td>
             <td data-bind="text:TelNumber"></td>
-            <td data-bind="text:CustomerType"></td>
+            <td data-bind="text:CustomerTypeStr"></td>
+            <td data-bind="text:Origin"></td>
             <td data-bind="text:EmployeeModel.Name"></td>
             <td data-bind="time:UpdateTime"></td>
             <td>
                 <a href="#" data-bind="click:CustomerCreate.viewModel.ShowEdit">编辑</a>
                 <a href="#" data-bind="click:CustomerCreate.viewModel.Delete">删除</a>
-
             </td>
         </tr>
     </tbody>
@@ -57,9 +56,9 @@
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label  class="col-sm-2 control-label">名称</label>
+                        <label class="col-sm-2 control-label">名称</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.Name" >
+                            <input type="text" class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.Name">
                         </div>
                     </div>
                     <div class="form-group">
@@ -89,11 +88,11 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">类型</label>
                         <div class="col-sm-10">
-                            <select data-bind="value:CustomerCreate.viewModel.CustomerModel.CustomerType">
-                                <option value="0">未知</option>
-                                <option value="1">贸易商</option>
-                                <option value="2">工厂</option>
-                            </select>                            
+                            <select class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.CustomerType">
+                                <option>请选择</option>
+                                <option value="贸易商">贸易商</option>
+                                <option value="工厂">工厂</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -111,7 +110,6 @@
         </div>
     </div>
 </div>
-
 <!-- /编辑 -->
 <div class="modal fade" id="editdialog">
     <div class="modal-dialog">
@@ -155,10 +153,10 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">类型</label>
                         <div class="col-sm-10">
-                            <select data-bind="value:CustomerCreate.viewModel.CustomerModel.CustomerType">
-                                <option value="0">未知</option>
-                                <option value="1">贸易商</option>
-                                <option value="2">工厂</option>
+                            <select class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.CustomerType">
+                                <option>请选择</option>
+                                <option value="贸易商">贸易商</option>
+                                <option value="工厂">工厂</option>
                             </select>
                         </div>
                     </div>
@@ -188,54 +186,54 @@
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">编号关键字</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label">编号关键字</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.Code">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">名称关键字</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label">名称关键字</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">名称关键字</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label">名称关键字</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.Address">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Email</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label">Email</label>
+                        <div class="col-sm-9">
                             <input type="email" class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.Email">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">名称关键字</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label">名称关键字</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.ContactPerson">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">电话</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label">电话</label>
+                        <div class="col-sm-9">
                             <input type="tel" class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.TelNumber">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">类型</label>
-                        <div class="col-sm-10">
-                            <select data-bind="value:CustomerCreate.viewModel.CustomerModel.CustomerType">
-                                <option value="3">全部</option>                               
-                                <option value="1">贸易商</option>
-                                <option value="2">工厂</option>
+                        <label class="col-sm-3 control-label">类型</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.CustomerType">
+                                <option>请选择</option>
+                                <option value="贸易商">贸易商</option>
+                                <option value="工厂">工厂</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">名称关键字</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label">名称关键字</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" data-bind="value:CustomerCreate.viewModel.CustomerModel.Origin">
                         </div>
                     </div>
@@ -248,43 +246,3 @@
         </div>
     </div>
 </div>
-
-<!-- /显示料号 -->
-@*<div class="modal fade" id="productdialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">料号</h4>
-            </div>
-            <div class="modal-body">
-                <div class="formbox" style="margin: auto">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="料号" data-bind="value:CustomerCreate.viewModel.ProductModel.PartNumber" readonly="readonly">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="型号" data-bind="value:CustomerCreate.viewModel.ProductModel.ProductType" readonly="readonly">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="电压" data-bind="value:CustomerCreate.viewModel.ProductModel.Voltage" readonly="readonly">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="容量" data-bind="value:CustomerCreate.viewModel.ProductModel.Capacity" readonly="readonly">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="脚距" data-bind="value:CustomerCreate.viewModel.ProductModel.Pitch" readonly="readonly">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="等级" data-bind="value:CustomerCreate.viewModel.ProductModel.Level" readonly="readonly">
-                    </div>
-                    <div class="form-group">
-                        <textarea placeholder="特殊设计" class="form-control" rows="3" data-bind="value:CustomerCreate.viewModel.ProductModel.SpecificDesign" readonly="readonly"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            </div>
-        </div>
-    </div>
-</div>*@

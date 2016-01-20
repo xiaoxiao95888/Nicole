@@ -1,17 +1,115 @@
-﻿
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Search</title>
-</head>
-<body>
-    <div> 
+﻿@Scripts.Render("~/bundles/CustomerSearch")
+@*<h2 class="page-header">
+        @ViewBag.Title
+    </h2>*@
+<div class="row">
+    <div class="col-md-12">
+        <div class="navbar-form navbar-right">
+            <a class="btn btn-default" data-bind="click:CustomerSearch.viewModel.ShowSearch">搜索</a>
+            <a class="btn btn-default" data-bind="click:CustomerSearch.viewModel.ShowExport">导出</a>
+        </div>
     </div>
-</body>
-</html>
+</div>
+<table class="table table-responsive table-bordered">
+    <thead>
+        <tr>
+            <th>编号</th>
+            <th>名称</th>
+            <th>邮件</th>
+            <th>联系人</th>
+            <th>电话</th>
+            <th>类型</th>
+            <th>分配至</th>
+            <th>来源</th>
+            <th>创建时间</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach:viewModel.Page.Models">
+        <tr>
+            <td data-bind="text:Code"></td>
+            <td data-bind="text:Name"></td>
+            <td data-bind="text:Email"></td>
+            <td data-bind="text:ContactPerson"></td>
+            <td data-bind="text:TelNumber"></td>
+            <td data-bind="text:CustomerTypeStr"></td>
+            <td data-bind="foreach:EmployeeModels">
+                <p data-bind="text:Name"></p>
+            </td>
+            <td data-bind="text:Origin"></td>
+            <td data-bind="time:UpdateTime"></td>
+        </tr>
+    </tbody>
+</table>
+<div id="page-selection" class="text-center"></div>
+
+<!-- /搜索 -->
+<div class="modal fade" id="searchdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">搜索</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">编号关键字</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerSearch.viewModel.CustomerModel.Code">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">名称关键字</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerSearch.viewModel.CustomerModel.Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">名称关键字</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerSearch.viewModel.CustomerModel.Address">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Email</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" data-bind="value:CustomerSearch.viewModel.CustomerModel.Email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">名称关键字</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerSearch.viewModel.CustomerModel.ContactPerson">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">电话</label>
+                        <div class="col-sm-9">
+                            <input type="tel" class="form-control" data-bind="value:CustomerSearch.viewModel.CustomerModel.TelNumber">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">类型</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" data-bind="value:CustomerSearch.viewModel.CustomerModel.CustomerType">
+                                <option>请选择</option>
+                                <option value="贸易商">贸易商</option>
+                                <option value="工厂">工厂</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">名称关键字</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerSearch.viewModel.CustomerModel.Origin">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:CustomerSearch.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>

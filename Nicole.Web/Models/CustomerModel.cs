@@ -36,7 +36,16 @@ namespace Nicole.Web.Models
         /// <summary>
         /// 类型
         /// </summary>
-        public CustomerType CustomerType { get; set; }
+        public CustomerType? CustomerType { get; set; }
+
+        public string CustomerTypeStr
+        {
+            get
+            {
+                return CustomerType == null ? "未知" : CustomerType.ToString();
+            }
+        }
+
         /// <summary>
         /// 来源
         /// </summary>

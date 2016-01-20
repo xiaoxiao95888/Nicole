@@ -1,6 +1,6 @@
 ﻿var CustomerCreate = {
     viewModel: {
-        Pge: {
+        Page: {
             CurrentPageIndex: ko.observable(1),
             AllPage: ko.observable(1),
             Models: ko.observableArray()
@@ -14,7 +14,7 @@
             ContactPerson: ko.observable(),
             TelNumber: ko.observable(),
             CustomerType: ko.observable(),
-            Origin: ko.observable()
+            Origin: ko.observable(),
         }
     }
 };
@@ -74,14 +74,17 @@ CustomerCreate.viewModel.ShowCreate = function () {
 };
 //保存新增
 CustomerCreate.viewModel.CreateSave = function () {
+   
     var model = ko.toJS(CustomerCreate.viewModel.CustomerModel);    
     $.post("/api/CustomerCreate", model, function (result) {
         if (result.Error) {
             Helper.ShowErrorDialog(result.Message);
         } else {
+            CustomerCreate.viewModel.ClearSearch();
             Helper.ShowSuccessDialog(Messages.Success);
             CustomerCreate.viewModel.Search();
             $('#createdialog').modal('hide');
+            
         }
     });
 
@@ -107,6 +110,7 @@ CustomerCreate.viewModel.EditSave = function () {
             if (result.Error) {
                 Helper.ShowErrorDialog(result.Message);
             } else {
+                CustomerCreate.viewModel.ClearSearch();
                 Helper.ShowSuccessDialog(Messages.Success);
                 $('#editdialog').modal('hide');
                 CustomerCreate.viewModel.Search();
@@ -130,17 +134,6 @@ CustomerCreate.viewModel.GotoPage = function () {
         CustomerCreate.viewModel.UpdatePagination();
     });
 };
-//显示料号
-//CustomerCreate.viewModel.ShowProductModel = function () {
-//    var model = ko.toJS(this);
-//    $.get("/api/ProductSetting/" + model.ProductModel.Id, function (result) {
-//        ko.mapping.fromJS(result, {}, CustomerCreate.viewModel.ProductModel);
-//        $('#productdialog').modal({
-//            show: true,
-//            backdrop: 'static'
-//        });
-//    });
-//}
 CustomerCreate.viewModel.Delete = function () {
     var model = ko.toJS(this);
     Helper.ShowConfirmationDialog({
@@ -163,8 +156,18 @@ CustomerCreate.viewModel.Delete = function () {
         }
     });
 };
+//清空搜索项
+CustomerCreate.viewModel.ClearSearch = function() {
+    for (var index in CustomerCreate.viewModel.CustomerModel) {
+        if (ko.isObservable(CustomerCreate.viewModel.CustomerModel[index])) {
+            CustomerCreate.viewModel.CustomerModel[index](null);
+        }
+    }
+    CustomerCreate.viewModel.CustomerModel.CustomerType('请选择');
+};
 //搜索
 CustomerCreate.viewModel.ShowSearch = function () {
+    CustomerCreate.viewModel.ClearSearch();
     $('#searchdialog').modal({
         show: true,
         backdrop: 'static'

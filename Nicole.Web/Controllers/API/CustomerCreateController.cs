@@ -65,22 +65,39 @@ namespace Nicole.Web.Controllers.API
             {
                 result = result.Where(n => n.TelNumber.Contains(telNumberKey));
             }
-            if (!string.IsNullOrEmpty(customerTypeKey))
+            if (string.IsNullOrEmpty(customerTypeKey) == false && customerTypeKey!="请选择")
             {
-                var customerType = Convert.ToInt32(customerTypeKey);
-                if (customerType != 3)
-                {
-                    result = result.Where(n => n.CustomerType == (CustomerType)customerType);
-                }
+                var type = (CustomerType)Enum.Parse(typeof(CustomerType), customerTypeKey, false);
+                result = result.Where(n => n.CustomerType == type);
+
             }
             if (!string.IsNullOrEmpty(originKey))
             {
                 result = result.Where(n => n.Origin.Contains(originKey));
             }
             Mapper.Reset();
+            Mapper.CreateMap<Employee, EmployeeModel>();
             Mapper.CreateMap<Customer, CustomerModel>()
                 .ForMember(n => n.CustomerType, opt => opt.MapFrom(src => src.CustomerType))
-                .ForMember(n => n.EmployeeModel, opt => opt.MapFrom(src => src.Position.EmployeePostions.Where(p => p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate)).Select(p => p.Employee).FirstOrDefault()));
+                .ForMember(n => n.EmployeeModel,
+                    opt =>
+                        opt.MapFrom(
+                            src =>
+                                src.Position.EmployeePostions.Where(
+                                    p => p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate))
+                                    .Select(p => p.Employee)
+                                    .FirstOrDefault()))
+                .ForMember(n => n.EmployeeModels,
+                    opt =>
+                        opt.MapFrom(
+                            src =>
+                                src.PositionCustomers.SelectMany(
+                                    p =>
+                                        p.Position.EmployeePostions.Where(
+                                            ep =>
+                                                ep.StartDate <= currentDate &&
+                                                (ep.EndDate == null || ep.EndDate >= currentDate))
+                                            .Select(rp => rp.Employee))));
             var model = new CustomerModelSettingModel
             {
                 Models =
@@ -96,15 +113,7 @@ namespace Nicole.Web.Controllers.API
             return model;
 
         }
-        public object Get(Guid id)
-        {
-            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            Mapper.Reset();
-            Mapper.CreateMap<Customer, CustomerModel>()
-                .ForMember(n => n.CustomerType, opt => opt.MapFrom(src => src.CustomerType))
-                .ForMember(n => n.EmployeeModel, opt => opt.MapFrom(src => src.Position.EmployeePostions.Where(p => p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate)).Select(p => p.Employee).FirstOrDefault()));
-            return Mapper.Map<Customer, CustomerModel>(_customerService.GetCustomer(id));
-        }
+        
         public object Post(CustomerModel model)
         {
             var errormessage = string.Empty;
@@ -118,8 +127,7 @@ namespace Nicole.Web.Controllers.API
             }
             if (string.IsNullOrEmpty(errormessage))
             {
-                var has = _customerService.GetCustomers().Any() ? _customerService.GetCustomers().Any(n => n.Name == model.Name.Trim()) : false;
-                if (_customerService.GetCustomers().Any() ? _customerService.GetCustomers().Any(n => n.Name == model.Name.Trim()) : false)
+                if (_customerService.GetCustomers().Any() && _customerService.GetCustomers().Any(n => n.Name == model.Name.Trim()))
                 {
                     errormessage = "客户名称重复";
                 }
@@ -138,7 +146,7 @@ namespace Nicole.Web.Controllers.API
                         ContactPerson = string.IsNullOrEmpty(model.ContactPerson) ? null : model.ContactPerson.Trim(),
                         TelNumber = string.IsNullOrEmpty(model.TelNumber) ? null : model.TelNumber.Trim(),
                         Origin = string.IsNullOrEmpty(model.Origin) ? null : model.Origin.Trim(),
-                        CustomerType = (CustomerType)model.CustomerType
+                        CustomerType = (CustomerType?)model.CustomerType
                     };
                     try
                     {
@@ -182,7 +190,7 @@ namespace Nicole.Web.Controllers.API
                     item.ContactPerson = string.IsNullOrEmpty(model.ContactPerson) ? null : model.ContactPerson.Trim();
                     item.TelNumber = string.IsNullOrEmpty(model.TelNumber) ? null : model.TelNumber.Trim();
                     item.Origin = string.IsNullOrEmpty(model.Origin) ? null : model.Origin.Trim();
-                    item.CustomerType = (CustomerType)model.CustomerType;
+                    item.CustomerType = (CustomerType?)model.CustomerType;
                     try
                     {
                         _customerService.Update();
