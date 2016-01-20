@@ -10,7 +10,7 @@ namespace Nicole.Library.Services
         
         IDbSet<Account> Accounts { get; set; }
         IDbSet<LeftNavigation> LeftNavigations { get; set; }
-        
+        IDbSet<PositionCustomer> PositionCustomers { get; set; }
         IDbSet<Customer> Customers { get; set; }
         IDbSet<Employee> Employees { get; set; }
         IDbSet<EmployeePostion> EmployeePostions { get; set; }

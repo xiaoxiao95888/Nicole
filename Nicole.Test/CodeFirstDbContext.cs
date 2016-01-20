@@ -12,7 +12,7 @@ namespace Nicole.Test
     {
         public IDbSet<Account> Accounts { get; set; }
         public IDbSet<LeftNavigation> LeftNavigations { get; set; }
-
+        public IDbSet<PositionCustomer> PositionCustomers { get; set; }
 
         public IDbSet<Customer> Customers { get; set; }
 

@@ -32,7 +32,8 @@ namespace Nicole.Web
             container.RegisterType<ILeftNavigationsService, LeftNavigationService>();
             container.RegisterType<IEmployeePostionService, EmployeePostionService>();
             container.RegisterType<IEmployeesService, EmployeesService>();
-            //PositionService
+            //IPositionCustomerService
+            container.RegisterType<IPositionCustomerService, PositionCustomerService>();
             container.RegisterType<IPositionService, PositionService>();
         }
     }

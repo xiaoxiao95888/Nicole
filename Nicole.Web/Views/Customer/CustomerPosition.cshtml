@@ -31,7 +31,7 @@
                 <p data-bind="text:Name"></p>
             </td>
             <td>
-                <a href="#" data-bind="click:"></a>
+                <a href="#" data-bind="click:CustomerPosition.viewModel.ShowCreate">分配</a>
             </td>
         </tr>
     </tbody>
@@ -104,6 +104,44 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bind="click:CustomerPosition.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /新增 -->
+<div class="modal fade" id="createdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" data-bind="text:CustomerPosition.viewModel.SelectedCustomerModel.Name">新增分配</h4>
+            </div>
+            <div class="modal-body">
+               <table class="table table-bordered table-responsive">
+                   <thead>
+                       <tr>
+                           <th>职位</th>
+                           <th>姓名</th>
+                           <th>手机</th>
+                           <th>入职</th>
+                           <th>操作</th>
+                       </tr>
+                   </thead>
+                   <tbody data-bind="foreach:CustomerPosition.viewModel.PositionModels">
+                       <tr>
+                           <td data-bind="text:Name"></td>
+                           <td data-bind="text:CurrentEmployeeModel.Name"></td>
+                           <td data-bind="text:CurrentEmployeeModel.PhoneNumber"></td>
+                           <td data-bind="date:CurrentEmployeeModel.JoinDate"></td>
+                           <td>
+                               <a href="#" data-bind="click:CustomerPosition.viewModel.AddSave">绑定</a>
+                           </td>
+                       </tr>
+                   </tbody>
+               </table>
+            </div>
+            <div class="modal-footer">                
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>

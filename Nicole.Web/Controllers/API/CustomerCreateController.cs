@@ -65,7 +65,7 @@ namespace Nicole.Web.Controllers.API
             {
                 result = result.Where(n => n.TelNumber.Contains(telNumberKey));
             }
-            if (string.IsNullOrEmpty(customerTypeKey) == false && customerTypeKey!="请选择")
+            if (string.IsNullOrEmpty(customerTypeKey) == false && customerTypeKey != "请选择")
             {
                 var type = (CustomerType)Enum.Parse(typeof(CustomerType), customerTypeKey, false);
                 result = result.Where(n => n.CustomerType == type);
@@ -113,7 +113,7 @@ namespace Nicole.Web.Controllers.API
             return model;
 
         }
-        
+
         public object Post(CustomerModel model)
         {
             var errormessage = string.Empty;
@@ -170,6 +170,10 @@ namespace Nicole.Web.Controllers.API
             else if (string.IsNullOrEmpty(model.Name))
             {
                 errormessage = "名称不能为空";
+            }
+            else if (_customerService.GetCustomers().Any() && _customerService.GetCustomers().Any(n => n.Name == model.Name.Trim() && n.Id != model.Id))
+            {
+                errormessage = "客户名称重复";
             }
             else
             {
