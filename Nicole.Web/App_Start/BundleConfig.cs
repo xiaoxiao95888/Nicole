@@ -39,25 +39,28 @@ namespace Nicole.Web
                 "~/Scripts/moment-with-locales.min.js"));
             //Home
             bundles.Add(new ScriptBundle("~/bundles/Home").Include(
-           "~/Scripts/JS/Home.js"));
+                "~/Scripts/JS/Home.js"));
             //ProductSetting
             bundles.Add(new ScriptBundle("~/bundles/ProductSetting").Include(
-          "~/Scripts/JS/ProductSetting.js",
-          "~/Scripts/jquery.bootpag.min.js"));
+                "~/Scripts/JS/ProductSetting.js",
+                "~/Scripts/jquery.bootpag.min.js"));
             //StandardCostSetting
             bundles.Add(new ScriptBundle("~/bundles/StandardCostSetting").Include(
-          "~/Scripts/JS/StandardCostSetting.js",
-          "~/Scripts/jquery.bootpag.min.js",
-          "~/Scripts/bootstrap-multiselect.js",
-           "~/Scripts/bootstrap-multiselect-collapsible-groups.js",
-           "~/Scripts/bootstrap-datetimepicker.min.js"));
+                "~/Scripts/JS/StandardCostSetting.js",
+                "~/Scripts/jquery.bootpag.min.js",
+                "~/Scripts/bootstrap-multiselect.js",
+                "~/Scripts/bootstrap-multiselect-collapsible-groups.js",
+                "~/Scripts/bootstrap-datetimepicker.min.js"));
             //StandardCostSetting
             bundles.Add(new StyleBundle("~/Content/StandardCostSetting").Include(
                 "~/Content/bootstrap-datetimepicker.min.css"));
             //EnquiryManager
             bundles.Add(new ScriptBundle("~/bundles/EnquiryManager").Include(
-        "~/Scripts/JS/EnquiryManager.js",
-        "~/Scripts/jquery.bootpag.min.js"));
+                "~/Scripts/JS/EnquiryManager.js",
+                "~/Scripts/jquery.bootpag.min.js"));
+            //LeftNavigationSetting
+            bundles.Add(new ScriptBundle("~/bundles/LeftNavigationSetting").Include(
+              "~/Scripts/JS/LeftNavigationSetting.js"));
         }
     }
 }

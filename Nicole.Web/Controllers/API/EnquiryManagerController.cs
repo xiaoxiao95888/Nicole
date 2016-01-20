@@ -111,8 +111,8 @@ namespace Nicole.Web.Controllers.API
             }
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentUser = HttpContext.Current.User.Identity.GetUser();
-            var product = _productService.GetProducts().Where(n => n.PartNumber == model.ProductModel.PartNumber.Trim()).FirstOrDefault();
-            var customer = _customerService.GetCustomers().Where(n => n.Code == model.CustomerModel.Code.Trim()).FirstOrDefault();
+            var product = _productService.GetProducts().FirstOrDefault(n => n.PartNumber == model.ProductModel.PartNumber.Trim());
+            var customer = _customerService.GetCustomers().FirstOrDefault(n => n.Code == model.CustomerModel.Code.Trim());
             var position = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(p => p.Position).FirstOrDefault();
             if (product != null && customer != null && position != null)
             {

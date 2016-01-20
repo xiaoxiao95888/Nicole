@@ -26,5 +26,9 @@ namespace Nicole.Web.Controllers
             ViewBag.Title = _leftNavigationsService.GetLeftNavigation(HttpContext.Request.Path).Name;
             return View();
         }
+        public ActionResult LeftNavigationSetting()
+        {
+            return View();
+        }
     }
 }

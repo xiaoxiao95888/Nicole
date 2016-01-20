@@ -204,7 +204,7 @@ namespace Nicole.Web.Controllers.API
                 var currentUser = HttpContext.Current.User.Identity.GetUser();
                 var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
                 var item = _customerService.GetCustomer(id);
-                if (item.Positions.Any())
+                if (item.PositionCustomers.Any())
                 {
                     return Failed("该客户已分配给销售，禁止删除");
                 }

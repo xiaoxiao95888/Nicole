@@ -96,12 +96,12 @@ ProductSetting.viewModel.UpdatePagination = function () {
     $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: ProductSetting.viewModel.ProductSettingModels.CurrentPageIndex() });
 };
 //弹出搜索框
-ProductSetting.viewModel.ShowSearch = function () {
+ProductSetting.viewModel.ShowSearch = function() {
     $('#searchdialog').modal({
         show: true,
         backdrop: 'static'
     });
-}
+};
 //确定搜索
 ProductSetting.viewModel.Search = function () {
     ProductSetting.viewModel.ProductSettingModels.CurrentPageIndex(1);

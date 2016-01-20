@@ -72,6 +72,7 @@
     <Compile Include="Services\IEmployeePostionService.cs" />
     <Compile Include="Services\IEmployeesService.cs" />
     <Compile Include="Services\IEnquiryService.cs" />
+    <Compile Include="Services\IPositionService.cs" />
     <Compile Include="Services\IStandardCostService.cs" />
     <Compile Include="Services\IProductService.cs" />
     <Compile Include="Services\ILeftNavigationsService.cs" />

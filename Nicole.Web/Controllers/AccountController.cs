@@ -44,7 +44,7 @@ namespace Nicole.Web.Controllers
             if (user != null)
             {
                 userModel.Name = user.Employee.Name;
-                userModel.EmpId = user.Employee.Id;
+                userModel.EmployeeId = user.Employee.Id;
                 userModel.AccountId = user.Id;
                 var identity = UserService.CreateIdentity(userModel, DefaultAuthenticationTypes.ApplicationCookie);
                 AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
