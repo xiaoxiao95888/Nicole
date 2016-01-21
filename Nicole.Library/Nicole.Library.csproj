@@ -53,7 +53,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Account.cs" />
-    <Compile Include="Models\Enum\CustomerType.cs" />
     <Compile Include="Models\PositionCustomer.cs" />
     <Compile Include="Models\Review.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -68,6 +67,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IAccountService.cs" />
     <Compile Include="Services\ICustomerService.cs" />
+    <Compile Include="Services\ICustomerTypeService.cs" />
     <Compile Include="Services\IDataContext.cs" />
     <Compile Include="Services\IEmployeePostionService.cs" />
     <Compile Include="Services\IEmployeesService.cs" />

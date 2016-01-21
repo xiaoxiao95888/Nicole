@@ -1,8 +1,4 @@
-﻿using Nicole.Web.Models.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System;
 
 namespace Nicole.Web.Models
 {
@@ -36,15 +32,7 @@ namespace Nicole.Web.Models
         /// <summary>
         /// 类型
         /// </summary>
-        public CustomerType? CustomerType { get; set; }
-
-        public string CustomerTypeStr
-        {
-            get
-            {
-                return CustomerType == null ? "未知" : CustomerType.ToString();
-            }
-        }
+        public CustomerTypeModel CustomerTypeModel { get; set; }
 
         /// <summary>
         /// 来源

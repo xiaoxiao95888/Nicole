@@ -207,6 +207,7 @@
     <Compile Include="Controllers\API\BaseApiController.cs" />
     <Compile Include="Controllers\API\CustomerController.cs" />
     <Compile Include="Controllers\API\CustomerCreateController.cs" />
+    <Compile Include="Controllers\API\CustomerTypeController.cs" />
     <Compile Include="Controllers\API\PositionCustomerController.cs" />
     <Compile Include="Controllers\API\EnquiryManagerController.cs" />
     <Compile Include="Controllers\API\LeftNavigationController.cs" />
@@ -233,10 +234,10 @@
     <Compile Include="Models\BreadCrumbModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\CustomerModelSettingModel.cs" />
+    <Compile Include="Models\CustomerTypeModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\EnquiryManagerModel.cs" />
     <Compile Include="Models\EnquiryModel.cs" />
-    <Compile Include="Models\Enum\CustomerType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LeftNavigationModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />

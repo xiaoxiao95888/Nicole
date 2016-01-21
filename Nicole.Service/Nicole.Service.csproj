@@ -57,6 +57,7 @@
     <Compile Include="NicoleDataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CustomerService.cs" />
+    <Compile Include="Services\CustomerTypeService.cs" />
     <Compile Include="Services\EmployeePostionService.cs" />
     <Compile Include="Services\EmployeesService.cs" />
     <Compile Include="Services\EnquiryService.cs" />

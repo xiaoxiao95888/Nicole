@@ -12,6 +12,7 @@ namespace Nicole.Service
             : base("NicoleDataContext")
         {
         }
+        public IDbSet<CustomerType> CustomerTypes { get; set; }
         public IDbSet<Account> Accounts { get; set; }
         public IDbSet<LeftNavigation> LeftNavigations { get; set; }       
         public IDbSet<PositionCustomer> PositionCustomers { get; set; }

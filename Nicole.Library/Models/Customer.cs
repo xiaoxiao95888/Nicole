@@ -1,11 +1,7 @@
-﻿using Nicole.Library.Models.Enum;
-using Nicole.Library.Models.Interfaces;
+﻿using Nicole.Library.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Nicole.Library.Models
 {
@@ -30,10 +26,12 @@ namespace Nicole.Library.Models
         /// </summary>
         public string ContactPerson { get; set; }
         public string TelNumber { get; set; }
+        public Guid? CustomerTypeId { get; set; }
         /// <summary>
         /// 类型
         /// </summary>
-        public CustomerType? CustomerType { get; set; }
+        [ForeignKey("CustomerTypeId")]
+        public virtual CustomerType CustomerType { get; set; }
         /// <summary>
         /// 来源
         /// </summary>
@@ -51,5 +49,11 @@ namespace Nicole.Library.Models
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsDeleted { get; set; }
+    }
+
+    public class CustomerType
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
 }

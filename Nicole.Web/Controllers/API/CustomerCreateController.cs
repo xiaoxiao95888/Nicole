@@ -1,17 +1,12 @@
 ﻿using AutoMapper;
 using Nicole.Library.Models;
-using Nicole.Library.Models.Enum;
 using Nicole.Library.Services;
 using Nicole.Web.Infrastructure;
 using Nicole.Web.Models;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web;
-using System.Web.Http;
 
 namespace Nicole.Web.Controllers.API
 {
@@ -76,9 +71,10 @@ namespace Nicole.Web.Controllers.API
                 result = result.Where(n => n.Origin.Contains(originKey));
             }
             Mapper.Reset();
+            Mapper.CreateMap<CustomerType, CustomerTypeModel>();
             Mapper.CreateMap<Employee, EmployeeModel>();
             Mapper.CreateMap<Customer, CustomerModel>()
-                .ForMember(n => n.CustomerType, opt => opt.MapFrom(src => src.CustomerType))
+                .ForMember(n => n.CustomerTypeModel, opt => opt.MapFrom(src => src.CustomerType))
                 .ForMember(n => n.EmployeeModel,
                     opt =>
                         opt.MapFrom(
@@ -146,7 +142,7 @@ namespace Nicole.Web.Controllers.API
                         ContactPerson = string.IsNullOrEmpty(model.ContactPerson) ? null : model.ContactPerson.Trim(),
                         TelNumber = string.IsNullOrEmpty(model.TelNumber) ? null : model.TelNumber.Trim(),
                         Origin = string.IsNullOrEmpty(model.Origin) ? null : model.Origin.Trim(),
-                        CustomerType = (CustomerType?)model.CustomerType
+                        CustomerTypeId = model.CustomerTypeModel?.Id ?? Guid.Empty
                     };
                     try
                     {
@@ -194,7 +190,7 @@ namespace Nicole.Web.Controllers.API
                     item.ContactPerson = string.IsNullOrEmpty(model.ContactPerson) ? null : model.ContactPerson.Trim();
                     item.TelNumber = string.IsNullOrEmpty(model.TelNumber) ? null : model.TelNumber.Trim();
                     item.Origin = string.IsNullOrEmpty(model.Origin) ? null : model.Origin.Trim();
-                    item.CustomerType = (CustomerType?)model.CustomerType;
+                    item.CustomerTypeId = model.CustomerTypeModel?.Id ?? Guid.Empty;
                     try
                     {
                         _customerService.Update();

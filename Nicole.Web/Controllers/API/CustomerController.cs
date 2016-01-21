@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using AutoMapper;
-using Microsoft.AspNet.Identity;
 using Nicole.Library.Models;
-using Nicole.Library.Models.Enum;
 using Nicole.Library.Services;
 using Nicole.Web.Infrastructure;
 using Nicole.Web.Models;
@@ -27,7 +22,7 @@ namespace Nicole.Web.Controllers.API
             _employeesService = employeesService;
             _positionService = positionService;
         }
-        public object Get()
+        public object Get([FromUri] CustomerModel key, int pageIndex = 1)
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentPosition =
@@ -36,20 +31,11 @@ namespace Nicole.Web.Controllers.API
                         n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
                     .Select(n => n.Position)
                     .FirstOrDefault();
-            var subpositions = _positionService.GetPositions().Where(n => n.Parent.Id == currentPosition.Id).Select(p=>p.Id).ToArray();
+            var subpositions = _positionService.GetPositions().Where(n => n.Parent.Id == currentPosition.Id).Select(p => p.Id).ToArray();
 
-            var pageIndex = string.IsNullOrEmpty(HttpContext.Current.Request["pageIndex"])
-                ? 1
-                : Convert.ToInt32(HttpContext.Current.Request["pageIndex"]);
+
             var pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
-            var codeKey = HttpContext.Current.Request["CodeKey"] ?? string.Empty;
-            var nameKey = HttpContext.Current.Request["NameKey"] ?? string.Empty;
-            var addressKey = HttpContext.Current.Request["AddressKey"] ?? string.Empty;
-            var emailKey = HttpContext.Current.Request["EmailKey"] ?? string.Empty;
-            var contactPersonKey = HttpContext.Current.Request["ContactPersonKey"] ?? string.Empty;
-            var telNumberKey = HttpContext.Current.Request["TelNumberKey"] ?? string.Empty;
-            var customerTypeKey = HttpContext.Current.Request["CustomerTypeKey"] ?? string.Empty;
-            var originKey = HttpContext.Current.Request["OriginKey"] ?? string.Empty;
+
             var result =
                 _customerService.GetCustomers()
                     .Where(
@@ -61,44 +47,24 @@ namespace Nicole.Web.Controllers.API
                 result =
                 _customerService.GetCustomers();
             }
-            if (!string.IsNullOrEmpty(codeKey))
-            {
-                result = result.Where(n => n.Code.Contains(codeKey));
-            }
-            if (!string.IsNullOrEmpty(nameKey))
-            {
-                result = result.Where(n => n.Name.Contains(nameKey));
-            }
-            if (!string.IsNullOrEmpty(addressKey))
-            {
-                result = result.Where(n => n.Address.Contains(addressKey));
-            }
-            if (!string.IsNullOrEmpty(emailKey))
-            {
-                result = result.Where(n => n.Email.Contains(emailKey));
-            }
-            if (!string.IsNullOrEmpty(contactPersonKey))
-            {
-                result = result.Where(n => n.ContactPerson.Contains(contactPersonKey));
-            }
-            if (!string.IsNullOrEmpty(telNumberKey))
-            {
-                result = result.Where(n => n.TelNumber.Contains(telNumberKey));
-            }
-            if (string.IsNullOrEmpty(customerTypeKey) == false && customerTypeKey != "请选择")
-            {
-                var type = (CustomerType)Enum.Parse(typeof(CustomerType), customerTypeKey, false);
-                result = result.Where(n => n.CustomerType == type);
 
-            }
-            if (!string.IsNullOrEmpty(originKey))
+            result = result.Where(n => (key.Name == null || n.Name.Contains(key.Name))
+                                       && (key.Origin == null || n.Origin.Contains(key.Origin))
+                                       && (key.TelNumber == null || n.TelNumber.Contains(key.TelNumber))
+                                       && (key.Address == null || n.Address.Contains(key.Address))
+                                       && (key.Code == null || n.Code.Contains(key.Code))
+                                       && (key.ContactPerson == null || n.ContactPerson.Contains(key.ContactPerson))
+                                       && (key.Email == null || n.Email.Contains(key.Email)));
+
+            if (key.CustomerTypeModel != null)
             {
-                result = result.Where(n => n.Origin.Contains(originKey));
+                result = result.Where(n => n.CustomerType != null && n.CustomerTypeId == key.CustomerTypeModel.Id);
             }
             Mapper.Reset();
             Mapper.CreateMap<Employee, EmployeeModel>();
+            Mapper.CreateMap<CustomerType, CustomerTypeModel>();
             Mapper.CreateMap<Customer, CustomerModel>()
-                .ForMember(n => n.CustomerType, opt => opt.MapFrom(src => src.CustomerType))
+                .ForMember(n => n.CustomerTypeModel, opt => opt.MapFrom(src => src.CustomerType))
                 .ForMember(n => n.EmployeeModel,
                     opt =>
                         opt.MapFrom(
@@ -137,9 +103,10 @@ namespace Nicole.Web.Controllers.API
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             Mapper.Reset();
+            Mapper.CreateMap<CustomerType, CustomerTypeModel>();
             Mapper.CreateMap<Employee, EmployeeModel>();
             Mapper.CreateMap<Customer, CustomerModel>()
-                .ForMember(n => n.CustomerType, opt => opt.MapFrom(src => src.CustomerType))
+                .ForMember(n => n.CustomerTypeModel, opt => opt.MapFrom(src => src.CustomerType))
                 .ForMember(n => n.EmployeeModel, opt => opt.MapFrom(src => src.Position.EmployeePostions.Where(p => p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate)).Select(p => p.Employee).FirstOrDefault()));
             return Mapper.Map<Customer, CustomerModel>(_customerService.GetCustomer(id));
         }

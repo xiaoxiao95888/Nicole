@@ -13,9 +13,13 @@
             Email: ko.observable(),
             ContactPerson: ko.observable(),
             TelNumber: ko.observable(),
-            CustomerType: ko.observable(),
+            CustomerTypeModel: {
+                Id: ko.observable(),
+                Name: ko.observable()
+            },
             Origin: ko.observable()
-        }
+        },
+        CustomerTypeModels: ko.observableArray()
     }
 };
 ko.bindingHandlers.time = {
@@ -48,18 +52,8 @@ CustomerSearch.viewModel.UpdatePagination = function () {
 //确定搜索
 CustomerSearch.viewModel.Search = function () {
     CustomerSearch.viewModel.Page.CurrentPageIndex(1);
-    var data = ko.toJS(CustomerSearch.viewModel.CustomerModel);
-    var model = {
-        CodeKey: data.Code,
-        NameKey: data.Name,
-        AddressKey: data.Address,
-        EmailKey: data.Email,
-        ContactPersonKey: data.ContactPerson,
-        TelNumberKey: data.TelNumber,
-        CustomerTypeKey: data.CustomerType,
-        OriginKey: data.Origin,
-        pageIndex: CustomerSearch.viewModel.Page.CurrentPageIndex(),
-    };
+    var model = ko.toJS(CustomerSearch.viewModel.CustomerModel);
+    model.pageIndex = 1;
     $.get("/api/Customer", model, function (result) {
         ko.mapping.fromJS(result, {}, CustomerSearch.viewModel.Page);
         CustomerSearch.viewModel.UpdatePagination();
@@ -67,16 +61,8 @@ CustomerSearch.viewModel.Search = function () {
     });
 };
 CustomerSearch.viewModel.GotoPage = function () {
-    var model = {
-        pageIndex: CustomerSearch.viewModel.Page.CurrentPageIndex(),
-        ProductTypeKey: $('#ProductTypeKey').val(),
-        PartNumberKey: $('#PartNumberKey').val(),
-        VoltageKey: $('#VoltageKey').val(),
-        CapacityKey: $('#CapacityKey').val(),
-        PitchKey: $('#PitchKey').val(),
-        LevelKey: $('#LevelKey').val(),
-        SpecificDesignKey: $('#SpecificDesignKey').val()
-    };
+    var model = ko.toJS(CustomerSearch.viewModel.CustomerModel);
+    model.pageIndex = CustomerSearch.viewModel.Page.CurrentPageIndex();
     $.get("/api/Customer", model, function (result) {
         ko.mapping.fromJS(result, {}, CustomerSearch.viewModel.Page);
         CustomerSearch.viewModel.UpdatePagination();
@@ -91,7 +77,11 @@ CustomerSearch.viewModel.ShowSearch = function () {
 };
 $(function () {
     ko.applyBindings(CustomerSearch);
-    CustomerSearch.viewModel.Search();
+    $.get('/api/CustomerType', function (result) {
+        ko.mapping.fromJS(result, {}, CustomerSearch.viewModel.CustomerTypeModels);
+        CustomerSearch.viewModel.Search();
+    });
+
     //初始化页码
     $('#page-selection').bootpag({
         total: 1,

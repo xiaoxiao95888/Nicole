@@ -11,6 +11,7 @@ namespace Nicole.Test
     public class CodeFirstDbContext : DbContext, IDataContext
     {
         public IDbSet<Account> Accounts { get; set; }
+        public IDbSet<CustomerType> CustomerTypes { get; set; }
         public IDbSet<LeftNavigation> LeftNavigations { get; set; }
         public IDbSet<PositionCustomer> PositionCustomers { get; set; }
 
