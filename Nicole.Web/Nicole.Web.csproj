@@ -231,7 +231,11 @@
     <Compile Include="Infrastructure\Filters\CustomExceptionFilter.cs" />
     <Compile Include="Infrastructure\UserService.cs" />
     <Compile Include="MapperHelper\CustomerMapper.cs" />
+    <Compile Include="MapperHelper\EmployeeMapper.cs" />
     <Compile Include="MapperHelper\IMapper.cs" />
+    <Compile Include="MapperHelper\IMapperFactory.cs" />
+    <Compile Include="MapperHelper\IMapperInterfaces\ICustomerMapper.cs" />
+    <Compile Include="MapperHelper\IMapperInterfaces\IEmployeeMapper.cs" />
     <Compile Include="MapperHelper\MapperFactory.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BreadCrumbModel.cs" />

@@ -49,16 +49,16 @@ CustomerCreate.viewModel.UpdatePagination = function () {
 //确定搜索
 CustomerCreate.viewModel.Search = function () {
     CustomerCreate.viewModel.Page.CurrentPageIndex(1);
-    var model = ko.toJS(CustomerCreate.viewModel.CustomerModel);
+    var model = ko.mapping.toJS(CustomerCreate.viewModel.CustomerModel);
     model.pageIndex = 1;
-    $.get("/api/Customer", JSON.stringify(model), function (result) {
+    $.get("/api/Customer", model, function (result) {
         ko.mapping.fromJS(result, {}, CustomerCreate.viewModel.Page);
         CustomerCreate.viewModel.UpdatePagination();
         $('#searchdialog').modal('hide');
     });
 };
 CustomerCreate.viewModel.GotoPage = function () {
-    var model = ko.toJS(CustomerCreate.viewModel.CustomerModel);
+    var model = ko.mapping.toJS(CustomerCreate.viewModel.CustomerModel);
     model.pageIndex = CustomerCreate.viewModel.Page.CurrentPageIndex();
     $.get("/api/Customer", model, function (result) {
         ko.mapping.fromJS(result, {}, CustomerCreate.viewModel.Page);
@@ -73,7 +73,7 @@ CustomerCreate.viewModel.ShowCreate = function () {
 };
 //保存新增
 CustomerCreate.viewModel.CreateSave = function () {
-    var model = ko.toJS(CustomerCreate.viewModel.CustomerModel);
+    var model = ko.mapping.toJS(CustomerCreate.viewModel.CustomerModel);
     $.post("/api/Customer", model, function (result) {
         if (result.Error) {
             Helper.ShowErrorDialog(result.Message);
@@ -88,15 +88,14 @@ CustomerCreate.viewModel.CreateSave = function () {
 
 };
 CustomerCreate.viewModel.ShowEdit = function () {
-    var model = ko.toJS(this);
+    var model = ko.mapping.toJS(this);
     if (model.CustomerTypeModel != null) {
         ko.utils.arrayForEach(CustomerCreate.viewModel.CustomerTypeModels(), function (item) {
-            if (item.Id() == model.CustomerTypeModel.Id) {
+            if (item.Id() === model.CustomerTypeModel.Id) {
                 CustomerCreate.viewModel.CustomerModel.CustomerTypeModel(item);
             }
         });
     }
-    //问题把结构改变了
     ko.mapping.fromJS(model, {}, CustomerCreate.viewModel.CustomerModel);
     $('#editdialog').modal({
         show: true,
@@ -105,7 +104,7 @@ CustomerCreate.viewModel.ShowEdit = function () {
 };
 //保存编辑
 CustomerCreate.viewModel.EditSave = function () {
-    var model = ko.toJS(CustomerCreate.viewModel.CustomerModel);
+    var model = ko.mapping.toJS(CustomerCreate.viewModel.CustomerModel);
     $.ajax({
         type: 'put',
         url: '/api/Customer',
@@ -127,7 +126,7 @@ CustomerCreate.viewModel.EditSave = function () {
 };
 //删除
 CustomerCreate.viewModel.Delete = function () {
-    var model = ko.toJS(this);
+    var model = ko.mapping.toJS(this);
     Helper.ShowConfirmationDialog({
         message: "是否确认删除?",
         confirmFunction: function () {
