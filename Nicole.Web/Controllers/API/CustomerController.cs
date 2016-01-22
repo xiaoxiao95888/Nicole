@@ -7,6 +7,7 @@ using AutoMapper;
 using Nicole.Library.Models;
 using Nicole.Library.Services;
 using Nicole.Web.Infrastructure;
+using Nicole.Web.MapperHelper;
 using Nicole.Web.Models;
 
 namespace Nicole.Web.Controllers.API
@@ -16,11 +17,13 @@ namespace Nicole.Web.Controllers.API
         private readonly ICustomerService _customerService;
         private readonly IEmployeesService _employeesService;
         private readonly IPositionService _positionService;
-        public CustomerController(ICustomerService customerService, IEmployeesService employeesService, IPositionService positionService)
+        private readonly IMapperFactory _mapperFactory;
+        public CustomerController(ICustomerService customerService, IEmployeesService employeesService, IPositionService positionService, IMapperFactory mapperFactory)
         {
             _customerService = customerService;
             _employeesService = employeesService;
             _positionService = positionService;
+            _mapperFactory = mapperFactory;
         }
         public object Get([FromUri] CustomerModel key, int pageIndex = 1)
         {
@@ -60,30 +63,7 @@ namespace Nicole.Web.Controllers.API
             {
                 result = result.Where(n => n.CustomerType != null && n.CustomerTypeId == key.CustomerTypeModel.Id);
             }
-            Mapper.Reset();
-            Mapper.CreateMap<Employee, EmployeeModel>();
-            Mapper.CreateMap<CustomerType, CustomerTypeModel>();
-            Mapper.CreateMap<Customer, CustomerModel>()
-                .ForMember(n => n.CustomerTypeModel, opt => opt.MapFrom(src => src.CustomerType))
-                .ForMember(n => n.EmployeeModel,
-                    opt =>
-                        opt.MapFrom(
-                            src =>
-                                src.Position.EmployeePostions.Where(
-                                    p => p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate))
-                                    .Select(p => p.Employee)
-                                    .FirstOrDefault()))
-                .ForMember(n => n.EmployeeModels,
-                    opt =>
-                        opt.MapFrom(
-                            src =>
-                                src.PositionCustomers.SelectMany(
-                                    p =>
-                                        p.Position.EmployeePostions.Where(
-                                            ep =>
-                                                ep.StartDate <= currentDate &&
-                                                (ep.EndDate == null || ep.EndDate >= currentDate))
-                                            .Select(rp => rp.Employee))));
+            _mapperFactory.GetCustomerMapper().Create();
             var model = new CustomerModelSettingModel
             {
                 Models =
@@ -98,17 +78,122 @@ namespace Nicole.Web.Controllers.API
             };
             return model;
 
-        }
-        public object Get(Guid id)
+        }        
+        public object Post(CustomerModel model)
         {
-            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            Mapper.Reset();
-            Mapper.CreateMap<CustomerType, CustomerTypeModel>();
-            Mapper.CreateMap<Employee, EmployeeModel>();
-            Mapper.CreateMap<Customer, CustomerModel>()
-                .ForMember(n => n.CustomerTypeModel, opt => opt.MapFrom(src => src.CustomerType))
-                .ForMember(n => n.EmployeeModel, opt => opt.MapFrom(src => src.Position.EmployeePostions.Where(p => p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate)).Select(p => p.Employee).FirstOrDefault()));
-            return Mapper.Map<Customer, CustomerModel>(_customerService.GetCustomer(id));
+            var errormessage = string.Empty;
+            if (model == null)
+            {
+                errormessage = "客户不得为空";
+            }
+            else if (string.IsNullOrEmpty(model.Name))
+            {
+                errormessage = "名称不能为空";
+            }
+            if (string.IsNullOrEmpty(errormessage))
+            {
+                if (_customerService.GetCustomers().Any() && _customerService.GetCustomers().Any(n => n.Name == model.Name.Trim()))
+                {
+                    errormessage = "客户名称重复";
+                }
+                else
+                {
+                    var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                    var currentUser = HttpContext.Current.User.Identity.GetUser();
+                    var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
+                    var item = new Customer
+                    {
+                        Id = Guid.NewGuid(),
+                        PositionId = positionId,
+                        Name = model.Name.Trim(),
+                        Address = string.IsNullOrEmpty(model.Address) ? null : model.Address.Trim(),
+                        Email = string.IsNullOrEmpty(model.Email) ? null : model.Email.Trim(),
+                        ContactPerson = string.IsNullOrEmpty(model.ContactPerson) ? null : model.ContactPerson.Trim(),
+                        TelNumber = string.IsNullOrEmpty(model.TelNumber) ? null : model.TelNumber.Trim(),
+                        Origin = string.IsNullOrEmpty(model.Origin) ? null : model.Origin.Trim(),
+                        CustomerTypeId = model.CustomerTypeModel == null ? (Guid?)null : model.CustomerTypeModel.Id
+                    };
+                    try
+                    {
+                        _customerService.Insert(item);
+                    }
+                    catch (Exception ex)
+                    {
+                        return Failed(ex.Message);
+                    }
+                }
+            }
+            return string.IsNullOrEmpty(errormessage) ? Success() : Failed(errormessage);
+        }
+        public object Put(CustomerModel model)
+        {
+            var errormessage = string.Empty;
+            if (model == null)
+            {
+                errormessage = "客户不得为空";
+            }
+            else if (string.IsNullOrEmpty(model.Name))
+            {
+                errormessage = "名称不能为空";
+            }
+            else if (_customerService.GetCustomers().Any() && _customerService.GetCustomers().Any(n => n.Name == model.Name.Trim() && n.Id != model.Id))
+            {
+                errormessage = "客户名称重复";
+            }
+            else
+            {
+                var item = _customerService.GetCustomer(model.Id);
+                if (item.IsDeleted)
+                {
+                    errormessage = "该客户已删除";
+                }
+                if (string.IsNullOrEmpty(errormessage))
+                {
+                    var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                    var currentUser = HttpContext.Current.User.Identity.GetUser();
+                    var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
+                    item.PositionId = positionId;
+                    item.Name = model.Name.Trim();
+                    item.Address = string.IsNullOrEmpty(model.Address) ? null : model.Address.Trim();
+                    item.Email = string.IsNullOrEmpty(model.Email) ? null : model.Email.Trim();
+                    item.ContactPerson = string.IsNullOrEmpty(model.ContactPerson) ? null : model.ContactPerson.Trim();
+                    item.TelNumber = string.IsNullOrEmpty(model.TelNumber) ? null : model.TelNumber.Trim();
+                    item.Origin = string.IsNullOrEmpty(model.Origin) ? null : model.Origin.Trim();
+                    item.CustomerTypeId = model.CustomerTypeModel != null ? model.CustomerTypeModel.Id : (Guid?)null;
+                    try
+                    {
+                        _customerService.Update();
+                    }
+                    catch (Exception ex)
+                    {
+                        errormessage = ex.Message;
+                    }
+                }
+            }
+            return string.IsNullOrEmpty(errormessage) ? Success() : Failed(errormessage);
+
+        }
+        public object Delete(Guid id)
+        {
+            try
+            {
+                var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                var currentUser = HttpContext.Current.User.Identity.GetUser();
+                var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
+                var item = _customerService.GetCustomer(id);
+                if (item.PositionCustomers.Any())
+                {
+                    return Failed("该客户已分配给销售，禁止删除");
+                }
+                item.IsDeleted = true;
+                item.PositionId = positionId;
+                _customerService.Update();
+            }
+            catch (Exception ex)
+            {
+                return Failed(ex.Message);
+            }
+            return Success();
         }
     }
 }

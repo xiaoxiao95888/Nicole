@@ -11,7 +11,6 @@ namespace Nicole.Library.Services
     {
         void Insert(CustomerType customerType);
         void Update();
-        void Delete(Guid id);
         CustomerType GetCustomerType(Guid id);
         IQueryable<CustomerType> GetCustomerTypes();
         

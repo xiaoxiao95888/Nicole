@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Microsoft.Practices.Unity;
 using Nicole.Library.Services;
 using Nicole.Service.Services;
+using Nicole.Web.MapperHelper;
 using Unity.Mvc5;
 
 namespace Nicole.Web
@@ -32,10 +33,14 @@ namespace Nicole.Web
             container.RegisterType<ILeftNavigationsService, LeftNavigationService>();
             container.RegisterType<IEmployeePostionService, EmployeePostionService>();
             container.RegisterType<IEmployeesService, EmployeesService>();
-            //ICustomerTypeService
             container.RegisterType<ICustomerTypeService, CustomerTypeService>();
             container.RegisterType<IPositionCustomerService, PositionCustomerService>();
             container.RegisterType<IPositionService, PositionService>();
+            
+            #region mapper inject
+            container.RegisterType<IMapperFactory, MapperFactory>();
+            #endregion
+
         }
     }
 }

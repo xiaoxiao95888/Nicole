@@ -13,9 +13,10 @@
             Email: ko.observable(),
             ContactPerson: ko.observable(),
             TelNumber: ko.observable(),
-            CustomerType: ko.observable(),
-            Origin: ko.observable(),
-        }
+            CustomerTypeModel: ko.observable(),
+            Origin: ko.observable()
+        },
+        CustomerTypeModels: ko.observableArray()
     }
 };
 ko.bindingHandlers.time = {
@@ -48,22 +49,20 @@ CustomerCreate.viewModel.UpdatePagination = function () {
 //确定搜索
 CustomerCreate.viewModel.Search = function () {
     CustomerCreate.viewModel.Page.CurrentPageIndex(1);
-    var data = ko.toJS(CustomerCreate.viewModel.CustomerModel);
-    var model = {
-        CodeKey: data.Code,
-        NameKey: data.Name,
-        AddressKey: data.Address,
-        EmailKey: data.Email,
-        ContactPersonKey: data.ContactPerson,
-        TelNumberKey: data.TelNumber,
-        CustomerTypeKey: data.CustomerType,
-        OriginKey: data.Origin,
-        pageIndex: CustomerCreate.viewModel.Page.CurrentPageIndex(),
-    };
-    $.get("/api/CustomerCreate", model, function (result) {
+    var model = ko.toJS(CustomerCreate.viewModel.CustomerModel);
+    model.pageIndex = 1;
+    $.get("/api/Customer", JSON.stringify(model), function (result) {
         ko.mapping.fromJS(result, {}, CustomerCreate.viewModel.Page);
         CustomerCreate.viewModel.UpdatePagination();
         $('#searchdialog').modal('hide');
+    });
+};
+CustomerCreate.viewModel.GotoPage = function () {
+    var model = ko.toJS(CustomerCreate.viewModel.CustomerModel);
+    model.pageIndex = CustomerCreate.viewModel.Page.CurrentPageIndex();
+    $.get("/api/Customer", model, function (result) {
+        ko.mapping.fromJS(result, {}, CustomerCreate.viewModel.Page);
+        CustomerCreate.viewModel.UpdatePagination();
     });
 };
 CustomerCreate.viewModel.ShowCreate = function () {
@@ -74,23 +73,30 @@ CustomerCreate.viewModel.ShowCreate = function () {
 };
 //保存新增
 CustomerCreate.viewModel.CreateSave = function () {
-   
-    var model = ko.toJS(CustomerCreate.viewModel.CustomerModel);    
-    $.post("/api/CustomerCreate", model, function (result) {
+    var model = ko.toJS(CustomerCreate.viewModel.CustomerModel);
+    $.post("/api/Customer", model, function (result) {
         if (result.Error) {
             Helper.ShowErrorDialog(result.Message);
         } else {
-            CustomerCreate.viewModel.ClearSearch();
             Helper.ShowSuccessDialog(Messages.Success);
+            CustomerCreate.viewModel.ClearSearch();
             CustomerCreate.viewModel.Search();
             $('#createdialog').modal('hide');
-            
+
         }
     });
 
 };
 CustomerCreate.viewModel.ShowEdit = function () {
     var model = ko.toJS(this);
+    if (model.CustomerTypeModel != null) {
+        ko.utils.arrayForEach(CustomerCreate.viewModel.CustomerTypeModels(), function (item) {
+            if (item.Id() == model.CustomerTypeModel.Id) {
+                CustomerCreate.viewModel.CustomerModel.CustomerTypeModel(item);
+            }
+        });
+    }
+    //问题把结构改变了
     ko.mapping.fromJS(model, {}, CustomerCreate.viewModel.CustomerModel);
     $('#editdialog').modal({
         show: true,
@@ -102,7 +108,7 @@ CustomerCreate.viewModel.EditSave = function () {
     var model = ko.toJS(CustomerCreate.viewModel.CustomerModel);
     $.ajax({
         type: 'put',
-        url: '/api/CustomerCreate',
+        url: '/api/Customer',
         contentType: 'application/json',
         dataType: "json",
         data: JSON.stringify(model),
@@ -110,30 +116,16 @@ CustomerCreate.viewModel.EditSave = function () {
             if (result.Error) {
                 Helper.ShowErrorDialog(result.Message);
             } else {
-                CustomerCreate.viewModel.ClearSearch();
                 Helper.ShowSuccessDialog(Messages.Success);
                 $('#editdialog').modal('hide');
+                CustomerCreate.viewModel.ClearSearch();
                 CustomerCreate.viewModel.Search();
             }
         }
     });
+
 };
-CustomerCreate.viewModel.GotoPage = function () {
-    var model = {
-        pageIndex: CustomerCreate.viewModel.Page.CurrentPageIndex(),
-        ProductTypeKey: $('#ProductTypeKey').val(),
-        PartNumberKey: $('#PartNumberKey').val(),
-        VoltageKey: $('#VoltageKey').val(),
-        CapacityKey: $('#CapacityKey').val(),
-        PitchKey: $('#PitchKey').val(),
-        LevelKey: $('#LevelKey').val(),
-        SpecificDesignKey: $('#SpecificDesignKey').val()
-    };
-    $.get("/api/CustomerCreate", model, function (result) {
-        ko.mapping.fromJS(result, {}, CustomerCreate.viewModel.Page);
-        CustomerCreate.viewModel.UpdatePagination();
-    });
-};
+//删除
 CustomerCreate.viewModel.Delete = function () {
     var model = ko.toJS(this);
     Helper.ShowConfirmationDialog({
@@ -141,7 +133,7 @@ CustomerCreate.viewModel.Delete = function () {
         confirmFunction: function () {
             $.ajax({
                 type: 'delete',
-                url: '/api/CustomerCreate/' + model.Id,
+                url: '/api/Customer/' + model.Id,
                 contentType: 'application/json',
                 dataType: "json",
                 success: function (result) {
@@ -149,6 +141,7 @@ CustomerCreate.viewModel.Delete = function () {
                         Helper.ShowErrorDialog(result.Message);
                     } else {
                         Helper.ShowSuccessDialog(Messages.Success);
+                        CustomerCreate.viewModel.ClearSearch();
                         CustomerCreate.viewModel.Search();
                     }
                 }
@@ -157,13 +150,12 @@ CustomerCreate.viewModel.Delete = function () {
     });
 };
 //清空搜索项
-CustomerCreate.viewModel.ClearSearch = function() {
+CustomerCreate.viewModel.ClearSearch = function () {
     for (var index in CustomerCreate.viewModel.CustomerModel) {
         if (ko.isObservable(CustomerCreate.viewModel.CustomerModel[index])) {
             CustomerCreate.viewModel.CustomerModel[index](null);
         }
     }
-    CustomerCreate.viewModel.CustomerModel.CustomerType('请选择');
 };
 //搜索
 CustomerCreate.viewModel.ShowSearch = function () {
@@ -174,8 +166,11 @@ CustomerCreate.viewModel.ShowSearch = function () {
     });
 };
 $(function () {
-    ko.applyBindings(CustomerCreate);    
-    CustomerCreate.viewModel.Search();
+    ko.applyBindings(CustomerCreate);
+    $.get('/api/CustomerType', function (result) {
+        ko.mapping.fromJS(result, {}, CustomerCreate.viewModel.CustomerTypeModels);
+        CustomerCreate.viewModel.Search();
+    });
     //初始化页码
     $('#page-selection').bootpag({
         total: 1,
