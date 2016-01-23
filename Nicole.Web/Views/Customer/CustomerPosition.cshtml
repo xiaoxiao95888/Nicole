@@ -26,7 +26,7 @@
             <td data-bind="text:Code"></td>
             <td data-bind="text:Name"></td>
             <td data-bind="text:Address"></td>
-            <td data-bind="text:CustomerTypeStr"></td>
+            <td data-bind="text:CustomerTypeModel.Name"></td>
             <td data-bind="foreach:EmployeeModels">
                 <p data-bind="text:Name"></p>
             </td>
@@ -87,11 +87,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">类型</label>
                         <div class="col-sm-9">
-                            <select class="form-control" data-bind="value:CustomerPosition.viewModel.CustomerModel.CustomerType">
-                                <option>请选择</option>
-                                <option value="贸易商">贸易商</option>
-                                <option value="工厂">工厂</option>
-                            </select>
+                            <select class="form-control" data-bind="options: CustomerPosition.viewModel.CustomerTypeModels,optionsText: 'Name', optionsCaption: '选择',value:CustomerPosition.viewModel.CustomerModel.CustomerTypeModel"></select>
                         </div>
                     </div>
                     <div class="form-group">

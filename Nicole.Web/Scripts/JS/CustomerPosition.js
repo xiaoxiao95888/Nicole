@@ -18,9 +18,13 @@
             Email: ko.observable(),
             ContactPerson: ko.observable(),
             TelNumber: ko.observable(),
-            CustomerType: ko.observable(),
-            Origin: ko.observable(),
-        }
+            CustomerTypeModel: {
+                Id: ko.observable(),
+                Name: ko.observable()
+            },
+            Origin: ko.observable()
+        },
+        CustomerTypeModels: ko.observableArray()
     }
 };
 ko.bindingHandlers.time = {
@@ -67,42 +71,24 @@ ko.bindingHandlers.date = {
 };
 //更新页码
 CustomerPosition.viewModel.UpdatePagination = function () {
-    var allPage = CustomerPosition.viewModel.Page.AllPage() == 0 ? 1 : CustomerPosition.viewModel.Page.AllPage();
+    var allPage = CustomerPosition.viewModel.Page.AllPage() === 0 ? 1 : CustomerPosition.viewModel.Page.AllPage();
     $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: CustomerPosition.viewModel.Page.CurrentPageIndex() });
 };
 //确定搜索
 CustomerPosition.viewModel.Search = function () {
     CustomerPosition.viewModel.Page.CurrentPageIndex(1);
-    var data = ko.toJS(CustomerPosition.viewModel.CustomerModel);
-    var model = {
-        CodeKey: data.Code,
-        NameKey: data.Name,
-        AddressKey: data.Address,
-        EmailKey: data.Email,
-        ContactPersonKey: data.ContactPerson,
-        TelNumberKey: data.TelNumber,
-        CustomerTypeKey: data.CustomerType,
-        OriginKey: data.Origin,
-        pageIndex: CustomerPosition.viewModel.Page.CurrentPageIndex(),
-    };
-    $.get("/api/CustomerCreate", model, function (result) {
+    var model = ko.mapping.toJS(CustomerPosition.viewModel.CustomerModel);
+    model.pageIndex = 1;
+    $.get("/api/Customer", model, function (result) {
         ko.mapping.fromJS(result, {}, CustomerPosition.viewModel.Page);
         CustomerPosition.viewModel.UpdatePagination();
         $('#searchdialog').modal('hide');
     });
 };
 CustomerPosition.viewModel.GotoPage = function () {
-    var model = {
-        pageIndex: CustomerPosition.viewModel.Page.CurrentPageIndex(),
-        ProductTypeKey: $('#ProductTypeKey').val(),
-        PartNumberKey: $('#PartNumberKey').val(),
-        VoltageKey: $('#VoltageKey').val(),
-        CapacityKey: $('#CapacityKey').val(),
-        PitchKey: $('#PitchKey').val(),
-        LevelKey: $('#LevelKey').val(),
-        SpecificDesignKey: $('#SpecificDesignKey').val()
-    };
-    $.get("/api/CustomerCreate", model, function (result) {
+    var model = ko.mapping.toJS(CustomerPosition.viewModel.CustomerModel);
+    model.pageIndex = CustomerPosition.viewModel.Page.CurrentPageIndex();
+    $.get("/api/Customer", model, function (result) {
         ko.mapping.fromJS(result, {}, CustomerPosition.viewModel.Page);
         CustomerPosition.viewModel.UpdatePagination();
     });
@@ -152,7 +138,10 @@ CustomerPosition.viewModel.AddSave = function () {
 
 $(function () {
     ko.applyBindings(CustomerPosition);
-    CustomerPosition.viewModel.Search();
+    $.get('/api/CustomerType', function (result) {
+        ko.mapping.fromJS(result, {}, CustomerPosition.viewModel.CustomerTypeModels);
+        CustomerPosition.viewModel.Search();
+    });
     //初始化页码
     $('#page-selection').bootpag({
         total: 1,

@@ -52,7 +52,7 @@ CustomerSearch.viewModel.UpdatePagination = function () {
 //确定搜索
 CustomerSearch.viewModel.Search = function () {
     CustomerSearch.viewModel.Page.CurrentPageIndex(1);
-    var model = ko.toJS(CustomerSearch.viewModel.CustomerModel);
+    var model = ko.mapping.toJS(CustomerSearch.viewModel.CustomerModel);
     model.pageIndex = 1;
     $.get("/api/Customer", model, function (result) {
         ko.mapping.fromJS(result, {}, CustomerSearch.viewModel.Page);
@@ -61,7 +61,7 @@ CustomerSearch.viewModel.Search = function () {
     });
 };
 CustomerSearch.viewModel.GotoPage = function () {
-    var model = ko.toJS(CustomerSearch.viewModel.CustomerModel);
+    var model = ko.mapping.toJS(CustomerSearch.viewModel.CustomerModel);
     model.pageIndex = CustomerSearch.viewModel.Page.CurrentPageIndex();
     $.get("/api/Customer", model, function (result) {
         ko.mapping.fromJS(result, {}, CustomerSearch.viewModel.Page);
