@@ -18,6 +18,11 @@ namespace Nicole.Web.MapperHelper
             return new EmployeeMapper();
         }
 
+        public IEnquiryMapper GetEnquiryMapper()
+        {
+           return new EnquiryMapper();
+        }
+
         public IStandardCostMapper GetStandardCostMapper()
         {
             return new StandardCostMapper();

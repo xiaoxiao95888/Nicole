@@ -12,7 +12,7 @@ namespace Nicole.Web.Models
         /// <summary>
         /// 申请人
         /// </summary>
-        public EmployeeModel EmployeeModel { get; set; }
+        public PositionModel PositionModel { get; set; }
         /// <summary>
         /// 报价
         /// </summary>

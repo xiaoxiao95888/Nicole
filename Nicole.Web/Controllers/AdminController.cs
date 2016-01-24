@@ -30,5 +30,10 @@ namespace Nicole.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult EnquirySetting()
+        {
+            return View();
+        }
     }
 }

@@ -16,27 +16,16 @@ namespace Nicole.Web.Controllers.API
     {
         private readonly ICustomerService _customerService;
         private readonly IEmployeesService _employeesService;
-        private readonly IPositionService _positionService;
         private readonly IMapperFactory _mapperFactory;
-        public CustomerController(ICustomerService customerService, IEmployeesService employeesService, IPositionService positionService, IMapperFactory mapperFactory)
+        public CustomerController(ICustomerService customerService, IEmployeesService employeesService, IMapperFactory mapperFactory)
         {
             _customerService = customerService;
             _employeesService = employeesService;
-            _positionService = positionService;
             _mapperFactory = mapperFactory;
         }
         public object Get([FromUri] CustomerModel key, int pageIndex = 1)
         {
-            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            var currentPosition =
-                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
-                    .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
-                    .Select(n => n.Position)
-                    .FirstOrDefault();
-           
             var pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
-
             var result =
                 _customerService.GetCustomers();
             result = result.Where(n => (key.Name == null || n.Name.Contains(key.Name))

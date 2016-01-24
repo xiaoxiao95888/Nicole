@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Nicole.Web.Controllers
 {
-    public class EnquiryController : BaseController
+    public class MyEnquiryController : BaseController
     {
         // GET: Enquiry
         public ActionResult Index()

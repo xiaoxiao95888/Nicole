@@ -20,7 +20,7 @@ namespace Nicole.Web.Controllers.API
             _positionService = positionService;
         }
 
-        public object Get()
+        public object Get([FromUri] PositionModel key)
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             Mapper.Reset();
@@ -34,7 +34,20 @@ namespace Nicole.Web.Controllers.API
                                     p => p.StartDate <= currentDate && (p.EndDate >= currentDate || p.EndDate == null))
                                     .Select(p => p.Employee)
                                     .FirstOrDefault()));
-            return _positionService.GetPositions().Select(Mapper.Map<Position, PositionModel>);
+            var result = _positionService.GetPositions();
+            if (key.CurrentEmployeeModel != null)
+            {
+                result =
+                    result.Where(
+                        n =>
+                            key.CurrentEmployeeModel.Name == null ||
+                            n.EmployeePostions.Any(
+                                p =>
+                                    p.Employee.Name.Contains(key.CurrentEmployeeModel.Name) &&
+                                    p.StartDate <= currentDate && (p.EndDate >= currentDate || p.EndDate == null) &&
+                                    p.IsDeleted == false));
+            }
+            return result.Select(Mapper.Map<Position, PositionModel>);
         }
     }
 }

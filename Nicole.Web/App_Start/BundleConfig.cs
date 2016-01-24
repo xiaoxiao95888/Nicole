@@ -54,10 +54,14 @@ namespace Nicole.Web
             //StandardCostSetting
             bundles.Add(new StyleBundle("~/Content/StandardCostSetting").Include(
                 "~/Content/bootstrap-datetimepicker.min.css"));
-            //EnquiryManager
-            bundles.Add(new ScriptBundle("~/bundles/EnquiryManager").Include(
-                "~/Scripts/JS/EnquiryManager.js",
+            //EnquirySetting
+            bundles.Add(new ScriptBundle("~/bundles/EnquirySetting").Include(
+                "~/Scripts/JS/EnquirySetting.js",
                 "~/Scripts/jquery.bootpag.min.js"));
+            //MyEnquiry
+            bundles.Add(new ScriptBundle("~/bundles/MyEnquiry").Include(
+               "~/Scripts/JS/MyEnquiry.js",
+               "~/Scripts/jquery.bootpag.min.js"));
             //LeftNavigationSetting
             bundles.Add(new ScriptBundle("~/bundles/LeftNavigationSetting").Include(
               "~/Scripts/JS/LeftNavigationSetting.js"));
@@ -69,10 +73,7 @@ namespace Nicole.Web
             bundles.Add(new ScriptBundle("~/bundles/CustomerSearch").Include(
                 "~/Scripts/JS/CustomerSearch.js",
                 "~/Scripts/jquery.bootpag.min.js"));
-            //CustomerPosition
-            bundles.Add(new ScriptBundle("~/bundles/CustomerPosition").Include(
-                "~/Scripts/JS/CustomerPosition.js",
-                "~/Scripts/jquery.bootpag.min.js"));
+            
             //ProductSearch
             bundles.Add(new ScriptBundle("~/bundles/ProductSearch").Include(
                 "~/Scripts/JS/ProductSearch.js",

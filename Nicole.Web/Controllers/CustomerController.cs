@@ -17,9 +17,6 @@ namespace Nicole.Web.Controllers
         {
             return View();
         }
-        public ActionResult CustomerPosition()
-        {
-            return View();
-        }
+       
     }
 }

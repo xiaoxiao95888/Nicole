@@ -208,9 +208,8 @@
     <Compile Include="Controllers\API\CustomerController.cs" />
     <Compile Include="Controllers\API\CustomerTypeController.cs" />
     <Compile Include="Controllers\API\MyCustomerController.cs" />
-    <Compile Include="Controllers\API\MyCustomersController.cs" />
     <Compile Include="Controllers\API\PositionCustomerController.cs" />
-    <Compile Include="Controllers\API\EnquiryManagerController.cs" />
+    <Compile Include="Controllers\API\EnquirySettingController.cs" />
     <Compile Include="Controllers\API\LeftNavigationController.cs" />
     <Compile Include="Controllers\API\PositionController.cs" />
     <Compile Include="Controllers\API\PositionLeftNavigationController.cs" />
@@ -219,7 +218,7 @@
     <Compile Include="Controllers\API\StandardCostSettingController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
-    <Compile Include="Controllers\EnquiryController.cs" />
+    <Compile Include="Controllers\MyEnquiryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Enums\IsPublish.cs" />
@@ -235,10 +234,12 @@
     <Compile Include="Infrastructure\UserService.cs" />
     <Compile Include="MapperHelper\CustomerMapper.cs" />
     <Compile Include="MapperHelper\EmployeeMapper.cs" />
+    <Compile Include="MapperHelper\EnquiryMapper.cs" />
     <Compile Include="MapperHelper\IMapper.cs" />
     <Compile Include="MapperHelper\IMapperFactory.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\ICustomerMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IEmployeeMapper.cs" />
+    <Compile Include="MapperHelper\IMapperInterfaces\IEnquiryMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IStandardCostMapper.cs" />
     <Compile Include="MapperHelper\MapperFactory.cs" />
     <Compile Include="MapperHelper\StandardCostMapper.cs" />
@@ -305,12 +306,12 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\JS\CustomerCreate.js" />
-    <Content Include="Scripts\JS\CustomerPosition.js" />
     <Content Include="Scripts\JS\CustomerSearch.js" />
-    <Content Include="Scripts\JS\EnquiryManager.js" />
+    <Content Include="Scripts\JS\EnquirySetting.js" />
     <Content Include="Scripts\JS\Home.js" />
     <Content Include="Scripts\JS\LeftNavigationSetting.js" />
     <Content Include="Scripts\JS\Main.js" />
+    <Content Include="Scripts\JS\MyEnquiry.js" />
     <Content Include="Scripts\JS\ProductSearch.js" />
     <Content Include="Scripts\JS\ProductSetting.js" />
     <Content Include="Scripts\JS\StandardCostSetting.js" />
@@ -357,12 +358,12 @@
     <Content Include="Views\Home\BreadCrumb.cshtml" />
     <Content Include="Views\Admin\StandardCostSetting.cshtml" />
     <Content Include="Views\Admin\ProductSetting.cshtml" />
-    <Content Include="Views\Enquiry\Index.cshtml" />
+    <Content Include="Views\Admin\EnquirySetting.cshtml" />
     <Content Include="Views\Customer\Create.cshtml" />
-    <Content Include="Views\Customer\CustomerPosition.cshtml" />
     <Content Include="Views\Customer\Search.cshtml" />
     <Content Include="Views\Admin\LeftNavigationSetting.cshtml" />
     <Content Include="Views\Product\Search.cshtml" />
+    <Content Include="Views\MyEnquiry\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
