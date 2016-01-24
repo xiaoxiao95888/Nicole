@@ -17,5 +17,10 @@ namespace Nicole.Web.MapperHelper
         {
             return new EmployeeMapper();
         }
+
+        public IStandardCostMapper GetStandardCostMapper()
+        {
+            return new StandardCostMapper();
+        }
     }
 }

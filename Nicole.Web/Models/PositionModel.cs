@@ -9,7 +9,7 @@ namespace Nicole.Web.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public PositionModel Parent { get; set; }
+        public Guid? ParentId { get; set; }
         /// <summary>
         /// 当前人员
         /// </summary>

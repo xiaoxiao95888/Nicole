@@ -62,11 +62,11 @@ EnquiryManager.viewModel.CreateSave = function () {
         }
     });
 }
-//显示特殊设计
-EnquiryManager.viewModel.ShowSpecificDesign = function () {
-    var model = ko.toJS(this);
-    Helper.ShowMessageDialog(model.ProductModel.SpecificDesign, model.ProductModel.PartNumber);
-};
+////显示特殊设计
+//EnquiryManager.viewModel.ShowSpecificDesign = function () {
+//    var model = ko.toJS(this);
+//    Helper.ShowMessageDialog(model.ProductModel.SpecificDesign, model.ProductModel.PartNumber);
+//};
 EnquiryManager.viewModel.GotoPage = function () {
     var model = {
         pageIndex: ProductSetting.viewModel.ProductSettingModels.CurrentPageIndex(),

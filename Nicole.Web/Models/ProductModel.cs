@@ -34,6 +34,10 @@ namespace Nicole.Web.Models
         /// 特殊设计
         /// </summary>
         public string SpecificDesign { get; set; }
+        /// <summary>
+        /// 成本
+        /// </summary>
+        public decimal? Price { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }
     }

@@ -9,7 +9,13 @@
             Id: ko.observable(),
             ProductModel: {
                 Id: ko.observable(),
-                PartNumber:ko.observable(),
+                PartNumber: ko.observable(),
+                ProductType: ko.observable(),
+                Voltage: ko.observable(),
+                Capacity: ko.observable(),
+                Pitch: ko.observable(),
+                Level: ko.observable(),
+                SpecificDesign: ko.observable()
             },
             Price: ko.observable(),
             QuotedTime: ko.observable(),
@@ -62,16 +68,8 @@ StandardCostSetting.viewModel.UpdatePagination = function () {
 //确定搜索
 StandardCostSetting.viewModel.Search = function () {
     StandardCostSetting.viewModel.StandardCostSettingModels.CurrentPageIndex(1);
-    var model = {
-        ProductTypeKey: $('#ProductTypeKey').val(),
-        PartNumberKey: $('#PartNumberKey').val(),
-        VoltageKey: $('#VoltageKey').val(),
-        CapacityKey: $('#CapacityKey').val(),
-        PitchKey: $('#PitchKey').val(),
-        LevelKey: $('#LevelKey').val(),
-        SpecificDesignKey: $('#SpecificDesignKey').val(),
-        pageIndex: StandardCostSetting.viewModel.StandardCostSettingModels.CurrentPageIndex(),
-    };
+    var model = ko.mapping.toJS(StandardCostSetting.viewModel.StandardCostModel);
+    model.pageIndex = 1;
     $.get("/api/StandardCostSetting", model, function (result) {
         ko.mapping.fromJS(result, {}, StandardCostSetting.viewModel.StandardCostSettingModels);
         StandardCostSetting.viewModel.UpdatePagination();
@@ -79,6 +77,7 @@ StandardCostSetting.viewModel.Search = function () {
     });
 };
 StandardCostSetting.viewModel.ShowCreate = function () {
+    StandardCostSetting.viewModel.ClearSearch();
     $('#createdialog').modal({
         show: true,
         backdrop: 'static'
@@ -93,6 +92,7 @@ StandardCostSetting.viewModel.CreateSave = function () {
             Helper.ShowErrorDialog(result.Message);
         } else {
             Helper.ShowSuccessDialog(Messages.Success);
+            StandardCostSetting.viewModel.ClearSearch();
             StandardCostSetting.viewModel.Search();
             $('#createdialog').modal('hide');
         }
@@ -110,7 +110,6 @@ StandardCostSetting.viewModel.ShowEdit = function () {
 //保存编辑
 StandardCostSetting.viewModel.EditSave = function () {
     var model = ko.toJS(StandardCostSetting.viewModel.StandardCostModel);
-    
     $.ajax({
         type: 'put',
         url: '/api/StandardCostSetting',
@@ -123,6 +122,7 @@ StandardCostSetting.viewModel.EditSave = function () {
             } else {
                 Helper.ShowSuccessDialog(Messages.Success);
                 $('#editdialog').modal('hide');
+                StandardCostSetting.viewModel.ClearSearch();
                 StandardCostSetting.viewModel.Search();
             }
         }
@@ -170,6 +170,7 @@ StandardCostSetting.viewModel.Delete = function () {
                         Helper.ShowErrorDialog(result.Message);
                     } else {
                         Helper.ShowSuccessDialog(Messages.Success);
+                        StandardCostSetting.viewModel.ClearSearch();
                         StandardCostSetting.viewModel.Search();
                     }
                 }
@@ -179,10 +180,24 @@ StandardCostSetting.viewModel.Delete = function () {
 };
 //搜索
 StandardCostSetting.viewModel.ShowSearch = function () {
+    StandardCostSetting.viewModel.ClearSearch();
     $('#searchdialog').modal({
         show: true,
         backdrop: 'static'
     });
+};
+//清空搜索项
+StandardCostSetting.viewModel.ClearSearch = function () {
+    for (var index in StandardCostSetting.viewModel.StandardCostModel) {
+        if (ko.isObservable(StandardCostSetting.viewModel.StandardCostModel[index])) {
+            StandardCostSetting.viewModel.StandardCostModel[index](null);
+        }
+    }
+    for (var index in StandardCostSetting.viewModel.StandardCostModel.ProductModel) {
+        if (ko.isObservable(StandardCostSetting.viewModel.StandardCostModel.ProductModel[index])) {
+            StandardCostSetting.viewModel.StandardCostModel.ProductModel[index](null);
+        }
+    }
 };
 $(function () {
     ko.applyBindings(StandardCostSetting);

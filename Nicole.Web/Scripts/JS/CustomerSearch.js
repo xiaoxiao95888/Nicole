@@ -54,7 +54,7 @@ CustomerSearch.viewModel.Search = function () {
     CustomerSearch.viewModel.Page.CurrentPageIndex(1);
     var model = ko.mapping.toJS(CustomerSearch.viewModel.CustomerModel);
     model.pageIndex = 1;
-    $.get("/api/Customer", model, function (result) {
+    $.get("/api/MyCustomer", model, function (result) {
         ko.mapping.fromJS(result, {}, CustomerSearch.viewModel.Page);
         CustomerSearch.viewModel.UpdatePagination();
         $('#searchdialog').modal('hide');
@@ -63,7 +63,7 @@ CustomerSearch.viewModel.Search = function () {
 CustomerSearch.viewModel.GotoPage = function () {
     var model = ko.mapping.toJS(CustomerSearch.viewModel.CustomerModel);
     model.pageIndex = CustomerSearch.viewModel.Page.CurrentPageIndex();
-    $.get("/api/Customer", model, function (result) {
+    $.get("/api/MyCustomer", model, function (result) {
         ko.mapping.fromJS(result, {}, CustomerSearch.viewModel.Page);
         CustomerSearch.viewModel.UpdatePagination();
     });

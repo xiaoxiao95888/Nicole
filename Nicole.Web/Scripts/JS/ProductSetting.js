@@ -13,16 +13,17 @@
             Capacity: ko.observable(),
             Pitch: ko.observable(),
             Level: ko.observable(),
-            SpecificDesign: ko.observable()
+            SpecificDesign: ko.observable(),
+            Price: ko.observable()
         }
 
     }
 };
-//显示特殊设计
-ProductSetting.viewModel.ShowSpecificDesign = function () {
-    var model = ko.toJS(this);
-    Helper.ShowMessageDialog(model.SpecificDesign, model.PartNumber);
-};
+////显示特殊设计
+//ProductSetting.viewModel.ShowSpecificDesign = function () {
+//    var model = ko.toJS(this);
+//    Helper.ShowMessageDialog(model.SpecificDesign, model.PartNumber);
+//};
 ProductSetting.viewModel.ShowEdit = function () {
     var model = ko.toJS(this);
     ko.mapping.fromJS(model, {}, ProductSetting.viewModel.ProductModel);
@@ -68,23 +69,17 @@ ProductSetting.viewModel.EditSave = function () {
                 Helper.ShowErrorDialog(result.Message);
             } else {
                 Helper.ShowSuccessDialog(Messages.Success);
-                $('#editdialog').modal('hide');
+                ProductSetting.viewModel.ClearSearch();
                 ProductSetting.viewModel.Search();
+                $('#editdialog').modal('hide');
             }
         }
     });
+
 };
 ProductSetting.viewModel.GotoPage = function () {
-    var model = {
-        pageIndex: ProductSetting.viewModel.ProductSettingModels.CurrentPageIndex(),
-        ProductTypeKey: $('#ProductTypeKey').val(),
-        PartNumberKey: $('#PartNumberKey').val(),
-        VoltageKey: $('#VoltageKey').val(),
-        CapacityKey: $('#CapacityKey').val(),
-        PitchKey: $('#PitchKey').val(),
-        LevelKey: $('#LevelKey').val(),
-        SpecificDesignKey: $('#SpecificDesignKey').val()
-    };
+    var model = ko.mapping.toJS(ProductSetting.viewModel.ProductModel);
+    model.pageIndex = ProductSetting.viewModel.ProductSettingModels.CurrentPageIndex();
     $.get("/api/ProductSetting", model, function (result) {
         ko.mapping.fromJS(result, {}, ProductSetting.viewModel.ProductSettingModels);
         ProductSetting.viewModel.UpdatePagination();
@@ -92,11 +87,12 @@ ProductSetting.viewModel.GotoPage = function () {
 };
 //更新页码
 ProductSetting.viewModel.UpdatePagination = function () {
-    var allPage = ProductSetting.viewModel.ProductSettingModels.AllPage() == 0 ? 1 : ProductSetting.viewModel.ProductSettingModels.AllPage();
+    var allPage = ProductSetting.viewModel.ProductSettingModels.AllPage() === 0 ? 1 : ProductSetting.viewModel.ProductSettingModels.AllPage();
     $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: ProductSetting.viewModel.ProductSettingModels.CurrentPageIndex() });
 };
 //弹出搜索框
-ProductSetting.viewModel.ShowSearch = function() {
+ProductSetting.viewModel.ShowSearch = function () {
+    ProductSetting.viewModel.ClearSearch();
     $('#searchdialog').modal({
         show: true,
         backdrop: 'static'
@@ -105,16 +101,8 @@ ProductSetting.viewModel.ShowSearch = function() {
 //确定搜索
 ProductSetting.viewModel.Search = function () {
     ProductSetting.viewModel.ProductSettingModels.CurrentPageIndex(1);
-    var model = {
-        ProductTypeKey: $('#ProductTypeKey').val(),
-        PartNumberKey: $('#PartNumberKey').val(),
-        VoltageKey: $('#VoltageKey').val(),
-        CapacityKey: $('#CapacityKey').val(),
-        PitchKey: $('#PitchKey').val(),
-        LevelKey: $('#LevelKey').val(),
-        SpecificDesignKey: $('#SpecificDesignKey').val(),
-        pageIndex: ProductSetting.viewModel.ProductSettingModels.CurrentPageIndex(),
-    };
+    var model = ko.mapping.toJS(ProductSetting.viewModel.ProductModel);
+    model.pageIndex = 1;
     $.get("/api/ProductSetting", model, function (result) {
         ko.mapping.fromJS(result, {}, ProductSetting.viewModel.ProductSettingModels);
         ProductSetting.viewModel.UpdatePagination();
@@ -122,6 +110,7 @@ ProductSetting.viewModel.Search = function () {
     });
 };
 ProductSetting.viewModel.ShowCreate = function () {
+
     $('#createdialog').modal({
         show: true,
         backdrop: 'static'
@@ -135,10 +124,20 @@ ProductSetting.viewModel.CreateSave = function () {
             Helper.ShowErrorDialog(result.Message);
         } else {
             Helper.ShowSuccessDialog(Messages.Success);
+            ProductSetting.viewModel.ClearSearch();
             ProductSetting.viewModel.Search();
             $('#createdialog').modal('hide');
         }
     });
+
+};
+//清空搜索项
+ProductSetting.viewModel.ClearSearch = function () {
+    for (var index in ProductSetting.viewModel.ProductModel) {
+        if (ko.isObservable(ProductSetting.viewModel.ProductModel[index])) {
+            ProductSetting.viewModel.ProductModel[index](null);
+        }
+    }
 
 };
 $(function () {

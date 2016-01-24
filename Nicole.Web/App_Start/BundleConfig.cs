@@ -73,6 +73,10 @@ namespace Nicole.Web
             bundles.Add(new ScriptBundle("~/bundles/CustomerPosition").Include(
                 "~/Scripts/JS/CustomerPosition.js",
                 "~/Scripts/jquery.bootpag.min.js"));
+            //ProductSearch
+            bundles.Add(new ScriptBundle("~/bundles/ProductSearch").Include(
+                "~/Scripts/JS/ProductSearch.js",
+                "~/Scripts/jquery.bootpag.min.js"));
         }
     }
 }

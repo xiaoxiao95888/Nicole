@@ -21,6 +21,7 @@
             <th>容量</th>
             <th>脚距</th>
             <th>等级</th>
+            <th>成本</th>
             <th>特殊设计</th>
             <th>操作</th>
         </tr>
@@ -33,9 +34,8 @@
             <td data-bind="text:Capacity"></td>
             <td data-bind="text:Pitch"></td>
             <td data-bind="text:Level"></td>
-            <td>
-                <a href="#" data-bind="click:ProductSetting.viewModel.ShowSpecificDesign,visible:SpecificDesign()!=null">查看</a>
-            </td>
+            <td data-bind="text:Price"></td>
+            <td data-bind="text:SpecificDesign"></td>
             <td>
 
                 <a href="#" data-bind="click:ProductSetting.viewModel.ShowEdit">编辑</a>
@@ -55,27 +55,54 @@
                 <h4 class="modal-title">新增</h4>
             </div>
             <div class="modal-body">
-                <div class="formbox" style="margin: auto">
+                <div class="form-horizontal">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="料号" data-bind="value:ProductSetting.viewModel.ProductModel.PartNumber">
+                        <label class="col-sm-3 control-label">料号</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="料号" data-bind="value:ProductSetting.viewModel.ProductModel.PartNumber">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="型号" data-bind="value:ProductSetting.viewModel.ProductModel.ProductType">
+                        <label class="col-sm-3 control-label">型号</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="型号" data-bind="value:ProductSetting.viewModel.ProductModel.ProductType">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="电压" data-bind="value:ProductSetting.viewModel.ProductModel.Voltage">
+                        <label class="col-sm-3 control-label">电压</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="电压" data-bind="value:ProductSetting.viewModel.ProductModel.Voltage">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="容量" data-bind="value:ProductSetting.viewModel.ProductModel.Capacity">
+                        <label class="col-sm-3 control-label">容量</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="容量" data-bind="value:ProductSetting.viewModel.ProductModel.Capacity">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="脚距" data-bind="value:ProductSetting.viewModel.ProductModel.Pitch">
+                        <label class="col-sm-3 control-label">脚距</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="脚距" data-bind="value:ProductSetting.viewModel.ProductModel.Pitch">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="等级" data-bind="value:ProductSetting.viewModel.ProductModel.Level">
+                        <label class="col-sm-3 control-label">等级</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="等级" data-bind="value:ProductSetting.viewModel.ProductModel.Level">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <textarea placeholder="特殊设计" class="form-control" rows="3" data-bind="value:ProductSetting.viewModel.ProductModel.SpecificDesign"></textarea>
+                        <label class="col-sm-3 control-label">成本</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="成本" data-bind="value:ProductSetting.viewModel.ProductModel.Price">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">特殊设计</label>
+                        <div class="col-sm-9">
+                            <textarea placeholder="特殊设计" class="form-control" rows="3" data-bind="value:ProductSetting.viewModel.ProductModel.SpecificDesign"></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -96,27 +123,54 @@
                 <h4 class="modal-title">编辑</h4>
             </div>
             <div class="modal-body">
-                <div class="formbox" style="margin: auto">
+                <div class="form-horizontal">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="料号" data-bind="value:ProductSetting.viewModel.ProductModel.PartNumber">
+                        <label class="col-sm-3 control-label">料号</label>
+                        <div class="col-sm-9">
+                            <input type="text" readonly="readonly" class="form-control" placeholder="料号" data-bind="value:ProductSetting.viewModel.ProductModel.PartNumber">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="型号" data-bind="value:ProductSetting.viewModel.ProductModel.ProductType">
+                        <label class="col-sm-3 control-label">型号</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="型号" data-bind="value:ProductSetting.viewModel.ProductModel.ProductType">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="电压" data-bind="value:ProductSetting.viewModel.ProductModel.Voltage">
+                        <label class="col-sm-3 control-label">电压</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="电压" data-bind="value:ProductSetting.viewModel.ProductModel.Voltage">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="容量" data-bind="value:ProductSetting.viewModel.ProductModel.Capacity">
+                        <label class="col-sm-3 control-label">容量</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="容量" data-bind="value:ProductSetting.viewModel.ProductModel.Capacity">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="脚距" data-bind="value:ProductSetting.viewModel.ProductModel.Pitch">
+                        <label class="col-sm-3 control-label">脚距</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="脚距" data-bind="value:ProductSetting.viewModel.ProductModel.Pitch">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="等级" data-bind="value:ProductSetting.viewModel.ProductModel.Level">
+                        <label class="col-sm-3 control-label">等级</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="等级" data-bind="value:ProductSetting.viewModel.ProductModel.Level">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <textarea placeholder="特殊设计" class="form-control" rows="3" data-bind="value:ProductSetting.viewModel.ProductModel.SpecificDesign"></textarea>
+                        <label class="col-sm-3 control-label">成本</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="成本" data-bind="value:ProductSetting.viewModel.ProductModel.Price">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">特殊设计</label>
+                        <div class="col-sm-9">
+                            <textarea placeholder="特殊设计" class="form-control" rows="3" data-bind="value:ProductSetting.viewModel.ProductModel.SpecificDesign"></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -136,27 +190,54 @@
                 <h4 class="modal-title">搜索</h4>
             </div>
             <div class="modal-body">
-                <div class="formbox" style="margin: auto">
+                <div class="form-horizontal">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="料号关键字" id="PartNumberKey">
+                        <label class="col-sm-3 control-label">料号</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="料号" data-bind="value:ProductSetting.viewModel.ProductModel.PartNumber">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="型号关键字" id="ProductTypeKey">
+                        <label class="col-sm-3 control-label">型号</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="型号" data-bind="value:ProductSetting.viewModel.ProductModel.ProductType">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="电压关键字" id="VoltageKey">
+                        <label class="col-sm-3 control-label">电压</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="电压" data-bind="value:ProductSetting.viewModel.ProductModel.Voltage">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="容量关键字" id="CapacityKey">
+                        <label class="col-sm-3 control-label">容量</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="容量" data-bind="value:ProductSetting.viewModel.ProductModel.Capacity">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="脚距关键字" id="PitchKey">
+                        <label class="col-sm-3 control-label">脚距</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="脚距" data-bind="value:ProductSetting.viewModel.ProductModel.Pitch">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="等级关键字" id="LevelKey">
+                        <label class="col-sm-3 control-label">等级</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="等级" data-bind="value:ProductSetting.viewModel.ProductModel.Level">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="特殊设计关键字" id="SpecificDesignKey" 、>
+                        <label class="col-sm-3 control-label">成本</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="成本" data-bind="value:ProductSetting.viewModel.ProductModel.Price">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">特殊设计</label>
+                        <div class="col-sm-9">
+                            <textarea placeholder="特殊设计" class="form-control" rows="3" data-bind="value:ProductSetting.viewModel.ProductModel.SpecificDesign"></textarea>
+                        </div>
                     </div>
                 </div>
             </div>

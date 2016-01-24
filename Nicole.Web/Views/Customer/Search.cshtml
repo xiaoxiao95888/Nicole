@@ -32,8 +32,11 @@
             <td data-bind="text:ContactPerson"></td>
             <td data-bind="text:TelNumber"></td>
             <td data-bind="text:CustomerTypeModel.Name"></td>
-            <td data-bind="foreach:EmployeeModels">
-                <p data-bind="text:Name"></p>
+            <td >
+                <div class="form-inline" data-bind="foreach:PositionModels">
+                    <span href="#" data-bind="text:CurrentEmployeeModel.Name"></span>
+                </div>
+              
             </td>
             <td data-bind="text:Origin"></td>
             <td data-bind="time:UpdateTime"></td>

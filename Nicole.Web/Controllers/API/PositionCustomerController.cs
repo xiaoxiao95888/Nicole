@@ -52,5 +52,31 @@ namespace Nicole.Web.Controllers.API
             }
 
         }
+        public object Delete(PositionCustomerModel model)
+        {
+            var postion = _positionService.GetPosition(model.PositionModel.Id);
+            var customer = _customerService.GetCustomer(model.CustomerModel.Id);
+            if (postion == null || customer == null || postion.IsDeleted || customer.IsDeleted)
+            {
+                return Failed("职位、客户不存在或者被删除");
+            }
+            try
+            {
+                var positionCustomer = customer.PositionCustomers.FirstOrDefault(n => n.PositionId == postion.Id);
+                if (positionCustomer != null)
+                {
+                    positionCustomer.IsDeleted = true;
+                    _customerService.Update();
+                }
+              
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                return Failed(ex.Message);
+            }
+        }
+
+        
     }
 }

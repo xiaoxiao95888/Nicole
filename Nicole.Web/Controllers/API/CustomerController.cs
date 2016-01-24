@@ -34,23 +34,11 @@ namespace Nicole.Web.Controllers.API
                         n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
                     .Select(n => n.Position)
                     .FirstOrDefault();
-            var subpositions = _positionService.GetPositions().Where(n => n.Parent.Id == currentPosition.Id).Select(p => p.Id).ToArray();
-
-
+           
             var pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
 
             var result =
-                _customerService.GetCustomers()
-                    .Where(
-                        n => (
-                            n.PositionCustomers.Any(
-                                p => p.PositionId != null && (subpositions.Any() ? subpositions.Contains(p.PositionId.Value) : p.PositionId == currentPosition.Id))));
-            if (currentPosition.Parent == null)
-            {
-                result =
                 _customerService.GetCustomers();
-            }
-
             result = result.Where(n => (key.Name == null || n.Name.Contains(key.Name))
                                        && (key.Origin == null || n.Origin.Contains(key.Origin))
                                        && (key.TelNumber == null || n.TelNumber.Contains(key.TelNumber))

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Nicole.Web.Models
 {
@@ -39,13 +40,14 @@ namespace Nicole.Web.Models
         /// </summary>
         public string Origin { get; set; }
         /// <summary>
-        /// 所属人
+        /// 所属职位
         /// </summary>
-        public EmployeeModel[] EmployeeModels { get; set; }
+        public PositionModel[] PositionModels { get; set; }
+        
         /// <summary>
         /// 创建人
         /// </summary>
-        public EmployeeModel EmployeeModel { get; set; }
+        public PositionModel PositionModel { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }
 

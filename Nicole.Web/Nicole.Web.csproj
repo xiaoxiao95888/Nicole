@@ -207,18 +207,21 @@
     <Compile Include="Controllers\API\BaseApiController.cs" />
     <Compile Include="Controllers\API\CustomerController.cs" />
     <Compile Include="Controllers\API\CustomerTypeController.cs" />
+    <Compile Include="Controllers\API\MyCustomerController.cs" />
     <Compile Include="Controllers\API\MyCustomersController.cs" />
     <Compile Include="Controllers\API\PositionCustomerController.cs" />
     <Compile Include="Controllers\API\EnquiryManagerController.cs" />
     <Compile Include="Controllers\API\LeftNavigationController.cs" />
     <Compile Include="Controllers\API\PositionController.cs" />
     <Compile Include="Controllers\API\PositionLeftNavigationController.cs" />
+    <Compile Include="Controllers\API\ProductSearchController.cs" />
     <Compile Include="Controllers\API\ProductSettingController.cs" />
     <Compile Include="Controllers\API\StandardCostSettingController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\EnquiryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Enums\IsPublish.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -236,7 +239,9 @@
     <Compile Include="MapperHelper\IMapperFactory.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\ICustomerMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IEmployeeMapper.cs" />
+    <Compile Include="MapperHelper\IMapperInterfaces\IStandardCostMapper.cs" />
     <Compile Include="MapperHelper\MapperFactory.cs" />
+    <Compile Include="MapperHelper\StandardCostMapper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BreadCrumbModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
@@ -306,6 +311,7 @@
     <Content Include="Scripts\JS\Home.js" />
     <Content Include="Scripts\JS\LeftNavigationSetting.js" />
     <Content Include="Scripts\JS\Main.js" />
+    <Content Include="Scripts\JS\ProductSearch.js" />
     <Content Include="Scripts\JS\ProductSetting.js" />
     <Content Include="Scripts\JS\StandardCostSetting.js" />
     <Content Include="Scripts\knockout-3.2.0.js" />
@@ -356,6 +362,7 @@
     <Content Include="Views\Customer\CustomerPosition.cshtml" />
     <Content Include="Views\Customer\Search.cshtml" />
     <Content Include="Views\Admin\LeftNavigationSetting.cshtml" />
+    <Content Include="Views\Product\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

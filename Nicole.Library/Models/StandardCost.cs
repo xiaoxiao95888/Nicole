@@ -16,13 +16,13 @@ namespace Nicole.Library.Models
         public Guid Id { get; set; }
 
         public Guid? ProductId { get; set; }
-        [ForeignKey("ProductId")]
         /// <summary>
         /// 产品
         /// </summary>
+        [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
         /// <summary>
-        /// 成本
+        /// 报价
         /// </summary>
         public decimal Price { get; set; }
         /// <summary>

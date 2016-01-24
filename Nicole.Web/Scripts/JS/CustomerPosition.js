@@ -8,7 +8,8 @@
         PositionModels: ko.observableArray(),
         SelectedCustomerModel: {
             Id: ko.observable(),
-            Name: ko.observable()
+            Name: ko.observable(),
+            PositionModels: ko.observableArray()
         },
         CustomerModel: {
             Id: ko.observable(),
@@ -69,6 +70,7 @@ ko.bindingHandlers.date = {
         }
     }
 };
+
 //更新页码
 CustomerPosition.viewModel.UpdatePagination = function () {
     var allPage = CustomerPosition.viewModel.Page.AllPage() === 0 ? 1 : CustomerPosition.viewModel.Page.AllPage();
@@ -101,7 +103,7 @@ CustomerPosition.viewModel.ShowSearch = function () {
     });
 };
 CustomerPosition.viewModel.ShowCreate = function () {
-    var model = ko.toJS(this);
+    var model = ko.mapping.toJS(this);
     //绑定选中的CustomerModel
     ko.mapping.fromJS(model, {}, CustomerPosition.viewModel.SelectedCustomerModel);
     $.get('/api/Position/', function (result) {
@@ -111,12 +113,11 @@ CustomerPosition.viewModel.ShowCreate = function () {
             backdrop: 'static'
         });
     });
-    
 };
 //确定添加关系
 CustomerPosition.viewModel.AddSave = function () {
-    var selectedCustomerModel = ko.toJS(CustomerPosition.viewModel.SelectedCustomerModel);
-    var selectedPositionModel = ko.toJS(this);
+    var selectedCustomerModel = ko.mapping.toJS(CustomerPosition.viewModel.SelectedCustomerModel);
+    var selectedPositionModel = ko.mapping.toJS(this);
     var positionCustomerModel = {
         PositionModel: {
             Id: selectedPositionModel.Id
@@ -135,7 +136,48 @@ CustomerPosition.viewModel.AddSave = function () {
     });
 
 };
-
+//解除关系
+CustomerPosition.viewModel.Unfriend = function() {
+    var model = ko.mapping.toJS(this);
+    //绑定选中的CustomerModel
+    ko.mapping.fromJS(model, {}, CustomerPosition.viewModel.SelectedCustomerModel);
+    $('#unfrienddialog').modal({
+        show: true,
+        backdrop: 'static'
+    });
+};
+CustomerPosition.viewModel.UnfriendSave = function () {
+    var selectedCustomerModel = ko.mapping.toJS(CustomerPosition.viewModel.SelectedCustomerModel);
+    var selectedPositionModel = ko.mapping.toJS(this);
+    var positionCustomerModel = {
+        PositionModel: {
+            Id: selectedPositionModel.Id
+        },
+        CustomerModel: {
+            Id: selectedCustomerModel.Id
+        }
+    };
+    Helper.ShowConfirmationDialog({
+        message: "是否确认删除?",
+        confirmFunction: function () {
+            $.ajax({
+                type: 'delete',
+                url: '/api/PositionCustomer/',
+                contentType: 'application/json',
+                dataType: "json",
+                data:  JSON.stringify(positionCustomerModel),
+                success: function (result) {
+                    if (result.Error) {
+                        Helper.ShowErrorDialog(result.Message);
+                    } else {
+                        Helper.ShowSuccessDialog(Messages.Success);
+                        CustomerPosition.viewModel.Search();
+                    }
+                }
+            });
+        }
+    });
+};
 $(function () {
     ko.applyBindings(CustomerPosition);
     $.get('/api/CustomerType', function (result) {

@@ -11,5 +11,6 @@ namespace Nicole.Web.MapperHelper
     {
         ICustomerMapper GetCustomerMapper();
         IEmployeeMapper GetEmployeeMapper();
+        IStandardCostMapper GetStandardCostMapper();
     }
 }

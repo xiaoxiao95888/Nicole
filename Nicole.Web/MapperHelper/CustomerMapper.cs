@@ -16,28 +16,30 @@ namespace Nicole.Web.MapperHelper
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             Mapper.Reset();
             Mapper.CreateMap<Employee, EmployeeModel>();
+            Mapper.CreateMap<Position, PositionModel>()
+                .ForMember(n => n.ParentId, opt => opt.MapFrom(src => src.Parent.Id))
+                .ForMember(n => n.CurrentEmployeeModel,
+                    opt =>
+                        opt.MapFrom(
+                            src =>
+                                Mapper.Map<Employee, EmployeeModel>(src.EmployeePostions.Where(
+                                    e => e.StartDate <= currentDate && (e.EndDate == null || e.EndDate >= currentDate))
+                                    .Select(p => p.Employee)
+                                    .FirstOrDefault())
+                            ));
             Mapper.CreateMap<CustomerType, CustomerTypeModel>();
             Mapper.CreateMap<Customer, CustomerModel>()
                 .ForMember(n => n.CustomerTypeModel, opt => opt.MapFrom(src => src.CustomerType))
-                .ForMember(n => n.EmployeeModel,
+                .ForMember(n => n.PositionModel,
+                    opt =>
+                        opt.MapFrom(
+                            src => src.Position))
+                .ForMember(n => n.PositionModels,
                     opt =>
                         opt.MapFrom(
                             src =>
-                                src.Position.EmployeePostions.Where(
-                                    p => p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate))
-                                    .Select(p => p.Employee)
-                                    .FirstOrDefault()))
-                .ForMember(n => n.EmployeeModels,
-                    opt =>
-                        opt.MapFrom(
-                            src =>
-                                src.PositionCustomers.SelectMany(
-                                    p =>
-                                        p.Position.EmployeePostions.Where(
-                                            ep =>
-                                                ep.StartDate <= currentDate &&
-                                                (ep.EndDate == null || ep.EndDate >= currentDate))
-                                            .Select(rp => rp.Employee))));
+                                src.PositionCustomers.Where(p => p.IsDeleted == false)
+                                    .Select(p => Mapper.Map<Position, PositionModel>(p.Position))));
         }
     }
 }

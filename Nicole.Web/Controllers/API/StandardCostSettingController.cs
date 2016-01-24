@@ -3,13 +3,10 @@ using Nicole.Library.Models;
 using Nicole.Library.Services;
 using Nicole.Web.Models;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web;
 using System.Web.Http;
+using Nicole.Web.MapperHelper;
 
 namespace Nicole.Web.Controllers.API
 {
@@ -17,62 +14,41 @@ namespace Nicole.Web.Controllers.API
     {
         private readonly IProductService _productService;
         private readonly IStandardCostService _standardCostService;
-        public StandardCostSettingController(IProductService productService, IStandardCostService standardCostService)
+        private readonly IMapperFactory _mapperFactory;
+        public StandardCostSettingController(IProductService productService, IStandardCostService standardCostService, IMapperFactory mapperFactory)
         {
             _productService = productService;
             _standardCostService = standardCostService;
+            _mapperFactory = mapperFactory;
         }
-        public object Get()
+        public object Get([FromUri] StandardCostModel key, int pageIndex = 1)
         {
-            var pageIndex = string.IsNullOrEmpty(HttpContext.Current.Request["pageIndex"])
-                ? 1
-                : Convert.ToInt32(HttpContext.Current.Request["pageIndex"]);
             var pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
-            var productTypeKey = HttpContext.Current.Request["ProductTypeKey"] ?? string.Empty;
-            var voltageKey = HttpContext.Current.Request["VoltageKey"] ?? string.Empty;
-            var capacityKey = HttpContext.Current.Request["CapacityKey"] ?? string.Empty;
-            var pitchKey = HttpContext.Current.Request["PitchKey"] ?? string.Empty;
-            var levelKey = HttpContext.Current.Request["LevelKey"] ?? string.Empty;
-            var partNumberKey = HttpContext.Current.Request["PartNumberKey"] ?? string.Empty;
-            var specificDesignKey = HttpContext.Current.Request["SpecificDesignKey"] ?? string.Empty;
-            var quotedTimeKey = HttpContext.Current.Request["QuotedTimeKey"] ?? string.Empty;
-            var result = _standardCostService.GetStandardCosts();
-            if (!string.IsNullOrEmpty(quotedTimeKey))
+            var result =
+                _standardCostService.GetStandardCosts()
+                    .Where(n => (key.Remark == null || n.Remark.Contains(key.Remark.Trim())));
+            if (key.ProductModel != null)
             {
-                var quotedTime = Convert.ToDateTime(quotedTimeKey);
-                result = result.Where(n => n.QuotedTime == quotedTime);
+                result =
+                    result.Where(
+                        n =>
+                            (key.ProductModel.PartNumber == null ||
+                             n.Product.PartNumber.Contains(key.ProductModel.PartNumber.Trim()))
+                            && (key.ProductModel.Capacity == null ||
+                                n.Product.Capacity.Contains(key.ProductModel.Capacity.Trim()))
+                            && (key.ProductModel.Level == null ||
+                                n.Product.Level.Contains(key.ProductModel.Level.Trim()))
+                            && (key.ProductModel.Pitch == null ||
+                                n.Product.Pitch.Contains(key.ProductModel.Pitch.Trim()))
+                            && (key.ProductModel.SpecificDesign == null ||
+                                n.Product.SpecificDesign.Contains(key.ProductModel.SpecificDesign.Trim()))
+                            && (key.ProductModel.ProductType == null ||
+                                n.Product.ProductType.Contains(key.ProductModel.ProductType.Trim()))
+                            && (key.ProductModel.Voltage == null ||
+                                n.Product.Voltage.Contains(key.ProductModel.Voltage.Trim())));
+
             }
-            if (!string.IsNullOrEmpty(productTypeKey))
-            {
-                result = result.Where(n => n.Product.ProductType.Contains(productTypeKey));
-            }
-            if (!string.IsNullOrEmpty(voltageKey))
-            {
-                result = result.Where(n => n.Product.Voltage.Contains(voltageKey));
-            }
-            if (!string.IsNullOrEmpty(capacityKey))
-            {
-                result = result.Where(n => n.Product.Capacity.Contains(capacityKey));
-            }
-            if (!string.IsNullOrEmpty(pitchKey))
-            {
-                result = result.Where(n => n.Product.Pitch.Contains(pitchKey));
-            }
-            if (!string.IsNullOrEmpty(levelKey))
-            {
-                result = result.Where(n => n.Product.Level.Contains(levelKey));
-            }
-            if (!string.IsNullOrEmpty(specificDesignKey))
-            {
-                result = result.Where(n => n.Product.SpecificDesign.Contains(specificDesignKey));
-            }
-            if (!string.IsNullOrEmpty(partNumberKey))
-            {
-                result = result.Where(n => n.Product.PartNumber.Contains(partNumberKey));
-            }
-            Mapper.Reset();
-            Mapper.CreateMap<Product, ProductModel>();
-            Mapper.CreateMap<StandardCost, StandardCostModel>().ForMember(n => n.ProductModel, opt => opt.MapFrom(src => src.Product));
+            _mapperFactory.GetStandardCostMapper().Create();
             var model = new StandardCostSettingModel
             {
                 StandardCostModels =
@@ -88,13 +64,7 @@ namespace Nicole.Web.Controllers.API
             return model;
 
         }
-        public object Get(Guid id)
-        {
-            Mapper.Reset();
-            Mapper.CreateMap<Product, ProductModel>();
-            Mapper.CreateMap<StandardCost, StandardCostModel>().ForMember(n => n.ProductModel, opt => opt.MapFrom(src => src.Product));
-            return Mapper.Map<StandardCost, StandardCostModel>(_standardCostService.GetStandardCost(id));
-        }
+        
         public object Post(StandardCostModel model)
         {
             var errormessage = string.Empty;

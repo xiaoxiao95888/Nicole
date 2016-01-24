@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 
 namespace Nicole.Web.Controllers.API
@@ -20,48 +21,27 @@ namespace Nicole.Web.Controllers.API
             _productService = productService;
         }
         // GET: ProductSetting
-        public object Get()
+        public object Get([FromUri] ProductModel key, int pageIndex = 1)
         {
-            var pageIndex = string.IsNullOrEmpty(HttpContext.Current.Request["pageIndex"])
-                ? 1
-                : Convert.ToInt32(HttpContext.Current.Request["pageIndex"]);
             var pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
-            var productTypeKey = HttpContext.Current.Request["ProductTypeKey"] ?? string.Empty;
-            var voltageKey = HttpContext.Current.Request["VoltageKey"] ?? string.Empty;
-            var capacityKey = HttpContext.Current.Request["CapacityKey"] ?? string.Empty;
-            var pitchKey = HttpContext.Current.Request["PitchKey"] ?? string.Empty;
-            var levelKey = HttpContext.Current.Request["LevelKey"] ?? string.Empty;
-            var partNumberKey = HttpContext.Current.Request["PartNumberKey"] ?? string.Empty;
-            var specificDesignKey = HttpContext.Current.Request["SpecificDesignKey"] ?? string.Empty;
-            var result = _productService.GetProducts();
-            if (!string.IsNullOrEmpty(productTypeKey))
-            {
-                result = result.Where(n => n.ProductType.Contains(productTypeKey));
-            }
-            if (!string.IsNullOrEmpty(voltageKey))
-            {
-                result = result.Where(n => n.Voltage.Contains(voltageKey));
-            }
-            if (!string.IsNullOrEmpty(capacityKey))
-            {
-                result = result.Where(n => n.Capacity.Contains(capacityKey));
-            }
-            if (!string.IsNullOrEmpty(pitchKey))
-            {
-                result = result.Where(n => n.Pitch.Contains(pitchKey));
-            }
-            if (!string.IsNullOrEmpty(levelKey))
-            {
-                result = result.Where(n => n.Level.Contains(levelKey));
-            }
-            if (!string.IsNullOrEmpty(specificDesignKey))
-            {
-                result = result.Where(n => n.SpecificDesign.Contains(specificDesignKey));
-            }
-            if (!string.IsNullOrEmpty(partNumberKey))
-            {
-                result = result.Where(n => n.PartNumber.Contains(partNumberKey));
-            }
+            var result = _productService.GetProducts().Where(n =>
+                (key.PartNumber == null ||
+                 n.PartNumber.Contains(key.PartNumber.Trim()))
+                && (key.Capacity == null ||
+                    n.Capacity.Contains(key.Capacity.Trim()))
+                && (key.Level == null ||
+                    n.Level.Contains(key.Level.Trim()))
+                && (key.Pitch == null ||
+                    n.Pitch.Contains(key.Pitch.Trim()))
+                && (key.SpecificDesign == null ||
+                    n.SpecificDesign.Contains(key.SpecificDesign.Trim()))
+                && (key.ProductType == null ||
+                    n.ProductType.Contains(key.ProductType.Trim()))
+                    && (key.Price == null ||
+                    n.Price == key.Price)
+                && (key.Voltage == null ||
+                    n.Voltage.Contains(key.Voltage.Trim())));
+
             Mapper.Reset();
             Mapper.CreateMap<Product, ProductModel>();
             var model = new ProductSettingModel
@@ -79,58 +59,45 @@ namespace Nicole.Web.Controllers.API
             return model;
 
         }
-        public object Get(Guid id)
-        {
-            Mapper.Reset();
-            Mapper.CreateMap<Product, ProductModel>();
-            return Mapper.Map<Product, ProductModel>(_productService.GetProduct(id));
-        }
         public object Post(ProductModel model)
         {
-            var errormessage = string.Empty;
             if (model == null)
             {
-                errormessage = "型号不能为空";
+                return Failed("产品不能为空");
             }
-            else if (string.IsNullOrEmpty(model.ProductType))
+            if (string.IsNullOrEmpty(model.ProductType))
             {
-                errormessage = "型号不能为空";
+                return Failed("型号不能为空");
             }
-            else if (string.IsNullOrEmpty(model.PartNumber))
+            if (string.IsNullOrEmpty(model.PartNumber))
             {
-                errormessage = "料号不能为空";
+                return Failed("料号不能为空");
             }
-            else if (_productService.GetProducts().Any(n => n.PartNumber == model.PartNumber.Trim()))
+            if (_productService.GetProducts().Any(n => n.PartNumber == model.PartNumber.Trim()))
             {
-                errormessage = "料号不能重复";
-            }
 
-            if (string.IsNullOrEmpty(errormessage))
-            {
-                var item = new Product
-                {
-                    Id = Guid.NewGuid(),
-                    PartNumber = model.PartNumber.Trim(),
-                    ProductType = model.ProductType.Trim(),
-                    Voltage = string.IsNullOrEmpty(model.Voltage) ? model.Voltage : model.Voltage.Trim(),
-                    Capacity = string.IsNullOrEmpty(model.Capacity) ? model.Capacity : model.Capacity.Trim(),
-                    Pitch = string.IsNullOrEmpty(model.Pitch) ? model.Pitch : model.Pitch.Trim(),
-                    Level = string.IsNullOrEmpty(model.Level) ? model.Level : model.Level.Trim(),
-                    SpecificDesign = string.IsNullOrEmpty(model.SpecificDesign) ? model.SpecificDesign : model.SpecificDesign.Trim(),
-                };
-                try
-                {
-                    _productService.Insert(item);
-                }
-                catch (Exception ex)
-                {
-                    return Failed(ex.Message);
-                }
+                return Failed("料号不能重复");
             }
-            else
+            var item = new Product
             {
-                return Failed(errormessage);
-
+                Id = Guid.NewGuid(),
+                PartNumber = model.PartNumber.Trim(),
+                ProductType = model.ProductType.Trim(),
+                Voltage = string.IsNullOrEmpty(model.Voltage) ? model.Voltage : model.Voltage.Trim(),
+                Capacity = string.IsNullOrEmpty(model.Capacity) ? model.Capacity : model.Capacity.Trim(),
+                Pitch = string.IsNullOrEmpty(model.Pitch) ? model.Pitch : model.Pitch.Trim(),
+                Level = string.IsNullOrEmpty(model.Level) ? model.Level : model.Level.Trim(),
+                SpecificDesign =
+                    string.IsNullOrEmpty(model.SpecificDesign) ? model.SpecificDesign : model.SpecificDesign.Trim(),
+                Price = model.Price
+            };
+            try
+            {
+                _productService.Insert(item);
+            }
+            catch (Exception ex)
+            {
+                return Failed(ex.Message);
             }
             return Success();
         }
