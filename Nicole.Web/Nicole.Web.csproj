@@ -207,9 +207,10 @@
     <Compile Include="Controllers\API\BaseApiController.cs" />
     <Compile Include="Controllers\API\CustomerController.cs" />
     <Compile Include="Controllers\API\CustomerTypeController.cs" />
-    <Compile Include="Controllers\API\MyCustomerController.cs" />
-    <Compile Include="Controllers\API\PositionCustomerController.cs" />
     <Compile Include="Controllers\API\EnquirySettingController.cs" />
+    <Compile Include="Controllers\API\MyCustomerController.cs" />
+    <Compile Include="Controllers\API\MyEnquiryController.cs" />
+    <Compile Include="Controllers\API\PositionCustomerController.cs" />
     <Compile Include="Controllers\API\LeftNavigationController.cs" />
     <Compile Include="Controllers\API\PositionController.cs" />
     <Compile Include="Controllers\API\PositionLeftNavigationController.cs" />
@@ -358,12 +359,12 @@
     <Content Include="Views\Home\BreadCrumb.cshtml" />
     <Content Include="Views\Admin\StandardCostSetting.cshtml" />
     <Content Include="Views\Admin\ProductSetting.cshtml" />
-    <Content Include="Views\Admin\EnquirySetting.cshtml" />
     <Content Include="Views\Customer\Create.cshtml" />
     <Content Include="Views\Customer\Search.cshtml" />
     <Content Include="Views\Admin\LeftNavigationSetting.cshtml" />
     <Content Include="Views\Product\Search.cshtml" />
-    <Content Include="Views\MyEnquiry\Index.cshtml" />
+    <Content Include="Views\MyEnquiry\Search.cshtml" />
+    <Content Include="Views\Admin\EnquirySetting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

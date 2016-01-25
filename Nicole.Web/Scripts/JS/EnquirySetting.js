@@ -1,4 +1,4 @@
-﻿var MyEnquiry = {
+﻿var EnquirySetting = {
     viewModel: {
         Page: {
             CurrentPageIndex: ko.observable(1),
@@ -59,54 +59,82 @@ ko.bindingHandlers.time = {
         }
     }
 };
-MyEnquiry.viewModel.Print = function() {
-
+EnquirySetting.viewModel.Print = function() {
+    
 };
-
-MyEnquiry.viewModel.GotoPage = function () {
-    var model = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);
-    model.pageIndex = MyEnquiry.viewModel.Page.CurrentPageIndex();
-    $.get("/api/MyEnquiry", model, function (result) {
-        ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.Page);
-        MyEnquiry.viewModel.UpdatePagination();
+EnquirySetting.viewModel.GotoPage = function () {
+    var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel);
+    model.pageIndex = EnquirySetting.viewModel.Page.CurrentPageIndex();
+    $.get("/api/EnquirySetting", model, function (result) {
+        ko.mapping.fromJS(result, {}, EnquirySetting.viewModel.Page);
+        EnquirySetting.viewModel.UpdatePagination();
         $('#searchdialog').modal('hide');
     });
 };
-MyEnquiry.viewModel.UpdatePagination = function() {
-    var allPage = MyEnquiry.viewModel.Page.AllPage() == 0 ? 1 : MyEnquiry.viewModel.Page.AllPage();
-    $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: MyEnquiry.viewModel.Page.CurrentPageIndex() });
+EnquirySetting.viewModel.UpdatePagination = function() {
+    var allPage = EnquirySetting.viewModel.Page.AllPage() == 0 ? 1 : EnquirySetting.viewModel.Page.AllPage();
+    $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: EnquirySetting.viewModel.Page.CurrentPageIndex() });
 };
 //确定搜索
-MyEnquiry.viewModel.Search = function() {
-    MyEnquiry.viewModel.Page.CurrentPageIndex(1);
-    var model = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);
+EnquirySetting.viewModel.Search = function() {
+    EnquirySetting.viewModel.Page.CurrentPageIndex(1);
+    var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel);
     model.pageIndex = 1;
-    $.get("/api/MyEnquiry", model, function(result) {
-        ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.Page);
-        MyEnquiry.viewModel.UpdatePagination();
+    $.get("/api/EnquirySetting", model, function(result) {
+        ko.mapping.fromJS(result, {}, EnquirySetting.viewModel.Page);
+        EnquirySetting.viewModel.UpdatePagination();
         $('#searchdialog').modal('hide');
     });
 };
 //弹出搜索框
-MyEnquiry.viewModel.ShowSearch = function() {
-    MyEnquiry.viewModel.ClearSearch();
+EnquirySetting.viewModel.ShowSearch = function() {
+    EnquirySetting.viewModel.ClearSearch();
     $('#searchdialog').modal({
         show: true,
         backdrop: 'static'
     });
 };
-
 //清空搜索项
-MyEnquiry.viewModel.ClearSearch = function () {
-    for (var index in MyEnquiry.viewModel.EnquiryModel) {
-        if (ko.isObservable(MyEnquiry.viewModel.EnquiryModel[index])) {
-            MyEnquiry.viewModel.EnquiryModel[index](null);
+EnquirySetting.viewModel.ClearSearch = function () {
+    for (var index in EnquirySetting.viewModel.EnquiryModel) {
+        if (ko.isObservable(EnquirySetting.viewModel.EnquiryModel[index])) {
+            EnquirySetting.viewModel.EnquiryModel[index](null);
         }
     }
 };
+//弹出报价
+EnquirySetting.viewModel.ShowQuote = function () {
+    var model = ko.mapping.toJS(this);
+    EnquirySetting.viewModel.EnquiryModel.Id(model.Id);
+    $('#quotedialog').modal({
+        show: true,
+        backdrop: 'static'
+    });
+};
+//保存报价
+EnquirySetting.viewModel.SaveQuote = function () {
+    var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel);
+    $.ajax({
+        type: 'put',
+        url: '/api/EnquirySetting',
+        contentType: 'application/json',
+        dataType: "json",
+        data: JSON.stringify(model),
+        success: function (result) {
+            if (result.Error) {
+                Helper.ShowErrorDialog(result.Message);
+            } else {
+                Helper.ShowSuccessDialog(Messages.Success);
+                $('#quotedialog').modal('hide');
+                EnquirySetting.viewModel.ClearSearch();
+                EnquirySetting.viewModel.Search();
+            }
+        }
+    });
+};
 $(function () {
-    ko.applyBindings(MyEnquiry);
-    MyEnquiry.viewModel.Search();
+    ko.applyBindings(EnquirySetting);
+    EnquirySetting.viewModel.Search();
     //初始化页码
     $('#page-selection').bootpag({
         total: 1,
@@ -125,8 +153,8 @@ $(function () {
         firstClass: 'first'
     }).on("page", function (event, num) {
         if (num != null) {
-            MyEnquiry.viewModel.Page.CurrentPageIndex(num);
-            MyEnquiry.viewModel.GotoPage();
+            EnquirySetting.viewModel.Page.CurrentPageIndex(num);
+            EnquirySetting.viewModel.GotoPage();
         }
 
     });

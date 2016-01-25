@@ -21,7 +21,8 @@
             <th>类型</th>
             <th>分配至</th>
             <th>来源</th>
-            <th>创建时间</th>
+            @*<th>创建时间</th>*@
+            <th>操作</th>
         </tr>
     </thead>
     <tbody data-bind="foreach:viewModel.Page.Models">
@@ -32,19 +33,20 @@
             <td data-bind="text:ContactPerson"></td>
             <td data-bind="text:TelNumber"></td>
             <td data-bind="text:CustomerTypeModel.Name"></td>
-            <td >
+            <td>
                 <div class="form-inline" data-bind="foreach:PositionModels">
-                    <span href="#" data-bind="text:CurrentEmployeeModel.Name"></span>
+                    <span data-bind="text:CurrentEmployeeModel.Name"></span>
                 </div>
-              
             </td>
             <td data-bind="text:Origin"></td>
-            <td data-bind="time:UpdateTime"></td>
+            @*<td data-bind="time:UpdateTime"></td>*@
+            <td>
+                <a href="#" data-bind="click:CustomerSearch.viewModel.ShowEnquiry">询价</a>
+            </td>
         </tr>
     </tbody>
 </table>
 <div id="page-selection" class="text-center"></div>
-
 <!-- /搜索 -->
 <div class="modal fade" id="searchdialog">
     <div class="modal-dialog">
@@ -107,6 +109,37 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bind="click:CustomerSearch.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--询价 -->
+<div class="modal fade" id="enquirydialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">新增</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">客户</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:CustomerSearch.viewModel.CustomerModel.Name"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">料号</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerSearch.viewModel.ProductModel.PartNumber">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:CustomerSearch.viewModel.SaveEnquiry">提交</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>

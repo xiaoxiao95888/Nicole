@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using AutoMapper;
 using Nicole.Library.Models;
 using Nicole.Web.MapperHelper.IMapperInterfaces;
@@ -17,6 +15,7 @@ namespace Nicole.Web.MapperHelper
             Mapper.Reset();
             Mapper.CreateMap<Product, ProductModel>();
             Mapper.CreateMap<Employee, EmployeeModel>();
+            Mapper.CreateMap<CustomerType, CustomerTypeModel>();
             Mapper.CreateMap<Customer, CustomerModel>();
             Mapper.CreateMap<Position, PositionModel>()
                 .ForMember(n => n.ParentId, opt => opt.MapFrom(src => src.Parent.Id))

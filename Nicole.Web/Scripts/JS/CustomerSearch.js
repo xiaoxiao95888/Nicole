@@ -19,7 +19,12 @@
             },
             Origin: ko.observable()
         },
-        CustomerTypeModels: ko.observableArray()
+        CustomerTypeModels: ko.observableArray(),
+        ProductModel: {
+            Id: ko.observable(),
+            PartNumber: ko.observable(),
+        },
+        SelectedCustomerModel:ko.observable()
     }
 };
 ko.bindingHandlers.time = {
@@ -70,10 +75,51 @@ CustomerSearch.viewModel.GotoPage = function () {
 };
 //搜索
 CustomerSearch.viewModel.ShowSearch = function () {
+    CustomerSearch.viewModel.ClearSearch();
     $('#searchdialog').modal({
         show: true,
         backdrop: 'static'
     });
+};
+//询价
+CustomerSearch.viewModel.ShowEnquiry = function () {
+    var model = ko.mapping.toJS(this);
+    CustomerSearch.viewModel.CustomerModel.Id(model.Id);
+    CustomerSearch.viewModel.CustomerModel.Name(model.Name);
+    $('#enquirydialog').modal({
+        show: true,
+        backdrop: 'static'
+    });
+};
+//提交询价
+CustomerSearch.viewModel.SaveEnquiry = function () {
+    var customer = ko.mapping.toJS(CustomerSearch.viewModel.CustomerModel);
+    var product = ko.mapping.toJS(CustomerSearch.viewModel.ProductModel);
+    var model = {
+        CustomerModel: {
+            Id: customer.Id,
+        },
+        ProductModel: {
+            PartNumber: product.PartNumber,
+        }
+    };
+    $.post('/api/MyEnquiry', model, function(result) {
+        if (result.Error) {
+            Helper.ShowErrorDialog(result.Message);
+        } else {
+            Helper.ShowSuccessDialog(Messages.Success);
+            $('#enquirydialog').modal('hide');
+        }
+    });
+    CustomerSearch.viewModel.ClearSearch();
+};
+//清空搜索项
+CustomerSearch.viewModel.ClearSearch = function () {
+    for (var index in CustomerSearch.viewModel.CustomerModel) {
+        if (ko.isObservable(CustomerSearch.viewModel.CustomerModel[index])) {
+            CustomerSearch.viewModel.CustomerModel[index](null);
+        }
+    }
 };
 $(function () {
     ko.applyBindings(CustomerSearch);

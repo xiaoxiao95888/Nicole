@@ -53,7 +53,7 @@ namespace Nicole.Web.Controllers.API
             {
                 StandardCostModels =
                     result
-                        .OrderByDescending(n => n.CreatedTime)
+                        .OrderByDescending(n => n.UpdateTime)
                         .Skip((pageIndex - 1) * pageSize)
                         .Take(pageSize)
                         .Select(Mapper.Map<StandardCost, StandardCostModel>)
