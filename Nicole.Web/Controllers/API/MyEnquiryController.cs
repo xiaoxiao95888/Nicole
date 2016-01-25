@@ -4,29 +4,53 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using AutoMapper;
 using Nicole.Library.Models;
 using Nicole.Library.Services;
+using Nicole.Web.Infrastructure;
 using Nicole.Web.MapperHelper;
 using Nicole.Web.Models;
 
 namespace Nicole.Web.Controllers.API
 {
-    public class EnquirySettingController : BaseApiController
+    public class MyEnquiryController : BaseApiController
     {
         private readonly IEnquiryService _enquiryService;
         private readonly IMapperFactory _mapperFactory;
-        public EnquirySettingController(IEnquiryService enquiryService, IMapperFactory mapperFactory)
+        private readonly IEmployeesService _employeesService;
+        private readonly IPositionService _positionService;
+        private readonly IProductService _productService;
+        private readonly ICustomerService _customerService;
+        public MyEnquiryController(IEnquiryService enquiryService,
+            IMapperFactory mapperFactory,
+            IEmployeesService employeesService,
+            IPositionService positionService,
+            IProductService productService,
+            ICustomerService customerService)
         {
             _enquiryService = enquiryService;
             _mapperFactory = mapperFactory;
+            _employeesService = employeesService;
+            _positionService = positionService;
+            _productService = productService;
+            _customerService = customerService;
         }
         public object Get([FromUri]EnquiryModel key, int pageIndex = 1)
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentPosition =
+                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
+                    .EmployeePostions.Where(
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                    .Select(n => n.Position)
+                    .FirstOrDefault();
+            var subpositions = _positionService.GetPositions().Where(n => n.Parent.Id == currentPosition.Id || n.Id == currentPosition.Id).Select(p => p.Id).ToArray();
             var pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
-            var result = _enquiryService.GetEnquiries();
+            var result =
+                _enquiryService.GetEnquiries()
+                    .Where(n => subpositions.Contains(n.PositionId.Value));
             if (key.CustomerModel != null)
             {
                 result =
@@ -65,32 +89,6 @@ namespace Nicole.Web.Controllers.API
                              (key.ProductModel.Voltage == null || n.Product.Voltage.Contains(key.ProductModel.Voltage.Trim()))
                         );
             }
-            if (key.PositionModel != null && key.PositionModel.CurrentEmployeeModel != null)
-            {
-                result =
-                    result.Where(
-                        n =>
-                            (key.PositionModel.CurrentEmployeeModel.Name == null ||
-                             n.Position.EmployeePostions.Any(
-                                 p =>
-                                     p.Employee.Name.Contains(key.PositionModel.CurrentEmployeeModel.Name.Trim()) &&
-                                     p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate)))
-                            &&
-                            (key.PositionModel.CurrentEmployeeModel.Mail == null ||
-                             n.Position.EmployeePostions.Any(
-                                 p =>
-                                     p.Employee.Mail.Contains(key.PositionModel.CurrentEmployeeModel.Mail.Trim()) &&
-                                     p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate)))
-                            &&
-                            (key.PositionModel.CurrentEmployeeModel.PhoneNumber == null ||
-                             n.Position.EmployeePostions.Any(
-                                 p =>
-                                     p.Employee.PhoneNumber.Contains(
-                                         key.PositionModel.CurrentEmployeeModel.PhoneNumber.Trim()) &&
-                                     p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate)))
-
-                        );
-            }
             _mapperFactory.GetEnquiryMapper().Create();
             var model = new EnquiryManagerModel
             {
@@ -107,22 +105,43 @@ namespace Nicole.Web.Controllers.API
             return model;
         }
 
-        public object Put(EnquiryModel model)
+        public object Post(EnquiryModel model)
         {
             if (model == null)
             {
-                return Failed("询价为空");
+                return Failed("询价不得为空");
             }
-            var item = _enquiryService.GetEnquiry(model.Id);
-            if (item == null || item.IsDeleted)
+            if (model.CustomerModel == null || model.ProductModel==null)
             {
-                return Failed("找不到数据");
+                return Failed("产品或者客户不得为空");
             }
-            item.Price = model.Price;
+            var customer = _customerService.GetCustomer(model.CustomerModel.Id);
+            var product =
+                _productService.GetProducts().FirstOrDefault(n => n.PartNumber == model.ProductModel.PartNumber.Trim());
+            if (customer == null || product == null)
+            {
+                return Failed("找不到产品或者客户");
+            }
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentPosition =
+                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
+                    .EmployeePostions.Where(
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                    .Select(n => n.Position)
+                    .FirstOrDefault();
+            if (currentPosition == null)
+            {
+                return Failed("找不到相关职位");
+            }
             try
             {
-                _enquiryService.Update();
-                //todo 发送邮件
+                _enquiryService.Insert(new Enquiry
+                {
+                    Id = Guid.NewGuid(),
+                    CustomerId = customer.Id,
+                    ProductId = product.Id,
+                    PositionId = currentPosition.Id
+                });
                 return Success();
             }
             catch (Exception ex)
