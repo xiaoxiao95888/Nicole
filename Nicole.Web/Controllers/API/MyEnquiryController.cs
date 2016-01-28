@@ -105,6 +105,25 @@ namespace Nicole.Web.Controllers.API
             return model;
         }
 
+        public object Get(Guid id)
+        {
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentPosition =
+                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
+                    .EmployeePostions.Where(
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                    .Select(n => n.Position)
+                    .FirstOrDefault();
+            var subpositions = _positionService.GetPositions().Where(n => n.Parent.Id == currentPosition.Id || n.Id == currentPosition.Id).Select(p => p.Id).ToArray();
+            var pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
+            var result =
+                _enquiryService
+                    .GetEnquiries().FirstOrDefault(n => subpositions.Contains(n.PositionId.Value) && n.Id==id);
+           
+            _mapperFactory.GetEnquiryMapper().Create();
+
+            return Mapper.Map<Enquiry, EnquiryModel>(result);
+        }
         public object Post(EnquiryModel model)
         {
             if (model == null)

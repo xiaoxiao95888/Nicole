@@ -255,6 +255,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LeftNavigationModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\OrderModel.cs" />
     <Compile Include="Models\PositionCustomerModel.cs" />
     <Compile Include="Models\PositionLeftNavigationModel.cs" />
     <Compile Include="Models\PositionModel.cs" />

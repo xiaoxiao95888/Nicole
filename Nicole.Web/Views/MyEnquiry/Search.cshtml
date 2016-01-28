@@ -21,6 +21,7 @@
             <th>特殊设计</th>
             <th>报价</th>
             <th>提交日期</th>
+            <th>操作</th>
         </tr>
     </thead>
     <tbody data-bind="foreach:viewModel.Page.EnquiryModels">
@@ -36,12 +37,15 @@
             <td data-bind="text:ProductModel.SpecificDesign"></td>
             <td data-bind="text:Price"></td>
             <td data-bind="time:UpdateTime"></td>
+            <td>
+                <a href="#" data-bind="click:MyEnquiry.viewModel.ShowCreateOrder, visible:Price()!=null">生成合同</a>
+            </td>
         </tr>
     </tbody>
 </table>
 <div id="page-selection" class="text-center"></div>
 
-<!-- /搜索 -->
+<!--搜索 -->
 <div class="modal fade" id="searchdialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -145,3 +149,61 @@
         </div>
     </div>
 </div>
+<!--生成合同 -->
+
+<div class="modal fade" id="createorderdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">生成合同</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">客户</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyEnquiry.viewModel.EnquiryModel.CustomerModel.Name"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">料号</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyEnquiry.viewModel.EnquiryModel.ProductModel.PartNumber"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">单价</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyEnquiry.viewModel.EnquiryModel.Price"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报价</label>
+                        <div class="col-sm-9">
+                            <input type="number" style="max-width: 200px;" class="form-control" data-bind="value:MyEnquiry.viewModel.OrderModel.UnitPrice">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">数量</label>
+                        <div class="col-sm-9">
+                            <input type="number" style="max-width: 200px;" class="form-control" data-bind="value:MyEnquiry.viewModel.OrderModel.Qty">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">总价</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyEnquiry.viewModel.OrderModel.TotalPrice"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:MyEnquiry.viewModel.OrderSave">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+

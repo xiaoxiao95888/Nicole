@@ -5,10 +5,10 @@ using Nicole.Library.Services;
 
 namespace Nicole.Service.Services
 {
-     public class AccountService : BaseService, IAccountService
+    public class AccountService : BaseService, IAccountService
     {
-         public AccountService(NicoleDataContext dbContext)
-             : base(dbContext)
+        public AccountService(NicoleDataContext dbContext)
+            : base(dbContext)
         {
         }
 
