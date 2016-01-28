@@ -1,0 +1,134 @@
+﻿@Scripts.Render("~/bundles/EnquirySetting")
+<div class="row">
+    <div class="col-md-12">
+        <div class="navbar-form navbar-right">
+            <a class="btn btn-default" data-bind="click:EnquirySetting.viewModel.ShowSearch">搜索</a>
+            <a class="btn btn-default" data-bind="click:EnquirySetting.viewModel.Print">打印</a>
+            <a class="btn  btn-primary" data-bind="click:EnquirySetting.viewModel.ShowCreate">新增</a>
+        </div>
+    </div>
+</div>
+
+<table class="table table-responsive table-bordered">
+    <thead>
+        <tr>
+            <th>客户</th>
+            <th>料号</th>
+            <th>型号</th>
+            <th>电压</th>
+            <th>容量</th>
+            <th>脚距</th>
+            <th>等级</th>
+            <th>特殊设计</th>
+            <th>报价</th>
+            <th>提交人</th>
+            <th>提交日期</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach:viewModel.Page.EnquiryModels">
+        <tr>
+            <td data-bind="text:CustomerModel.Name"></td>
+            <td data-bind="text:ProductModel.PartNumber"></td>
+            <td data-bind="text:ProductModel.ProductType"></td>
+            <td data-bind="text:ProductModel.Voltage"></td>
+            <td data-bind="text:ProductModel.Capacity"></td>
+            <td data-bind="text:ProductModel.Pitch"></td>
+            <td data-bind="text:ProductModel.Level"></td>
+            <td data-bind="text:ProductModel.SpecificDesign"></td>
+            <td data-bind="text:Price"></td>
+            <td data-bind="text:PositionModel.CurrentEmployeeModel.Name"></td>
+            <td data-bind="time:UpdateTime"></td>
+        </tr>
+    </tbody>
+</table>
+<div id="page-selection" class="text-center"></div>
+<!-- /新增 -->
+<div class="modal fade" id="createdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">回复报价</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label class="control-label">报价</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <label class="control-label">
+                                <input class="form-control" type="number" data-bind="value:EnquirySetting.viewModel.EnquiryModel.Price" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:EnquirySetting.viewModel.CreateSave">保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /搜索 -->
+<div class="modal fade" id="searchdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">搜索</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal formbox" style="margin: auto">
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label class="control-label">产品</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control" type="text" placeholder="请输入料号" data-bind="value:EnquirySetting.viewModel.EnquiryModel.ProductModel.PartNumber" />
+
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" data-bind="click:EnquirySetting.viewModel.SearchForProduct">Search</button>
+                                </span>
+                            </div><!-- /input-group -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label class="control-label">客户</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control" type="text" placeholder="请输入客户名称" data-bind="value:EnquirySetting.viewModel.EnquiryModel.CustomerModel.Name" />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" data-bind="click:EnquirySetting.viewModel.SearchForCustomer">Search</button>
+                                </span>
+                            </div><!-- /input-group -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label class="control-label">人员</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control" type="text" placeholder="请输入姓名" data-bind="value:EnquirySetting.viewModel.EnquiryModel.PositionModel.CurrentEmployeeModel.Name" />
+
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" data-bind="click:EnquirySetting.viewModel.SearchForEmployee">Search</button>
+                                </span>
+                            </div><!-- /input-group -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:EnquirySetting.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
