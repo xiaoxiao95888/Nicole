@@ -53,6 +53,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\CustomerState.cs" />
+    <Compile Include="Models\ModeOfPayment.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderReview.cs" />
+    <Compile Include="Models\PayPeriod.cs" />
     <Compile Include="Models\PositionCustomer.cs" />
     <Compile Include="Models\Review.cs" />
     <Compile Include="Models\Employee.cs" />

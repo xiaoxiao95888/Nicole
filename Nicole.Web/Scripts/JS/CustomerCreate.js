@@ -104,64 +104,6 @@ CustomerCreate.viewModel.ShowCreate = function () {
         backdrop: 'static'
     });
 };
-//确定绑定关系
-CustomerCreate.viewModel.AddSave = function () {
-    var selectedCustomerModel = ko.mapping.toJS(CustomerCreate.viewModel.CustomerModel);
-    var selectedPositionModel = ko.mapping.toJS(this);
-    var positionCustomerModel = {
-        PositionModel: {
-            Id: selectedPositionModel.Id
-        },
-        CustomerModel: {
-            Id: selectedCustomerModel.Id
-        }
-    };
-    $.post('/api/PositionCustomer/', positionCustomerModel, function (result) {
-        if (result.Error) {
-            Helper.ShowErrorDialog(result.Message);
-        } else {
-            Helper.ShowSuccessDialog(Messages.Success);
-            CustomerCreate.viewModel.ClearSearch();
-            CustomerCreate.viewModel.Search();
-        }
-    });
-
-};
-//解除绑定
-CustomerCreate.viewModel.UnfriendSave = function () {
-    var selectedCustomerModel = ko.mapping.toJS(CustomerCreate.viewModel.CustomerModel);
-    var selectedPositionModel = ko.mapping.toJS(CustomerCreate.viewModel.PositionModel);
-    var positionCustomerModel = {
-        PositionModel: {
-            Id: selectedPositionModel.Id
-        },
-        CustomerModel: {
-            Id: selectedCustomerModel.Id
-        }
-    };
-    Helper.ShowConfirmationDialog({
-        message: "是否确认删除?",
-        confirmFunction: function () {
-            $.ajax({
-                type: 'delete',
-                url: '/api/PositionCustomer/',
-                contentType: 'application/json',
-                dataType: "json",
-                data: JSON.stringify(positionCustomerModel),
-                success: function (result) {
-                    if (result.Error) {
-                        Helper.ShowErrorDialog(result.Message);
-                    } else {
-                        Helper.ShowSuccessDialog(Messages.Success);
-                        CustomerCreate.viewModel.ClearSearch();
-                        CustomerCreate.viewModel.Search();
-                        $('#positiondetaildialog').modal('hide');
-                    }
-                }
-            });
-        }
-    });
-};
 //保存新增
 CustomerCreate.viewModel.CreateSave = function () {
     var model = ko.mapping.toJS(CustomerCreate.viewModel.CustomerModel);
@@ -255,30 +197,7 @@ CustomerCreate.viewModel.ShowSearch = function () {
         backdrop: 'static'
     });
 };
-//显示职位详细
-CustomerCreate.viewModel.ShowPositionDetail = function (customerModel,positionModel) {
-    var position = ko.mapping.toJS(positionModel);
-    var customer = ko.mapping.toJS(customerModel);
-    ko.mapping.fromJS(position, {}, CustomerCreate.viewModel.PositionModel);
-    ko.mapping.fromJS(customer, {}, CustomerCreate.viewModel.CustomerModel);
-    $('#positiondetaildialog').modal({
-        show: true,
-        backdrop: 'static'
-    });
-};
-//弹出分配窗口
-CustomerCreate.viewModel.ShowAllocation = function() {
-    var model = ko.mapping.toJS(this);
-    //绑定选中的CustomerModel
-    ko.mapping.fromJS(model, {}, CustomerCreate.viewModel.CustomerModel);
-    $.get('/api/Position/', function (result) {
-        ko.mapping.fromJS(result, {}, CustomerCreate.viewModel.PositionModels);
-        $('#allocationdialog').modal({
-            show: true,
-            backdrop: 'static'
-        });
-    });
-};
+
 $(function () {
     ko.applyBindings(CustomerCreate);
     $.get('/api/CustomerType', function (result) {
