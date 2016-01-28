@@ -111,16 +111,58 @@ namespace Nicole.Web.Controllers.API
             {
                 return Failed("询价不得为空");
             }
-            if (model.CustomerModel == null || model.ProductModel==null)
+            if (model.CustomerModel == null || model.ProductModel == null)
             {
                 return Failed("产品或者客户不得为空");
             }
-            var customer = _customerService.GetCustomer(model.CustomerModel.Id);
-            var product =
-                _productService.GetProducts().FirstOrDefault(n => n.PartNumber == model.ProductModel.PartNumber.Trim());
-            if (customer == null || product == null)
+            if (string.IsNullOrEmpty(model.ProductModel.PartNumber))
             {
-                return Failed("找不到产品或者客户");
+                return Failed("料号不得为空");
+            }
+            var customer = _customerService.GetCustomer(model.CustomerModel.Id);
+            if (customer == null)
+            {
+                return Failed("找不到客户");
+            }
+            var product =
+               _productService.GetProducts().FirstOrDefault(n => n.PartNumber == model.ProductModel.PartNumber.Trim());
+            if (product == null)
+            {
+                if (_productService.GetProducts().Any(n => n.PartNumber == model.ProductModel.PartNumber.Trim()))
+                {
+
+                    return Failed("料号已存在");
+                }
+                product = new Product
+                {
+                    Id = Guid.NewGuid(),
+                    PartNumber = model.ProductModel.PartNumber.Trim(),
+                    ProductType = string.IsNullOrEmpty(model.ProductModel.ProductType)
+                            ? model.ProductModel.ProductType
+                            : model.ProductModel.ProductType.Trim().ToUpper(),
+                    Voltage =
+                        string.IsNullOrEmpty(model.ProductModel.Voltage)
+                            ? model.ProductModel.Voltage
+                            : model.ProductModel.Voltage.Trim(),
+                    Capacity =
+                        string.IsNullOrEmpty(model.ProductModel.Capacity)
+                            ? model.ProductModel.Capacity
+                            : model.ProductModel.Capacity.Trim(),
+                    Pitch =
+                        string.IsNullOrEmpty(model.ProductModel.Pitch)
+                            ? model.ProductModel.Pitch
+                            : model.ProductModel.Pitch.Trim(),
+                    Level =
+                        string.IsNullOrEmpty(model.ProductModel.Level)
+                            ? model.ProductModel.Level
+                            : model.ProductModel.Level.Trim(),
+                    SpecificDesign =
+                        string.IsNullOrEmpty(model.ProductModel.SpecificDesign)
+                            ? model.ProductModel.SpecificDesign
+                            : model.ProductModel.SpecificDesign.Trim(),
+
+                };
+                _productService.Insert(product);
             }
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentPosition =

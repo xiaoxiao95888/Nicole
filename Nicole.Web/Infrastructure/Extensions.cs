@@ -42,7 +42,7 @@ namespace Nicole.Web.Infrastructure
                     .ForMember(n => n.EmployeeId, opt => opt.MapFrom(src => src.Employee.Id));
                 return Mapper.Map<Account, UserModel>(user);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //this.GetLogger().Error(ex.Message);
             }

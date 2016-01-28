@@ -42,22 +42,15 @@ namespace Nicole.Service.Services
 
         public void Insert(Customer customer)
         {
-            var constant = new[]{
-                "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
-                "V", "W", "X", "Y", "Z"};
+            var maxnumber = 1000;
             var allCode = GetCustomerCodes();
-            var rand = new Random();
-            while (true)
+            if (allCode.Any())
             {
-                var code = constant[rand.Next(0, 25)] + constant[rand.Next(0, 25)] + constant[rand.Next(0, 25)] + constant[rand.Next(0, 25)];
-                if (allCode.All(n => n != code))
-                {
-                    customer.Code = code;
-                    DbContext.Customers.Add(customer);
-                    Update();
-                    break;
-                }
+                maxnumber = Convert.ToInt32(allCode.OrderByDescending(n => n).FirstOrDefault()) + 1;
             }
+            customer.Code = maxnumber.ToString();
+            DbContext.Customers.Add(customer);
+            Update();
         }
 
         public void Update()

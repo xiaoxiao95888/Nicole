@@ -55,52 +55,46 @@ namespace Nicole.Web.Controllers.API
             };
             return model;
 
-        }        
+        }
         public object Post(CustomerModel model)
         {
-            var errormessage = string.Empty;
             if (model == null)
             {
-                errormessage = "客户不得为空";
+                return Failed("客户不得为空");
             }
-            else if (string.IsNullOrEmpty(model.Name))
+            if (string.IsNullOrEmpty(model.Name))
             {
-                errormessage = "名称不能为空";
+                return Failed("名称不能为空");
             }
-            if (string.IsNullOrEmpty(errormessage))
+
+            if (_customerService.GetCustomers().Any() && _customerService.GetCustomers().Any(n => n.Name == model.Name.Trim()))
             {
-                if (_customerService.GetCustomers().Any() && _customerService.GetCustomers().Any(n => n.Name == model.Name.Trim()))
-                {
-                    errormessage = "客户名称重复";
-                }
-                else
-                {
-                    var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                    var currentUser = HttpContext.Current.User.Identity.GetUser();
-                    var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
-                    var item = new Customer
-                    {
-                        Id = Guid.NewGuid(),
-                        PositionId = positionId,
-                        Name = model.Name.Trim(),
-                        Address = string.IsNullOrEmpty(model.Address) ? null : model.Address.Trim(),
-                        Email = string.IsNullOrEmpty(model.Email) ? null : model.Email.Trim(),
-                        ContactPerson = string.IsNullOrEmpty(model.ContactPerson) ? null : model.ContactPerson.Trim(),
-                        TelNumber = string.IsNullOrEmpty(model.TelNumber) ? null : model.TelNumber.Trim(),
-                        Origin = string.IsNullOrEmpty(model.Origin) ? null : model.Origin.Trim(),
-                        CustomerTypeId = model.CustomerTypeModel == null ? (Guid?)null : model.CustomerTypeModel.Id
-                    };
-                    try
-                    {
-                        _customerService.Insert(item);
-                    }
-                    catch (Exception ex)
-                    {
-                        return Failed(ex.Message);
-                    }
-                }
+                return Failed("客户名称重复");
             }
-            return string.IsNullOrEmpty(errormessage) ? Success() : Failed(errormessage);
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentUser = HttpContext.Current.User.Identity.GetUser();
+            var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
+            var item = new Customer
+            {
+                Id = Guid.NewGuid(),
+                PositionId = positionId,
+                Name = model.Name.Trim(),
+                Address = string.IsNullOrEmpty(model.Address) ? null : model.Address.Trim(),
+                Email = string.IsNullOrEmpty(model.Email) ? null : model.Email.Trim(),
+                ContactPerson = string.IsNullOrEmpty(model.ContactPerson) ? null : model.ContactPerson.Trim(),
+                TelNumber = string.IsNullOrEmpty(model.TelNumber) ? null : model.TelNumber.Trim(),
+                Origin = string.IsNullOrEmpty(model.Origin) ? null : model.Origin.Trim(),
+                CustomerTypeId = model.CustomerTypeModel?.Id
+            };
+            try
+            {
+                _customerService.Insert(item);
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                return Failed(ex.Message);
+            }
         }
         public object Put(CustomerModel model)
         {

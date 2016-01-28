@@ -13,7 +13,7 @@ namespace Nicole.Web.Controllers
         {
             return View();
         }
-        public ActionResult Search()
+        public ActionResult MyCustomer()
         {
             return View();
         }

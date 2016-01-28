@@ -1,0 +1,325 @@
+﻿@Scripts.Render("~/bundles/CustomerManager")
+@*<h2 class="page-header">
+        @ViewBag.Title
+    </h2>*@
+<div class="row">
+    <div class="col-md-12">
+        <div class="navbar-form navbar-right">
+            <a class="btn btn-default" data-bind="click:CustomerManager.viewModel.ShowSearch">搜索</a>
+            <a class="btn btn-default" data-bind="click:CustomerManager.viewModel.ShowExport">导出</a>
+            <a class="btn  btn-primary" data-bind="click:CustomerManager.viewModel.ShowCreate">新增</a>
+        </div>
+    </div>
+</div>
+<table class="table table-responsive table-bordered">
+    <thead>
+        <tr>
+            <th>编号</th>
+            <th>名称</th>
+            <th>邮件</th>
+            <th>联系人</th>
+            <th>电话</th>
+            <th>类型</th>
+            <th>来源</th>
+            <th>分配至</th>
+            <th>创建人</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach:viewModel.Page.Models">
+        <tr>
+            <td data-bind="text:Code"></td>
+            <td data-bind="text:Name"></td>
+            <td data-bind="text:Email"></td>
+            <td data-bind="text:ContactPerson"></td>
+            <td data-bind="text:TelNumber"></td>
+            <td data-bind="text:CustomerTypeModel.Name"></td>
+            <td data-bind="text:Origin"></td>
+            <td>
+                <div class="form-inline" data-bind="foreach:PositionModels">
+                    <a href="#" data-bind="text:Name,click:function(){CustomerManager.viewModel.ShowPositionDetail($parent,$data)}"></a>
+                </div>
+            </td>
+            <td data-bind="text:PositionModel.CurrentEmployeeModel.Name"></td>
+            <td data-bind="time:UpdateTime"></td>
+            <td>
+                <a href="#" data-bind="click:CustomerManager.viewModel.ShowAllocation">分配</a>
+                <a href="#" data-bind="click:CustomerManager.viewModel.ShowEdit">编辑</a>
+                <a href="#" data-bind="click:CustomerManager.viewModel.Delete">删除</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div id="page-selection" class="text-center"></div>
+<!-- /新增 -->
+<div class="modal fade" id="createdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">新增客户</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地址</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Address">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Email</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">联系人</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.ContactPerson">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">电话</label>
+                        <div class="col-sm-9">
+                            <input type="tel" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.TelNumber">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">类型</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" data-bind="options: CustomerManager.viewModel.CustomerTypeModels,optionsText: 'Name', optionsCaption: '选择',value:CustomerManager.viewModel.CustomerModel.CustomerTypeModel"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">来源</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Origin">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:CustomerManager.viewModel.CreateSave">保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /编辑 -->
+<div class="modal fade" id="editdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">编辑</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地址</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Address">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Email</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">联系人</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.ContactPerson">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">电话</label>
+                        <div class="col-sm-9">
+                            <input type="tel" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.TelNumber">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">类型</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" data-bind="options: CustomerManager.viewModel.CustomerTypeModels,optionsText: 'Name', optionsCaption: '选择',value:CustomerManager.viewModel.CustomerModel.CustomerTypeModel"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">来源</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Origin">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:CustomerManager.viewModel.EditSave">保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /搜索 -->
+<div class="modal fade" id="searchdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">搜索</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">编号关键字</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Code">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">名称关键字</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地址关键字</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Address">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Email</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">联系人关键字</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.ContactPerson">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">电话</label>
+                        <div class="col-sm-9">
+                            <input type="tel" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.TelNumber">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">类型</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" data-bind="options: CustomerManager.viewModel.CustomerTypeModels,optionsText: 'Name', optionsCaption: '选择',value:CustomerManager.viewModel.CustomerModel.CustomerTypeModel"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">来源关键字</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:CustomerManager.viewModel.CustomerModel.Origin">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:CustomerManager.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--职位详细-->
+<div class="modal fade" id="positiondetaildialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">职位详细</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">职位名称</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:CustomerManager.viewModel.PositionModel.Name"></label>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">姓名</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:CustomerManager.viewModel.PositionModel.CurrentEmployeeModel.Name"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Mail</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:CustomerManager.viewModel.PositionModel.CurrentEmployeeModel.Mail"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">电话</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:CustomerManager.viewModel.PositionModel.CurrentEmployeeModel.PhoneNumber"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:CustomerManager.viewModel.UnfriendSave">解除</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--分配客户-->
+<div class="modal fade" id="allocationdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" data-bind="text:CustomerManager.viewModel.CustomerModel.Name">新增分配</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                        <tr>
+                            <th>职位</th>
+                            <th>姓名</th>
+                            <th>手机</th>
+                            <th>入职</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach:CustomerManager.viewModel.PositionModels">
+                        <tr>
+                            <td data-bind="text:Name"></td>
+                            <td data-bind="text:CurrentEmployeeModel.Name"></td>
+                            <td data-bind="text:CurrentEmployeeModel.PhoneNumber"></td>
+                            <td data-bind="date:CurrentEmployeeModel.JoinDate"></td>
+                            <td>
+                                <a href="#" data-bind="click: CustomerManager.viewModel.AddSave">绑定</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>

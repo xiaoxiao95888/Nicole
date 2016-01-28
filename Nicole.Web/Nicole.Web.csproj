@@ -307,7 +307,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\JS\CustomerCreate.js" />
-    <Content Include="Scripts\JS\CustomerSearch.js" />
+    <Content Include="Scripts\JS\CustomerManager.js" />
+    <Content Include="Scripts\JS\MyCustomer.js" />
     <Content Include="Scripts\JS\EnquirySetting.js" />
     <Content Include="Scripts\JS\Home.js" />
     <Content Include="Scripts\JS\LeftNavigationSetting.js" />
@@ -360,11 +361,12 @@
     <Content Include="Views\Admin\StandardCostSetting.cshtml" />
     <Content Include="Views\Admin\ProductSetting.cshtml" />
     <Content Include="Views\Customer\Create.cshtml" />
-    <Content Include="Views\Customer\Search.cshtml" />
+    <Content Include="Views\Customer\MyCustomer.cshtml" />
     <Content Include="Views\Admin\LeftNavigationSetting.cshtml" />
     <Content Include="Views\Product\Search.cshtml" />
     <Content Include="Views\MyEnquiry\Search.cshtml" />
     <Content Include="Views\Admin\EnquirySetting.cshtml" />
+    <Content Include="Views\Admin\CustomerManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
