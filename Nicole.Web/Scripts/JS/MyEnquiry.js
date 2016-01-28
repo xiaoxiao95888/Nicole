@@ -33,11 +33,27 @@
                 Code: ko.observable(),
                 Name: ko.observable()
             }
-
+        },
+        OrderModel: {
+            Id: ko.observable(),
+            UnitPrice: ko.observable(),
+            Qty: ko.observable(),
+            Remark: ko.observable(),
+            EnquiryModel: ko.observable()
         }
-
     }
 };
+MyEnquiry.viewModel.OrderModel.TotalPrice = ko.computed({
+    read: function () {
+
+        if (MyEnquiry.viewModel.OrderModel.Qty() != null && MyEnquiry.viewModel.OrderModel.UnitPrice() != null) {
+            return MyEnquiry.viewModel.OrderModel.Qty() * MyEnquiry.viewModel.OrderModel.UnitPrice();
+        }
+        return null;
+    },
+    write: function (value) {
+    }
+});
 ko.bindingHandlers.time = {
     update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
         var value = valueAccessor();
@@ -61,23 +77,11 @@ ko.bindingHandlers.time = {
 };
 MyEnquiry.viewModel.Print = function () {
 
-}
-//MyEnquiry.viewModel.CreateSave = function () {
-//    var model = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);
-//    $.post("/api/MyEnquiry", model, function (result) {
-//        if (result.Error) {
-//            Helper.ShowErrorDialog(result.Message);
-//        } else {
-//            Helper.ShowSuccessDialog(Messages.Success);
-//            MyEnquiry.viewModel.Search();
-//            $('#createdialog').modal('hide');
-//        }
-//    });
-//}
+};
 
 MyEnquiry.viewModel.GotoPage = function () {
-    var model = ko.mapping.toJS(CustomerCreate.viewModel.CustomerModel);
-    model.pageIndex = CustomerCreate.viewModel.Page.CurrentPageIndex();
+    var model = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);
+    model.pageIndex = MyEnquiry.viewModel.Page.CurrentPageIndex();
     $.get("/api/MyEnquiry", model, function (result) {
         ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.Page);
         MyEnquiry.viewModel.UpdatePagination();
@@ -87,18 +91,18 @@ MyEnquiry.viewModel.GotoPage = function () {
 MyEnquiry.viewModel.UpdatePagination = function () {
     var allPage = MyEnquiry.viewModel.Page.AllPage() == 0 ? 1 : MyEnquiry.viewModel.Page.AllPage();
     $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: MyEnquiry.viewModel.Page.CurrentPageIndex() });
-}
+};
 //确定搜索
 MyEnquiry.viewModel.Search = function () {
     MyEnquiry.viewModel.Page.CurrentPageIndex(1);
-    var model = ko.mapping.toJS(CustomerCreate.viewModel.CustomerModel);
+    var model = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);
     model.pageIndex = 1;
     $.get("/api/MyEnquiry", model, function (result) {
         ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.Page);
         MyEnquiry.viewModel.UpdatePagination();
         $('#searchdialog').modal('hide');
     });
-}
+};
 //弹出搜索框
 MyEnquiry.viewModel.ShowSearch = function () {
     MyEnquiry.viewModel.ClearSearch();
@@ -106,13 +110,8 @@ MyEnquiry.viewModel.ShowSearch = function () {
         show: true,
         backdrop: 'static'
     });
-}
-MyEnquiry.viewModel.ShowCreate = function () {
-    $('#createdialog').modal({
-        show: true,
-        backdrop: 'static'
-    });
-}
+};
+
 //清空搜索项
 MyEnquiry.viewModel.ClearSearch = function () {
     for (var index in MyEnquiry.viewModel.EnquiryModel) {
@@ -120,6 +119,26 @@ MyEnquiry.viewModel.ClearSearch = function () {
             MyEnquiry.viewModel.EnquiryModel[index](null);
         }
     }
+};
+//生成合同
+MyEnquiry.viewModel.ShowCreateOrder = function () {
+    for (var index in MyEnquiry.viewModel.OrderModel) {
+        if (ko.isObservable(MyEnquiry.viewModel.OrderModel[index])) {
+            MyEnquiry.viewModel.OrderModel[index](null);
+        }
+    }
+    var model = ko.mapping.toJS(this);
+    $.get('/api/MyEnquiry/' + model.Id, function (result) {
+        ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.EnquiryModel);
+        $('#createorderdialog').modal({
+            show: true,
+            backdrop: 'static'
+        });
+    });
+};
+//保存合同
+MyEnquiry.viewModel.OrderSave = function () {
+
 };
 $(function () {
     ko.applyBindings(MyEnquiry);

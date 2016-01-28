@@ -48,7 +48,7 @@ namespace Nicole.Web.Controllers.API
             {
                 ProductModels =
                     result
-                        .OrderByDescending(n => n.CreatedTime)
+                        .OrderByDescending(n => n.UpdateTime)
                         .Skip((pageIndex - 1) * pageSize)
                         .Take(pageSize)
                         .Select(Mapper.Map<Product, ProductModel>)
@@ -65,10 +65,6 @@ namespace Nicole.Web.Controllers.API
             {
                 return Failed("产品不能为空");
             }
-            if (string.IsNullOrEmpty(model.ProductType))
-            {
-                return Failed("型号不能为空");
-            }
             if (string.IsNullOrEmpty(model.PartNumber))
             {
                 return Failed("料号不能为空");
@@ -81,8 +77,8 @@ namespace Nicole.Web.Controllers.API
             var item = new Product
             {
                 Id = Guid.NewGuid(),
-                PartNumber = model.PartNumber.Trim(),
-                ProductType = model.ProductType.Trim(),
+                PartNumber = model.PartNumber.Trim().ToUpper(),
+                ProductType = string.IsNullOrEmpty(model.ProductType) ? model.ProductType : model.ProductType.Trim().ToUpper(),
                 Voltage = string.IsNullOrEmpty(model.Voltage) ? model.Voltage : model.Voltage.Trim(),
                 Capacity = string.IsNullOrEmpty(model.Capacity) ? model.Capacity : model.Capacity.Trim(),
                 Pitch = string.IsNullOrEmpty(model.Pitch) ? model.Pitch : model.Pitch.Trim(),

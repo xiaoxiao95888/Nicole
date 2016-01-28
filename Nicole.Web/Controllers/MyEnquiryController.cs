@@ -9,7 +9,7 @@ namespace Nicole.Web.Controllers
     public class MyEnquiryController : BaseController
     {
         // GET: Enquiry
-        public ActionResult Index()
+        public ActionResult Search()
         {
             return View();
         }

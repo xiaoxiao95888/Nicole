@@ -36,7 +36,8 @@ namespace Nicole.Web
             container.RegisterType<ICustomerTypeService, CustomerTypeService>();
             container.RegisterType<IPositionCustomerService, PositionCustomerService>();
             container.RegisterType<IPositionService, PositionService>();
-            
+            container.RegisterType<IOrderService, OrderService>();
+
             #region mapper inject
             container.RegisterType<IMapperFactory, MapperFactory>();
             #endregion

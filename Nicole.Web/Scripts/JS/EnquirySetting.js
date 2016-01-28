@@ -8,7 +8,7 @@
         EnquiryModel: {
             Id: ko.observable(),
             Price: ko.observable(),
-            ProductModel: {                
+            ProductModel: {
                 PartNumber: ko.observable(),
                 ProductType: ko.observable(),
                 Voltage: ko.observable(),
@@ -29,7 +29,7 @@
                 }
             },
             CustomerModel: {
-                Id:ko.observable(),
+                Id: ko.observable(),
                 Code: ko.observable(),
                 Name: ko.observable()
             }
@@ -59,47 +59,9 @@ ko.bindingHandlers.time = {
         }
     }
 };
-EnquirySetting.viewModel.Print = function () {
-
-}
-EnquirySetting.viewModel.SearchForProduct = function() {
-    var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel.ProductModel);
-    $.get('/api/ProductSearch', model, function(result) {
-        ko.mapping.fromJS(result.ProductModels[0], {}, EnquirySetting.viewModel.EnquiryModel.ProductModel);
-    });
+EnquirySetting.viewModel.Print = function() {
+    
 };
-EnquirySetting.viewModel.SearchForCustomer = function () {
-    var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel.CustomerModel);
-    var mapping = {
-        'ignore': ["PositionModels"]
-    }
-    $.get('/api/Customer', model, function (result) {
-        // EnquirySetting.viewModel.EnquiryModel.CustomerModel
-        
-        var data = ko.mapping.fromJS(result.Models[0], mapping);
-        ko.mapping.fromJS(data, {}, EnquirySetting.viewModel.EnquiryModel.CustomerModel);
-
-    });
-};
-EnquirySetting.viewModel.SearchForEmployee = function () {
-    var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel.PositionModel.CurrentEmployeeModel);
-    $.get('/api/Position', model, function (result) {
-        ko.mapping.fromJS(result[0], {}, EnquirySetting.viewModel.EnquiryModel.PositionModel);
-    });
-};
-//EnquirySetting.viewModel.CreateSave = function () {
-//    var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel);
-//    $.post("/api/EnquirySetting", model, function (result) {
-//        if (result.Error) {
-//            Helper.ShowErrorDialog(result.Message);
-//        } else {
-//            Helper.ShowSuccessDialog(Messages.Success);
-//            EnquirySetting.viewModel.Search();
-//            $('#createdialog').modal('hide');
-//        }
-//    });
-//}
-
 EnquirySetting.viewModel.GotoPage = function () {
     var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel);
     model.pageIndex = EnquirySetting.viewModel.Page.CurrentPageIndex();
@@ -109,35 +71,29 @@ EnquirySetting.viewModel.GotoPage = function () {
         $('#searchdialog').modal('hide');
     });
 };
-EnquirySetting.viewModel.UpdatePagination = function () {
+EnquirySetting.viewModel.UpdatePagination = function() {
     var allPage = EnquirySetting.viewModel.Page.AllPage() == 0 ? 1 : EnquirySetting.viewModel.Page.AllPage();
     $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: EnquirySetting.viewModel.Page.CurrentPageIndex() });
-}
+};
 //确定搜索
-EnquirySetting.viewModel.Search = function () {
+EnquirySetting.viewModel.Search = function() {
     EnquirySetting.viewModel.Page.CurrentPageIndex(1);
-    var model = ko.mapping.toJSON(EnquirySetting.viewModel.EnquiryModel);
+    var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel);
     model.pageIndex = 1;
-    $.get("/api/EnquirySetting", model, function (result) {
+    $.get("/api/EnquirySetting", model, function(result) {
         ko.mapping.fromJS(result, {}, EnquirySetting.viewModel.Page);
         EnquirySetting.viewModel.UpdatePagination();
         $('#searchdialog').modal('hide');
     });
-}
+};
 //弹出搜索框
-EnquirySetting.viewModel.ShowSearch = function () {
+EnquirySetting.viewModel.ShowSearch = function() {
     EnquirySetting.viewModel.ClearSearch();
     $('#searchdialog').modal({
         show: true,
-        backdrop: "static"
-    });
-}
-EnquirySetting.viewModel.ShowCreate = function () {
-    $('#createdialog').modal({
-        show: true,
         backdrop: 'static'
     });
-}
+};
 //清空搜索项
 EnquirySetting.viewModel.ClearSearch = function () {
     for (var index in EnquirySetting.viewModel.EnquiryModel) {
@@ -145,6 +101,36 @@ EnquirySetting.viewModel.ClearSearch = function () {
             EnquirySetting.viewModel.EnquiryModel[index](null);
         }
     }
+};
+//弹出报价
+EnquirySetting.viewModel.ShowQuote = function () {
+    var model = ko.mapping.toJS(this);
+    EnquirySetting.viewModel.EnquiryModel.Id(model.Id);
+    $('#quotedialog').modal({
+        show: true,
+        backdrop: 'static'
+    });
+};
+//保存报价
+EnquirySetting.viewModel.SaveQuote = function () {
+    var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel);
+    $.ajax({
+        type: 'put',
+        url: '/api/EnquirySetting',
+        contentType: 'application/json',
+        dataType: "json",
+        data: JSON.stringify(model),
+        success: function (result) {
+            if (result.Error) {
+                Helper.ShowErrorDialog(result.Message);
+            } else {
+                Helper.ShowSuccessDialog(Messages.Success);
+                $('#quotedialog').modal('hide');
+                EnquirySetting.viewModel.ClearSearch();
+                EnquirySetting.viewModel.Search();
+            }
+        }
+    });
 };
 $(function () {
     ko.applyBindings(EnquirySetting);

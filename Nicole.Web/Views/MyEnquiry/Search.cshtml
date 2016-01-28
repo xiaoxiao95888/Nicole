@@ -1,9 +1,9 @@
-﻿@Scripts.Render("~/bundles/EnquirySetting")
+﻿@Scripts.Render("~/bundles/MyEnquiry")
 <div class="row">
     <div class="col-md-12">
         <div class="navbar-form navbar-right">
-            <a class="btn btn-default" data-bind="click:EnquirySetting.viewModel.ShowSearch">搜索</a>
-            <a class="btn btn-default" data-bind="click:EnquirySetting.viewModel.Print">打印</a>
+            <a class="btn btn-default" data-bind="click:MyEnquiry.viewModel.ShowSearch">搜索</a>
+            <a class="btn btn-default" data-bind="click:MyEnquiry.viewModel.Print">打印</a>
         </div>
     </div>
 </div>
@@ -19,8 +19,6 @@
             <th>脚距</th>
             <th>等级</th>
             <th>特殊设计</th>
-            <th>成本</th>
-            <th>询价人</th>
             <th>报价</th>
             <th>提交日期</th>
             <th>操作</th>
@@ -37,38 +35,17 @@
             <td data-bind="text:ProductModel.Pitch"></td>
             <td data-bind="text:ProductModel.Level"></td>
             <td data-bind="text:ProductModel.SpecificDesign"></td>
-            <td data-bind="text:ProductModel.Price"></td>
-            <td data-bind="text:PositionModel.CurrentEmployeeModel.Name"></td>
             <td data-bind="text:Price"></td>
             <td data-bind="time:UpdateTime"></td>
-            <td><a href="#" data-bind="click:EnquirySetting.viewModel.ShowQuote">报价</a></td>
+            <td>
+                <a href="#" data-bind="click:MyEnquiry.viewModel.ShowCreateOrder, visible:Price()!=null">生成合同</a>
+            </td>
         </tr>
     </tbody>
 </table>
 <div id="page-selection" class="text-center"></div>
-<!-- /新增 -->
-<div class="modal fade" id="quotedialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">报价</h4>
-            </div>
-            <div class="modal-body">
-                <div class="formbox" style="margin: auto">
-                    <div class="form-group">
-                        <input type="number" class="form-control" placeholder="报价" data-bind="value:EnquirySetting.viewModel.EnquiryModel.Price">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bind="click:EnquirySetting.viewModel.SaveQuote">提交</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /搜索 -->
+
+<!--搜索 -->
 <div class="modal fade" id="searchdialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -81,111 +58,152 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">料号</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="料号" data-bind="value:EnquirySetting.viewModel.EnquiryModel.ProductModel.PartNumber">
+                            <input type="text" class="form-control" placeholder="料号" data-bind="value:MyEnquiry.viewModel.EnquiryModel.ProductModel.PartNumber">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">型号</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="型号" data-bind="value:EnquirySetting.viewModel.EnquiryModel.ProductModel.ProductType">
+                            <input type="text" class="form-control" placeholder="型号" data-bind="value:MyEnquiry.viewModel.EnquiryModel.ProductModel.ProductType">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">电压</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="电压" data-bind="value:EnquirySetting.viewModel.EnquiryModel.ProductModel.Voltage">
+                            <input type="text" class="form-control" placeholder="电压" data-bind="value:MyEnquiry.viewModel.EnquiryModel.ProductModel.Voltage">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">容量</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="容量" data-bind="value:EnquirySetting.viewModel.EnquiryModel.ProductModel.Capacity">
+                            <input type="text" class="form-control" placeholder="容量" data-bind="value:MyEnquiry.viewModel.EnquiryModel.ProductModel.Capacity">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">脚距</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="脚距" data-bind="value:EnquirySetting.viewModel.EnquiryModel.ProductModel.Pitch">
+                            <input type="text" class="form-control" placeholder="脚距" data-bind="value:MyEnquiry.viewModel.EnquiryModel.ProductModel.Pitch">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">等级</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="等级" data-bind="value:EnquirySetting.viewModel.EnquiryModel.ProductModel.Level">
+                            <input type="text" class="form-control" placeholder="等级" data-bind="value:MyEnquiry.viewModel.EnquiryModel.ProductModel.Level">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">特殊设计</label>
                         <div class="col-sm-9">
-                            <textarea placeholder="特殊设计" class="form-control" rows="3" data-bind="value:EnquirySetting.viewModel.EnquiryModel.ProductModel.SpecificDesign"></textarea>
+                            <textarea placeholder="特殊设计" class="form-control" rows="3" data-bind="value:MyEnquiry.viewModel.EnquiryModel.ProductModel.SpecificDesign"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">客户编号</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" data-bind="value:EnquirySetting.viewModel.EnquiryModel.CustomerModel.Code">
+                            <input type="text" class="form-control" data-bind="value:MyEnquiry.viewModel.EnquiryModel.CustomerModel.Code">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">客户名称</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" data-bind="value:EnquirySetting.viewModel.EnquiryModel.CustomerModel.Name">
+                            <input type="text" class="form-control" data-bind="value:MyEnquiry.viewModel.EnquiryModel.CustomerModel.Name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">客户地址</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" data-bind="value:EnquirySetting.viewModel.EnquiryModel.CustomerModel.Address">
+                            <input type="text" class="form-control" data-bind="value:MyEnquiry.viewModel.EnquiryModel.CustomerModel.Address">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">客户Email</label>
                         <div class="col-sm-9">
-                            <input type="email" class="form-control" data-bind="value:EnquirySetting.viewModel.EnquiryModel.CustomerModel.Email">
+                            <input type="email" class="form-control" data-bind="value:MyEnquiry.viewModel.EnquiryModel.CustomerModel.Email">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">联系人</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" data-bind="value:EnquirySetting.viewModel.EnquiryModel.CustomerModel.ContactPerson">
+                            <input type="text" class="form-control" data-bind="value:MyEnquiry.viewModel.EnquiryModel.CustomerModel.ContactPerson">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">客户电话</label>
                         <div class="col-sm-9">
-                            <input type="tel" class="form-control" data-bind="value:EnquirySetting.viewModel.EnquiryModel.CustomerModel.TelNumber">
+                            <input type="tel" class="form-control" data-bind="value:MyEnquiry.viewModel.EnquiryModel.CustomerModel.TelNumber">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">客户来源</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" data-bind="value:EnquirySetting.viewModel.EnquiryModel.CustomerModel.Origin">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">人员名字</label>
-                        <div class="col-sm-9">
-                            <input type="email" class="form-control" data-bind="value:EnquirySetting.viewModel.EnquiryModel.PositionModel.CurrentEmployeeModel.Name">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">人员Mail</label>
-                        <div class="col-sm-9">
-                            <input type="email" class="form-control" data-bind="value:EnquirySetting.viewModel.EnquiryModel.PositionModel.CurrentEmployeeModel.Mail">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">人员手机</label>
-                        <div class="col-sm-9">
-                            <input type="email" class="form-control" data-bind="value:EnquirySetting.viewModel.EnquiryModel.PositionModel.CurrentEmployeeModel.PhoneNumber">
+                            <input type="text" class="form-control" data-bind="value:MyEnquiry.viewModel.EnquiryModel.CustomerModel.Origin">
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bind="click:EnquirySetting.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-primary" data-bind="click:MyEnquiry.viewModel.Search">确定</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>
 </div>
+<!--生成合同 -->
+
+<div class="modal fade" id="createorderdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">生成合同</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">客户</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyEnquiry.viewModel.EnquiryModel.CustomerModel.Name"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">料号</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyEnquiry.viewModel.EnquiryModel.ProductModel.PartNumber"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">单价</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyEnquiry.viewModel.EnquiryModel.Price"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报价</label>
+                        <div class="col-sm-9">
+                            <input type="number" style="max-width: 200px;" class="form-control" data-bind="value:MyEnquiry.viewModel.OrderModel.UnitPrice">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">数量</label>
+                        <div class="col-sm-9">
+                            <input type="number" style="max-width: 200px;" class="form-control" data-bind="value:MyEnquiry.viewModel.OrderModel.Qty">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">总价</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyEnquiry.viewModel.OrderModel.TotalPrice"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:MyEnquiry.viewModel.OrderSave">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -48,7 +48,7 @@ namespace Nicole.Web.Controllers.API
             {
                 ProductModels =
                     result
-                        .OrderByDescending(n => n.CreatedTime)
+                        .OrderByDescending(n => n.UpdateTime)
                         .Skip((pageIndex - 1) * pageSize)
                         .Take(pageSize)
                         .Select(Mapper.Map<Product, ProductModel>)
@@ -58,6 +58,24 @@ namespace Nicole.Web.Controllers.API
             };
             return model;
 
+        }
+        public object Get(string id)
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                var model = _productService.GetProducts().FirstOrDefault(n => n.PartNumber.Contains(id.ToLower().Trim()));
+                if (model == null)
+                {
+                    return Failed("找不到相关料号，请完善数据");
+                }
+                else
+                {
+                    Mapper.Reset();
+                    Mapper.CreateMap<Product, ProductModel>().ForMember(n => n.Price, opt => opt.Ignore());
+                    return Mapper.Map<Product, ProductModel>(model);
+                }
+            }
+            return Failed("找不到相关料号，请完善数据");
         }
     }
 }

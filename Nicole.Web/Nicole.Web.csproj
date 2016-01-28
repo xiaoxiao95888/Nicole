@@ -207,9 +207,10 @@
     <Compile Include="Controllers\API\BaseApiController.cs" />
     <Compile Include="Controllers\API\CustomerController.cs" />
     <Compile Include="Controllers\API\CustomerTypeController.cs" />
-    <Compile Include="Controllers\API\MyCustomerController.cs" />
-    <Compile Include="Controllers\API\PositionCustomerController.cs" />
     <Compile Include="Controllers\API\EnquirySettingController.cs" />
+    <Compile Include="Controllers\API\MyCustomerController.cs" />
+    <Compile Include="Controllers\API\MyEnquiryController.cs" />
+    <Compile Include="Controllers\API\PositionCustomerController.cs" />
     <Compile Include="Controllers\API\LeftNavigationController.cs" />
     <Compile Include="Controllers\API\PositionController.cs" />
     <Compile Include="Controllers\API\PositionLeftNavigationController.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LeftNavigationModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\OrderModel.cs" />
     <Compile Include="Models\PositionCustomerModel.cs" />
     <Compile Include="Models\PositionLeftNavigationModel.cs" />
     <Compile Include="Models\PositionModel.cs" />
@@ -306,7 +308,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\JS\CustomerCreate.js" />
-    <Content Include="Scripts\JS\CustomerSearch.js" />
+    <Content Include="Scripts\JS\CustomerManager.js" />
+    <Content Include="Scripts\JS\MyCustomer.js" />
     <Content Include="Scripts\JS\EnquirySetting.js" />
     <Content Include="Scripts\JS\Home.js" />
     <Content Include="Scripts\JS\LeftNavigationSetting.js" />
@@ -358,12 +361,13 @@
     <Content Include="Views\Home\BreadCrumb.cshtml" />
     <Content Include="Views\Admin\StandardCostSetting.cshtml" />
     <Content Include="Views\Admin\ProductSetting.cshtml" />
-    <Content Include="Views\Admin\EnquirySetting.cshtml" />
     <Content Include="Views\Customer\Create.cshtml" />
-    <Content Include="Views\Customer\Search.cshtml" />
+    <Content Include="Views\Customer\MyCustomer.cshtml" />
     <Content Include="Views\Admin\LeftNavigationSetting.cshtml" />
     <Content Include="Views\Product\Search.cshtml" />
-    <Content Include="Views\MyEnquiry\Index.cshtml" />
+    <Content Include="Views\MyEnquiry\Search.cshtml" />
+    <Content Include="Views\Admin\EnquirySetting.cshtml" />
+    <Content Include="Views\Admin\CustomerManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

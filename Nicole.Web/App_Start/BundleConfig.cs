@@ -69,14 +69,18 @@ namespace Nicole.Web
             bundles.Add(new ScriptBundle("~/bundles/CustomerCreate").Include(
                 "~/Scripts/JS/CustomerCreate.js",
                 "~/Scripts/jquery.bootpag.min.js"));
-            //CustomerSearch
-            bundles.Add(new ScriptBundle("~/bundles/CustomerSearch").Include(
-                "~/Scripts/JS/CustomerSearch.js",
+            //MyCustomer
+            bundles.Add(new ScriptBundle("~/bundles/MyCustomer").Include(
+                "~/Scripts/JS/MyCustomer.js",
                 "~/Scripts/jquery.bootpag.min.js"));
             
             //ProductSearch
             bundles.Add(new ScriptBundle("~/bundles/ProductSearch").Include(
                 "~/Scripts/JS/ProductSearch.js",
+                "~/Scripts/jquery.bootpag.min.js"));
+            //CustomerManager
+            bundles.Add(new ScriptBundle("~/bundles/CustomerManager").Include(
+                "~/Scripts/JS/CustomerManager.js",
                 "~/Scripts/jquery.bootpag.min.js"));
         }
     }

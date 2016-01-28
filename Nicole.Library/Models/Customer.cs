@@ -46,6 +46,24 @@ namespace Nicole.Library.Models
         /// 分配至角色
         /// </summary>
         public virtual ICollection<PositionCustomer> PositionCustomers { get; set; }
+        public Guid? CustomerStateId { get; set; }
+        /// <summary>
+        /// 客户状态
+        /// </summary>
+        [ForeignKey("CustomerStateId")]
+        public virtual CustomerState CustomerState { get; set; }
+        public Guid? ModeOfPaymentId { get; set; }
+        /// <summary>
+        /// 付款方式
+        /// </summary>
+        [ForeignKey("ModeOfPaymentId")]
+        public virtual ModeOfPayment ModeOfPayment { get; set; }
+        public Guid? PayPeriodId { get; set; }
+        /// <summary>
+        /// 账期
+        /// </summary>
+        [ForeignKey("PayPeriodId")]
+        public virtual PayPeriod PayPeriod { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsDeleted { get; set; }

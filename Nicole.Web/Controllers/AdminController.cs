@@ -35,5 +35,9 @@ namespace Nicole.Web.Controllers
         {
             return View();
         }
+        public ActionResult CustomerManager()
+        {
+            return View();
+        }
     }
 }
