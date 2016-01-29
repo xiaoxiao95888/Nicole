@@ -119,11 +119,9 @@ MyCustomer.viewModel.SaveEnquiry = function () {
 };
 //清空搜索项
 MyCustomer.viewModel.ClearSearch = function () {
-    for (var index in MyCustomer.viewModel.CustomerModel) {
-        if (ko.isObservable(MyCustomer.viewModel.CustomerModel[index])) {
-            MyCustomer.viewModel.CustomerModel[index](null);
-        }
-    }
+    var model = ko.mapping.toJS(MyCustomer.viewModel.CustomerModel);
+    Helper.ClearObject(model);
+    ko.mapping.fromJS(model, {}, MyCustomer.viewModel.CustomerModel);
 };
 //根据料号搜索
 MyCustomer.viewModel.SearchProduct = function () {

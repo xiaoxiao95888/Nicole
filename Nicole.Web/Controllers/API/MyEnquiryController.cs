@@ -37,7 +37,7 @@ namespace Nicole.Web.Controllers.API
             _productService = productService;
             _customerService = customerService;
         }
-        public object Get([FromUri]EnquiryModel key, int pageIndex = 1)
+        public object Get([FromUri]EnquiryModel key, int pageIndex=1)
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentPosition =
@@ -115,7 +115,6 @@ namespace Nicole.Web.Controllers.API
                     .Select(n => n.Position)
                     .FirstOrDefault();
             var subpositions = _positionService.GetPositions().Where(n => n.Parent.Id == currentPosition.Id || n.Id == currentPosition.Id).Select(p => p.Id).ToArray();
-            var pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
             var result =
                 _enquiryService
                     .GetEnquiries().FirstOrDefault(n => subpositions.Contains(n.PositionId.Value) && n.Id==id);

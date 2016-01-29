@@ -59,8 +59,8 @@ ko.bindingHandlers.time = {
         }
     }
 };
-EnquirySetting.viewModel.Print = function() {
-    
+EnquirySetting.viewModel.Print = function () {
+
 };
 EnquirySetting.viewModel.GotoPage = function () {
     var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel);
@@ -71,23 +71,23 @@ EnquirySetting.viewModel.GotoPage = function () {
         $('#searchdialog').modal('hide');
     });
 };
-EnquirySetting.viewModel.UpdatePagination = function() {
+EnquirySetting.viewModel.UpdatePagination = function () {
     var allPage = EnquirySetting.viewModel.Page.AllPage() == 0 ? 1 : EnquirySetting.viewModel.Page.AllPage();
     $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: EnquirySetting.viewModel.Page.CurrentPageIndex() });
 };
 //确定搜索
-EnquirySetting.viewModel.Search = function() {
+EnquirySetting.viewModel.Search = function () {
     EnquirySetting.viewModel.Page.CurrentPageIndex(1);
     var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel);
     model.pageIndex = 1;
-    $.get("/api/EnquirySetting", model, function(result) {
+    $.get("/api/EnquirySetting", model, function (result) {
         ko.mapping.fromJS(result, {}, EnquirySetting.viewModel.Page);
         EnquirySetting.viewModel.UpdatePagination();
         $('#searchdialog').modal('hide');
     });
 };
 //弹出搜索框
-EnquirySetting.viewModel.ShowSearch = function() {
+EnquirySetting.viewModel.ShowSearch = function () {
     EnquirySetting.viewModel.ClearSearch();
     $('#searchdialog').modal({
         show: true,
@@ -96,11 +96,9 @@ EnquirySetting.viewModel.ShowSearch = function() {
 };
 //清空搜索项
 EnquirySetting.viewModel.ClearSearch = function () {
-    for (var index in EnquirySetting.viewModel.EnquiryModel) {
-        if (ko.isObservable(EnquirySetting.viewModel.EnquiryModel[index])) {
-            EnquirySetting.viewModel.EnquiryModel[index](null);
-        }
-    }
+    var model = ko.mapping.toJS(EnquirySetting.viewModel.EnquiryModel);
+    Helper.ClearObject(model);
+    ko.mapping.fromJS(model, {}, EnquirySetting.viewModel.EnquiryModel);
 };
 //弹出报价
 EnquirySetting.viewModel.ShowQuote = function () {

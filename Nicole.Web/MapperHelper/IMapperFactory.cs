@@ -13,5 +13,6 @@ namespace Nicole.Web.MapperHelper
         IEmployeeMapper GetEmployeeMapper();
         IStandardCostMapper GetStandardCostMapper();
         IEnquiryMapper GetEnquiryMapper();
+        IOrderMapper GetOrderMapper();
     }
 }

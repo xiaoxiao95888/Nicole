@@ -183,11 +183,9 @@ CustomerCreate.viewModel.Delete = function () {
 };
 //清空搜索项
 CustomerCreate.viewModel.ClearSearch = function () {
-    for (var index in CustomerCreate.viewModel.CustomerModel) {
-        if (ko.isObservable(CustomerCreate.viewModel.CustomerModel[index])) {
-            CustomerCreate.viewModel.CustomerModel[index](null);
-        }
-    }
+    var model = ko.mapping.toJS(CustomerCreate.viewModel.CustomerModel);
+    Helper.ClearObject(model);
+    ko.mapping.fromJS(model, {}, CustomerCreate.viewModel.CustomerModel);
 };
 //搜索
 CustomerCreate.viewModel.ShowSearch = function () {

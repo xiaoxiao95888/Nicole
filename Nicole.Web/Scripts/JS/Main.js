@@ -43,12 +43,26 @@ var Helper = {
             return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         }
         return (s4() + s4() + "-" + s4() + "-" + s4() + "-" + s4() + "-" + s4() + s4() + s4());
+    },
+    ClearObject: function (obj) {
+        for (var attribute in obj) {
+            if (obj.hasOwnProperty(attribute)) {
+                if (typeof (obj[attribute]) == "object") {
+                    this.ClearObject(obj[attribute]); //递归遍历
+                } else {
+                    obj[attribute] = null;
+                }
+            }
+        }
     }
 };
+
+
+
 var callback;
 var Messages = {
     UploadFileError: "文件类型错误，仅支持xls、xlsx",
-    Success: "操作成功",
+    Success: "操作成功"
 };
 $(function () {
     var dialog = $("#Confirmation");

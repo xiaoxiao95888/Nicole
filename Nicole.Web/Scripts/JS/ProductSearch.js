@@ -54,12 +54,9 @@ ProductSearch.viewModel.Search = function () {
 
 //清空搜索项
 ProductSearch.viewModel.ClearSearch = function () {
-    for (var index in ProductSearch.viewModel.ProductModel) {
-        if (ko.isObservable(ProductSearch.viewModel.ProductModel[index])) {
-            ProductSearch.viewModel.ProductModel[index](null);
-        }
-    }
-
+    var model = ko.mapping.toJS(ProductSearch.viewModel.ProductModel);
+    Helper.ClearObject(model);
+    ko.mapping.fromJS(model, {}, ProductSearch.viewModel.ProductModel);
 };
 $(function () {
     ko.applyBindings(ProductSearch);

@@ -27,5 +27,9 @@ namespace Nicole.Web.MapperHelper
         {
             return new StandardCostMapper();
         }
+        public IOrderMapper GetOrderMapper()
+        {
+            return new OrderMapper();
+        }
     }
 }

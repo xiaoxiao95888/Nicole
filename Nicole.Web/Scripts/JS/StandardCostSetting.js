@@ -188,16 +188,9 @@ StandardCostSetting.viewModel.ShowSearch = function () {
 };
 //清空搜索项
 StandardCostSetting.viewModel.ClearSearch = function () {
-    for (var index in StandardCostSetting.viewModel.StandardCostModel) {
-        if (ko.isObservable(StandardCostSetting.viewModel.StandardCostModel[index])) {
-            StandardCostSetting.viewModel.StandardCostModel[index](null);
-        }
-    }
-    for (var index in StandardCostSetting.viewModel.StandardCostModel.ProductModel) {
-        if (ko.isObservable(StandardCostSetting.viewModel.StandardCostModel.ProductModel[index])) {
-            StandardCostSetting.viewModel.StandardCostModel.ProductModel[index](null);
-        }
-    }
+    var model = ko.mapping.toJS(StandardCostSetting.viewModel.StandardCostModel);
+    Helper.ClearObject(model);
+    ko.mapping.fromJS(model, {}, StandardCostSetting.viewModel.StandardCostModel);
 };
 $(function () {
     ko.applyBindings(StandardCostSetting);

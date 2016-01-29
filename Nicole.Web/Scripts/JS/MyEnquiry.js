@@ -95,8 +95,9 @@ MyEnquiry.viewModel.UpdatePagination = function () {
 //确定搜索
 MyEnquiry.viewModel.Search = function () {
     MyEnquiry.viewModel.Page.CurrentPageIndex(1);
-    var model = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);
-    model.pageIndex = 1;
+    var model = {
+        key: ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel)
+    };
     $.get("/api/MyEnquiry", model, function (result) {
         ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.Page);
         MyEnquiry.viewModel.UpdatePagination();
@@ -114,19 +115,13 @@ MyEnquiry.viewModel.ShowSearch = function () {
 
 //清空搜索项
 MyEnquiry.viewModel.ClearSearch = function () {
-    for (var index in MyEnquiry.viewModel.EnquiryModel) {
-        if (ko.isObservable(MyEnquiry.viewModel.EnquiryModel[index])) {
-            MyEnquiry.viewModel.EnquiryModel[index](null);
-        }
-    }
+    var model = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);
+    Helper.ClearObject(model);
+    ko.mapping.fromJS(model, {}, MyEnquiry.viewModel.EnquiryModel);
+  
 };
 //生成合同
 MyEnquiry.viewModel.ShowCreateOrder = function () {
-    for (var index in MyEnquiry.viewModel.OrderModel) {
-        if (ko.isObservable(MyEnquiry.viewModel.OrderModel[index])) {
-            MyEnquiry.viewModel.OrderModel[index](null);
-        }
-    }
     var model = ko.mapping.toJS(this);
     $.get('/api/MyEnquiry/' + model.Id, function (result) {
         ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.EnquiryModel);
@@ -138,7 +133,8 @@ MyEnquiry.viewModel.ShowCreateOrder = function () {
 };
 //保存合同
 MyEnquiry.viewModel.OrderSave = function () {
-
+    var model = MyEnquiry.viewModel.EnquiryModel;
+    var orderModel = ko.mapping.toJS(MyEnquiry.viewModel.OrderModel);
 };
 $(function () {
     ko.applyBindings(MyEnquiry);

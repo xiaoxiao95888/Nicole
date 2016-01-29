@@ -210,6 +210,7 @@
     <Compile Include="Controllers\API\EnquirySettingController.cs" />
     <Compile Include="Controllers\API\MyCustomerController.cs" />
     <Compile Include="Controllers\API\MyEnquiryController.cs" />
+    <Compile Include="Controllers\API\OrderController.cs" />
     <Compile Include="Controllers\API\PositionCustomerController.cs" />
     <Compile Include="Controllers\API\LeftNavigationController.cs" />
     <Compile Include="Controllers\API\PositionController.cs" />
@@ -241,8 +242,10 @@
     <Compile Include="MapperHelper\IMapperInterfaces\ICustomerMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IEmployeeMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IEnquiryMapper.cs" />
+    <Compile Include="MapperHelper\IMapperInterfaces\IOrderMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IStandardCostMapper.cs" />
     <Compile Include="MapperHelper\MapperFactory.cs" />
+    <Compile Include="MapperHelper\OrderMapper.cs" />
     <Compile Include="MapperHelper\StandardCostMapper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BreadCrumbModel.cs" />
@@ -255,6 +258,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LeftNavigationModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\OrderManagerModel.cs" />
     <Compile Include="Models\OrderModel.cs" />
     <Compile Include="Models\PositionCustomerModel.cs" />
     <Compile Include="Models\PositionLeftNavigationModel.cs" />
@@ -371,6 +375,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Order\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
