@@ -7,7 +7,7 @@ namespace Nicole.Web.Models
 {
     public class OrderManagerModel
     {
-        public OrderModel[] OrderModels { get; set; }
+        public OrderModel[] Models { get; set; }
         public int CurrentPageIndex { get; set; }
         public int AllPage { get; set; }
     }

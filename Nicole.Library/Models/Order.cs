@@ -11,6 +11,7 @@ namespace Nicole.Library.Models
     public class Order : IDtStamped
     {
         public Guid Id { get; set; }
+        public string Code { get; set; }
         public Guid? EnquiryId { get; set; }
         [ForeignKey("EnquiryId")]
         public virtual Enquiry Enquiry { get; set; }

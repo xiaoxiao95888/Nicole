@@ -1,9 +1,11 @@
 ﻿using Nicole.Library.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using AutoMapper;
 using Nicole.Library.Models;
@@ -21,7 +23,7 @@ namespace Nicole.Web.Controllers.API
         private readonly IMapperFactory _mapperFactory;
         private readonly IPositionService _positionService;
         private readonly IOrderService _orderService;
-        public OrderController(ICustomerService customerService, IEnquiryService enquiryService, IMapperFactory mapperFactory, IEmployeesService employeesService,IPositionService positionService, IOrderService orderService)
+        public OrderController(ICustomerService customerService, IEnquiryService enquiryService, IMapperFactory mapperFactory, IEmployeesService employeesService, IPositionService positionService, IOrderService orderService)
         {
             _customerService = customerService;
             _enquiryService = enquiryService;
@@ -31,7 +33,65 @@ namespace Nicole.Web.Controllers.API
             _orderService = orderService;
         }
 
-        public object Get(OrderModel key, int pageIndex = 1)
+        public object Post(OrderModel model)
+        {
+            if (model == null || model.EnquiryModel == null)
+            {
+                return Failed("合同不能为空");
+            }
+            if (model.Qty == 0)
+            {
+                return Failed("合同不能没有数量");
+            }
+            var enquiry = _enquiryService.GetEnquiry(model.EnquiryModel.Id);
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentPosition =
+                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
+                    .EmployeePostions.Where(
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                    .Select(n => n.Position)
+                    .FirstOrDefault();
+
+            if (enquiry == null || enquiry.IsDeleted || enquiry.PositionId != currentPosition.Id || enquiry.Price == null)
+            {
+                return Failed("禁止提交");
+            }
+
+            if (model.UnitPrice < enquiry.Price || (Math.Abs(model.UnitPrice) > Math.Abs(enquiry.Price.Value) * (decimal)1.05))
+            {
+                return Failed("单价超出范围");
+            }
+            try
+            {
+                var item = new Order
+                {
+                    Id = Guid.NewGuid(),
+                    EnquiryId = model.EnquiryModel.Id,
+                    Qty = model.Qty,
+                    UnitPrice = model.UnitPrice,
+                    Remark = model.Remark,
+                    TotalPrice = model.Qty * model.UnitPrice,
+                    OrderReviews = new Collection<OrderReview>
+                    {
+                        new OrderReview
+                        {
+                            Id = Guid.NewGuid(),
+                            SendToPositionId = currentPosition.Parent.Id
+                        }
+                    }
+                };
+                _orderService.Insert(item);
+                return Success();
+            }
+            catch (Exception ex)
+            {
+
+                return Failed(ex.Message);
+            }
+
+
+        }
+        public object Get([FromUri]OrderModel key, int pageIndex = 1)
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentPosition =
@@ -47,12 +107,33 @@ namespace Nicole.Web.Controllers.API
                     .Where(n => subpositions.Contains(n.Enquiry.PositionId.Value));
             if (key.EnquiryModel != null)
             {
-                result = result.Where(n => n.EnquiryId == key.EnquiryModel.Id);
+                if (key.EnquiryModel.CustomerModel != null)
+                {
+                    result =
+                        result.Where(
+                            n =>
+                                (
+                                    key.EnquiryModel.CustomerModel.Code == null ||
+                                    n.Enquiry.Customer.Code.Contains(key.EnquiryModel.CustomerModel.Code.Trim()))
+                                && (
+                                    key.EnquiryModel.CustomerModel.Name == null ||
+                                    n.Enquiry.Customer.Name.Contains(key.EnquiryModel.CustomerModel.Name.Trim())));
+                }
+                if (key.EnquiryModel.ProductModel != null)
+                {
+                    result =
+                        result.Where(
+                            n =>
+                                key.EnquiryModel.ProductModel.PartNumber == null ||
+                                n.Enquiry.Product.PartNumber.Contains(
+                                    key.EnquiryModel.ProductModel.PartNumber.Trim()));
+                }
             }
+            result = result.Where(n => key.Code == null || n.Code.Contains(key.Code.Trim()));
             _mapperFactory.GetOrderMapper().Create();
             var model = new OrderManagerModel
             {
-                OrderModels = 
+                Models =
                    result
                        .OrderByDescending(n => n.UpdateTime)
                        .Skip((pageIndex - 1) * pageSize)
@@ -64,10 +145,69 @@ namespace Nicole.Web.Controllers.API
             };
             return model;
         }
-
         public object Get(Guid id)
         {
-            return null;
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentPosition =
+                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
+                    .EmployeePostions.Where(
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                    .Select(n => n.Position)
+                    .FirstOrDefault();
+            var subpositions = _positionService.GetPositions().Where(n => n.Parent.Id == currentPosition.Id || n.Id == currentPosition.Id).Select(p => p.Id).ToArray();
+            var result =
+                _orderService
+                    .GetOrders().FirstOrDefault(n => subpositions.Contains(n.Enquiry.PositionId.Value) && n.Id == id);
+
+            _mapperFactory.GetOrderMapper().Create();
+            return Mapper.Map<Order, OrderModel>(result);
+        }
+        public object Put(Guid id, OrderModel model)
+        {
+            var item = _orderService.GetOrder(id);
+            var enquiry = _enquiryService.GetEnquiry(model.EnquiryModel.Id);
+            if (item == null)
+            {
+                return Failed("找不到合同");
+            }
+            if (model.Qty == 0)
+            {
+                return Failed("合同不能没有数量");
+            }
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentPosition =
+                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
+                    .EmployeePostions.Where(
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                    .Select(n => n.Position)
+                    .FirstOrDefault();
+            if (currentPosition == null)
+            {
+                return Failed("没有权限");
+            }
+            if (enquiry == null || enquiry.IsDeleted || enquiry.PositionId != currentPosition.Id || enquiry.Price == null)
+            {
+                return Failed("禁止提交");
+            }
+
+            if (model.UnitPrice < enquiry.Price || (Math.Abs(model.UnitPrice) > Math.Abs(enquiry.Price.Value) * (decimal)1.05))
+            {
+                return Failed("单价超出范围");
+            }
+            item.Qty = model.Qty;
+            item.UnitPrice = model.UnitPrice;
+            item.Remark = model.Remark;
+            item.TotalPrice = model.Qty * model.UnitPrice;
+            try
+            {
+                _orderService.Update();
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                return Failed(ex.Message);
+            }
+
         }
     }
 }

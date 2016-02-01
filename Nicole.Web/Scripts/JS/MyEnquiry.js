@@ -133,8 +133,17 @@ MyEnquiry.viewModel.ShowCreateOrder = function () {
 };
 //保存合同
 MyEnquiry.viewModel.OrderSave = function () {
-    var model = MyEnquiry.viewModel.EnquiryModel;
+    var enquirymodel = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);
     var orderModel = ko.mapping.toJS(MyEnquiry.viewModel.OrderModel);
+    orderModel.EnquiryModel = enquirymodel;
+    $.post('/api/Order', orderModel, function (result) {
+        if (result.Error) {
+            Helper.ShowErrorDialog(result.Message);
+        } else {
+            Helper.ShowSuccessDialog(Messages.Success);
+            $('#createorderdialog').modal('hide');
+        }
+    });
 };
 $(function () {
     ko.applyBindings(MyEnquiry);

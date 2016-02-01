@@ -39,5 +39,10 @@ namespace Nicole.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult OrderManager()
+        {
+            return View();
+        }
     }
 }

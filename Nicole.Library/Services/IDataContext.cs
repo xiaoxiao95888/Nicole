@@ -7,6 +7,8 @@ namespace Nicole.Library.Services
 {
     public interface IDataContext : IObjectContextAdapter, IDisposable
     {
+        IDbSet<OrderReview> OrderReviews { get; set; }
+        IDbSet<AuditLevel> AuditLevels { get; set; }
         IDbSet<Order> Orders { get; set; }
         IDbSet<CustomerType> CustomerTypes { get; set; }
         IDbSet<Account> Accounts { get; set; }

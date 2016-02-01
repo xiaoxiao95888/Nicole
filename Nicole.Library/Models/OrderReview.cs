@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,13 +11,17 @@ namespace Nicole.Library.Models
     public class OrderReview: IDtStamped
     {
         public Guid? Id { get; set; }
+        public Guid? OrderId { get; set; }
         /// <summary>
         /// 等待审核的订单
         /// </summary>
+        [ForeignKey("OrderId")]
         public virtual Order Orders { get; set; }
+        public Guid? SendToPositionId { get; set; }
         /// <summary>
         /// 发送至审核人
         /// </summary>
+        [ForeignKey("SendToPositionId")]
         public virtual Position SendToPosition { get; set; }
         /// <summary>
         /// 退回原因

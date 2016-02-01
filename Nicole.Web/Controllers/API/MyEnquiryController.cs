@@ -104,7 +104,6 @@ namespace Nicole.Web.Controllers.API
             };
             return model;
         }
-
         public object Get(Guid id)
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);

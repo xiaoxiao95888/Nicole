@@ -12,6 +12,8 @@ namespace Nicole.Service
             : base("NicoleDataContext")
         {
         }
+        public IDbSet<OrderReview> OrderReviews { get; set; }
+        public IDbSet<AuditLevel> AuditLevels { get; set; }
         public IDbSet<Order> Orders { get; set; }
         public IDbSet<CustomerType> CustomerTypes { get; set; }
         public IDbSet<Account> Accounts { get; set; }

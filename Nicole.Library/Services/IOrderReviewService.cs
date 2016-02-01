@@ -7,14 +7,12 @@ using Nicole.Library.Models;
 
 namespace Nicole.Library.Services
 {
-    public interface IOrderService : IDisposable
+    public interface IOrderReviewService : IDisposable
     {
-        void Insert(Order order);
+        void Insert(OrderReview orderReview);
         void Update();
         void Delete(Guid id);
-        Order GetOrder(Guid id);
-        IQueryable<Order> GetOrders();
-
-        IQueryable<string> GetOrderCodes();
+        OrderReview GetOrderReview(Guid id);
+        IQueryable<OrderReview> GetOrderReviews();
     }
 }

@@ -30,6 +30,11 @@ namespace Nicole.Service.Services
             return DbContext.Orders.FirstOrDefault(n => n.Id == id);
         }
 
+        public IQueryable<string> GetOrderCodes()
+        {
+            return DbContext.Orders.Select(n => n.Code);
+        }
+
         public IQueryable<Order> GetOrders()
         {
             return DbContext.Orders.Where(n => !n.IsDeleted);
@@ -37,6 +42,13 @@ namespace Nicole.Service.Services
 
         public void Insert(Order order)
         {
+            var maxnumber = 1000;
+            var allCode = GetOrderCodes();
+            if (allCode.Any())
+            {
+                maxnumber = Convert.ToInt32(allCode.OrderByDescending(n => n).FirstOrDefault()) + 1;
+            }
+            order.Code = maxnumber.ToString();
             DbContext.Orders.Add(order);
             Update();
         }

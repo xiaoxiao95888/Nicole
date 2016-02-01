@@ -211,6 +211,7 @@
     <Compile Include="Controllers\API\MyCustomerController.cs" />
     <Compile Include="Controllers\API\MyEnquiryController.cs" />
     <Compile Include="Controllers\API\OrderController.cs" />
+    <Compile Include="Controllers\API\OrderReviewController.cs" />
     <Compile Include="Controllers\API\PositionCustomerController.cs" />
     <Compile Include="Controllers\API\LeftNavigationController.cs" />
     <Compile Include="Controllers\API\PositionController.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\MyEnquiryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Enums\IsPublish.cs" />
     <Compile Include="Global.asax.cs">
@@ -260,6 +262,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\OrderManagerModel.cs" />
     <Compile Include="Models\OrderModel.cs" />
+    <Compile Include="Models\OrderReviewModel.cs" />
     <Compile Include="Models\PositionCustomerModel.cs" />
     <Compile Include="Models\PositionLeftNavigationModel.cs" />
     <Compile Include="Models\PositionModel.cs" />
@@ -319,6 +322,8 @@
     <Content Include="Scripts\JS\LeftNavigationSetting.js" />
     <Content Include="Scripts\JS\Main.js" />
     <Content Include="Scripts\JS\MyEnquiry.js" />
+    <Content Include="Scripts\JS\MyOrder.js" />
+    <Content Include="Scripts\JS\OrderManager.js" />
     <Content Include="Scripts\JS\ProductSearch.js" />
     <Content Include="Scripts\JS\ProductSetting.js" />
     <Content Include="Scripts\JS\StandardCostSetting.js" />
@@ -372,10 +377,12 @@
     <Content Include="Views\MyEnquiry\Search.cshtml" />
     <Content Include="Views\Admin\EnquirySetting.cshtml" />
     <Content Include="Views\Admin\CustomerManager.cshtml" />
+    <Content Include="Views\Order\MyOrder.cshtml" />
+    <Content Include="Views\Admin\OrderManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Order\" />
+    <Folder Include="Views\OrderReview\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

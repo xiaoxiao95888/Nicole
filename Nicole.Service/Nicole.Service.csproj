@@ -56,12 +56,14 @@
     <Compile Include="BaseService.cs" />
     <Compile Include="NicoleDataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AuditLevelService.cs" />
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\CustomerTypeService.cs" />
     <Compile Include="Services\EmployeePostionService.cs" />
     <Compile Include="Services\EmployeesService.cs" />
     <Compile Include="Services\EnquiryService.cs" />
     <Compile Include="Services\LeftNavigationService.cs" />
+    <Compile Include="Services\OrderReviewService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PositionCustomerService.cs" />
     <Compile Include="Services\PositionService.cs" />

@@ -34,7 +34,31 @@ namespace Nicole.Web.MapperHelper
                 .ForMember(n => n.ProductModel, opt => opt.MapFrom(src => src.Product))
                 .ForMember(n => n.PositionModel, opt => opt.MapFrom(src => src.Position))
                 .ForMember(n => n.CustomerModel, opt => opt.MapFrom(src => src.Customer));
-            Mapper.CreateMap<Order, OrderModel>();
+            Mapper.CreateMap<OrderReview, OrderReviewModel>();
+            Mapper.CreateMap<Order, OrderModel>()
+                .ForMember(n => n.EnquiryModel, opt => opt.MapFrom(src => src.Enquiry))
+                .ForMember(n => n.State,
+                    opt =>
+                        opt.MapFrom(
+                            src =>
+                                src.IsApproved
+                                    ? "已审核"
+                                    : (src.OrderReviews.OrderByDescending(o => o.CreatedTime).FirstOrDefault().IsReturn
+                                        ? "被退回"
+                                        : "审核中")))
+                .ForMember(n => n.CanEdit,
+                    opt =>
+                        opt.MapFrom(
+                            src =>
+                                !src.IsApproved &&
+                                src.OrderReviews.OrderByDescending(o => o.CreatedTime).FirstOrDefault().IsReturn))
+                .ForMember(n => n.CurrentOrderReview,
+                    opt =>
+                        opt.MapFrom(
+                            src =>
+                                Mapper.Map<OrderReview, OrderReviewModel>(
+                                    src.OrderReviews.OrderByDescending(p => p.CreatedTime).FirstOrDefault())));
+
         }
     }
 }
