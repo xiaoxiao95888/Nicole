@@ -15,9 +15,9 @@
             <th>操作</th>
         </tr>
     </thead>
-    <tbody data-bind="foreach:viewModel.PositionLeftNavigationModels">
+    <tbody data-bind="foreach:viewModel.RoleLeftNavigationModels">
         <tr>
-            <td data-bind="text:PositionModel.Name"></td>
+            <td data-bind="text:RoleModel.Name"></td>
             <td data-bind="text:LeftNavigationModel.Name"></td>
             <td>
                 <a href="#" data-bind="click:LeftNavigationSetting.viewModel.Delete">删除</a>
@@ -36,9 +36,9 @@
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">选择岗位</label>
+                        <label class="col-sm-2 control-label">选择角色</label>
                         <div class="col-sm-10">
-                            <select class="form-control" data-bind="options: LeftNavigationSetting.viewModel.PositionModels,optionsText: 'Name', optionsCaption: '选择岗位',value:LeftNavigationSetting.viewModel.SelectedPositionModel"></select>
+                            <select class="form-control" data-bind="options: LeftNavigationSetting.viewModel.RoleModels,optionsText: 'Name', optionsCaption: '选择角色',value:LeftNavigationSetting.viewModel.SelectedRoleModel"></select>
 
                         </div>
                     </div>
@@ -57,3 +57,4 @@
             </div>
         </div>
     </div>
+</div>

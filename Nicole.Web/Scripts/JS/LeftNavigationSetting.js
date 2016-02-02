@@ -1,15 +1,15 @@
 ﻿var LeftNavigationSetting = {
     viewModel: {
-        PositionModels: ko.observableArray(),
+        RoleModels: ko.observableArray(),
         LeftNavigationModels: ko.observableArray(),
-        PositionLeftNavigationModels: ko.observableArray(),
+        RoleLeftNavigationModels: ko.observableArray(),
         SelectedLeftNavigationModel: ko.observable(),
-        SelectedPositionModel: ko.observable()
+        SelectedRoleModel: ko.observable()
     }
 };
 LeftNavigationSetting.viewModel.loadpage = function () {
-    $.get("/api/PositionLeftNavigation", function (result) {
-        ko.mapping.fromJS(result, {}, LeftNavigationSetting.viewModel.PositionLeftNavigationModels);
+    $.get("/api/RoleLeftNavigation", function (result) {
+        ko.mapping.fromJS(result, {}, LeftNavigationSetting.viewModel.RoleLeftNavigationModels);
     });
 };
 
@@ -20,7 +20,7 @@ LeftNavigationSetting.viewModel.Delete = function () {
         confirmFunction: function () {
             $.ajax({
                 type: 'delete',
-                url: '/api/PositionLeftNavigation/',
+                url: '/api/RoleLeftNavigation/',
                 contentType: 'application/json',
                 data: JSON.stringify(model),
                 dataType: "json",
@@ -37,8 +37,8 @@ LeftNavigationSetting.viewModel.Delete = function () {
     });
 };
 LeftNavigationSetting.viewModel.ShowCreate = function () {
-    $.get("/api/Position", function (positions) {
-        ko.mapping.fromJS(positions, {}, LeftNavigationSetting.viewModel.PositionModels);
+    $.get("/api/Role", function (positions) {
+        ko.mapping.fromJS(positions, {}, LeftNavigationSetting.viewModel.RoleModels);
         $.get("/api/LeftNavigation", function (leftNavigations) {
             ko.mapping.fromJS(leftNavigations, {}, LeftNavigationSetting.viewModel.LeftNavigationModels);
             $('#createdialog').modal({
@@ -50,11 +50,11 @@ LeftNavigationSetting.viewModel.ShowCreate = function () {
 };
 LeftNavigationSetting.viewModel.CreateSave = function () {
     var model = {
-        PositionModel: ko.toJS(LeftNavigationSetting.viewModel.SelectedPositionModel),
+        RoleModel: ko.toJS(LeftNavigationSetting.viewModel.SelectedRoleModel),
         LeftNavigationModel: ko.toJS(LeftNavigationSetting.viewModel.SelectedLeftNavigationModel)
     };
     model.LeftNavigationModel.SubModels = [];
-    $.post("/api/PositionLeftNavigation", model, function (result) {
+    $.post("/api/RoleLeftNavigation", model, function (result) {
         if (result.Error) {
             Helper.ShowErrorDialog(result.Message);
         } else {

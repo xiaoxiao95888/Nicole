@@ -65,8 +65,7 @@ namespace Nicole.Web.Controllers
             if (currentUser != null)
             {
                 Mapper.CreateMap<LeftNavigation, LeftNavigationModel>();
-
-                var range = this._employeePostionService.GeEmployeePostions().Where(n => n.Employee.Id == currentUser.EmployeeId && n.StartDate <= DateTime.Now && (n.EndDate >= DateTime.Now || n.EndDate == null)).SelectMany(n => n.Position.LeftNavigations).ToList();
+                var range = this._employeePostionService.GeEmployeePostions().Where(n => n.Employee.Id == currentUser.EmployeeId && n.StartDate <= DateTime.Now && (n.EndDate >= DateTime.Now || n.EndDate == null)).SelectMany(n => n.Position.Role.LeftNavigations).ToList();
                 var rootModels =
                     range.Where(n => n.Parent == null).Select(Mapper.Map<LeftNavigation, LeftNavigationModel>).ToList();
 

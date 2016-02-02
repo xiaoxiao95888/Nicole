@@ -8,6 +8,7 @@ namespace Nicole.Web.Models
     public class OrderReviewModel
     {
         public Guid Id { get; set; }
+        public Guid? SendToRoleId { get; set; }
         public string ReturnComments { get; set; }
         /// <summary>
         /// 是否退回

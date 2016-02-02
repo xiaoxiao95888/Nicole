@@ -5,9 +5,9 @@ using System.Web;
 
 namespace Nicole.Web.Models
 {
-    public class PositionLeftNavigationModel
+    public class RoleLeftNavigationModel
     {
-        public PositionModel PositionModel { get; set; }
+        public RoleModel RoleModel { get; set; }
         public LeftNavigationModel LeftNavigationModel { get; set; }
     }
 }

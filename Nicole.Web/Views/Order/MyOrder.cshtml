@@ -24,7 +24,7 @@
             <th>报价</th>
             <th>提交日期</th>
             <th>备注</th>
-            <th>状态</th>
+            <th>审核环节</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -47,8 +47,8 @@
             <td data-bind="text:Remark"></td>
             <td data-bind="text:State"></td>
             <td>
-                <a href="#" data-bind="click:MyOrder.viewModel.Edit,visible:CanEdit()">编辑</a>
-                <a href="#" data-bind="click:MyOrder.viewModel.Reason,visible:CanEdit()">原因</a>
+                <a href="#" data-bind="click:MyOrder.viewModel.Edit,visible:IsApproved()==false && CurrentOrderReview.IsReturn()">编辑</a>
+                <a href="#" data-bind="click:MyOrder.viewModel.Reason,visible:IsApproved()==false && CurrentOrderReview.IsReturn()">原因</a>
             </td>
         </tr>
     </tbody>
@@ -94,6 +94,68 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bind="click:MyOrder.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--编辑 -->
+<div class="modal fade" id="editdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">编辑合同</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">客户</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyOrder.viewModel.OrderModel.EnquiryModel.CustomerModel.Name"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">料号</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyOrder.viewModel.OrderModel.EnquiryModel.ProductModel.PartNumber"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">单价</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyOrder.viewModel.OrderModel.EnquiryModel.Price"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报价</label>
+                        <div class="col-sm-9">
+                            <input type="number" style="max-width: 200px;" class="form-control" data-bind="value:MyOrder.viewModel.OrderModel.UnitPrice">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">数量</label>
+                        <div class="col-sm-9">
+                            <input type="number" style="max-width: 200px;" class="form-control" data-bind="value:MyOrder.viewModel.OrderModel.Qty">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">备注</label>
+                        <div class="col-sm-9">
+                            <textarea rows="3" style="max-width: 200px;" class="form-control" data-bind="value:MyOrder.viewModel.OrderModel.Remark"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">总价</label>
+                        <div class="col-sm-9">
+                            <label class="control-label" data-bind="text:MyOrder.viewModel.OrderModel.TotalPrice"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:MyOrder.viewModel.SubmitAudit">提交审核</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-bind="click:MyOrder.viewModel.DeleteOrder">删除合同</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>

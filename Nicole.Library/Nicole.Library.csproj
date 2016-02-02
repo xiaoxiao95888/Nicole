@@ -60,7 +60,6 @@
     <Compile Include="Models\OrderReview.cs" />
     <Compile Include="Models\PayPeriod.cs" />
     <Compile Include="Models\PositionCustomer.cs" />
-    <Compile Include="Models\Review.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\EmployeePostion.cs" />
     <Compile Include="Models\LeftNavigation.cs" />
@@ -84,6 +83,7 @@
     <Compile Include="Services\IOrderService.cs" />
     <Compile Include="Services\IPositionCustomerService.cs" />
     <Compile Include="Services\IPositionService.cs" />
+    <Compile Include="Services\IRoleService.cs" />
     <Compile Include="Services\IStandardCostService.cs" />
     <Compile Include="Services\IProductService.cs" />
     <Compile Include="Services\ILeftNavigationsService.cs" />

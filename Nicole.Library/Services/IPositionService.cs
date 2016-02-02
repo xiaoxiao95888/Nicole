@@ -14,8 +14,6 @@ namespace Nicole.Library.Services
         void Delete(Guid id);
         Position GetPosition(Guid id);
         IQueryable<Position> GetPositions();
-        LeftNavigation GetLeftNavigation(Guid id);
-        IQueryable<LeftNavigation> GetLeftNavigations();
 
     }
 }

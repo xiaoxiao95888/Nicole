@@ -47,7 +47,7 @@ MyEnquiry.viewModel.OrderModel.TotalPrice = ko.computed({
     read: function () {
 
         if (MyEnquiry.viewModel.OrderModel.Qty() != null && MyEnquiry.viewModel.OrderModel.UnitPrice() != null) {
-            return MyEnquiry.viewModel.OrderModel.Qty() * MyEnquiry.viewModel.OrderModel.UnitPrice();
+            return MyEnquiry.viewModel.OrderModel.Qty()*10000 * MyEnquiry.viewModel.OrderModel.UnitPrice()/10000;
         }
         return null;
     },

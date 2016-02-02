@@ -215,7 +215,8 @@
     <Compile Include="Controllers\API\PositionCustomerController.cs" />
     <Compile Include="Controllers\API\LeftNavigationController.cs" />
     <Compile Include="Controllers\API\PositionController.cs" />
-    <Compile Include="Controllers\API\PositionLeftNavigationController.cs" />
+    <Compile Include="Controllers\API\RoleController.cs" />
+    <Compile Include="Controllers\API\RoleLeftNavigationController.cs" />
     <Compile Include="Controllers\API\ProductSearchController.cs" />
     <Compile Include="Controllers\API\ProductSettingController.cs" />
     <Compile Include="Controllers\API\StandardCostSettingController.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="Models\ProductSettingModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\ResponseModel.cs" />
+    <Compile Include="Models\RoleModel.cs" />
     <Compile Include="Models\StandardCostModel.cs" />
     <Compile Include="Models\StandardCostSettingModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -323,7 +325,7 @@
     <Content Include="Scripts\JS\Main.js" />
     <Content Include="Scripts\JS\MyEnquiry.js" />
     <Content Include="Scripts\JS\MyOrder.js" />
-    <Content Include="Scripts\JS\OrderManager.js" />
+    <Content Include="Scripts\JS\OrderReview.js" />
     <Content Include="Scripts\JS\ProductSearch.js" />
     <Content Include="Scripts\JS\ProductSetting.js" />
     <Content Include="Scripts\JS\StandardCostSetting.js" />
@@ -378,11 +380,11 @@
     <Content Include="Views\Admin\EnquirySetting.cshtml" />
     <Content Include="Views\Admin\CustomerManager.cshtml" />
     <Content Include="Views\Order\MyOrder.cshtml" />
-    <Content Include="Views\Admin\OrderManager.cshtml" />
+    <Content Include="Views\Admin\OrderReview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\OrderReview\" />
+    <Folder Include="Views\Role\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

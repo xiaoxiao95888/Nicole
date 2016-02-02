@@ -45,17 +45,5 @@ namespace Nicole.Service.Services
         {
             return DbContext.Positions.Where(n => !n.IsDeleted);
         }
-
-
-        public LeftNavigation GetLeftNavigation(Guid id)
-        {
-            return DbContext.LeftNavigations.FirstOrDefault(n => n.Id == id);
-        }
-
-
-        public IQueryable<LeftNavigation> GetLeftNavigations()
-        {
-            return DbContext.LeftNavigations;
-        }
     }
 }

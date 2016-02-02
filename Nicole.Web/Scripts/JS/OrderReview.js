@@ -1,4 +1,4 @@
-﻿var OrderManager = {
+﻿var OrderReview = {
     viewModel: {
         Page: {
             CurrentPageIndex: ko.observable(1),
@@ -70,14 +70,14 @@ ko.bindingHandlers.time = {
         }
     }
 };
-OrderManager.viewModel.UpdatePagination = function () {
-    var allPage = OrderManager.viewModel.Page.AllPage() == 0 ? 1 : OrderManager.viewModel.Page.AllPage();
-    $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: OrderManager.viewModel.Page.CurrentPageIndex() });
+OrderReview.viewModel.UpdatePagination = function () {
+    var allPage = OrderReview.viewModel.Page.AllPage() == 0 ? 1 : OrderReview.viewModel.Page.AllPage();
+    $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: OrderReview.viewModel.Page.CurrentPageIndex() });
 };
 //确定搜索
-OrderManager.viewModel.Search = function () {
-    OrderManager.viewModel.Page.CurrentPageIndex(1);
-    var data = ko.mapping.toJS(OrderManager.viewModel.OrderModel);
+OrderReview.viewModel.Search = function () {
+    OrderReview.viewModel.Page.CurrentPageIndex(1);
+    var data = ko.mapping.toJS(OrderReview.viewModel.OrderModel);
     var model = {
         key: {
             Code: data.Code,
@@ -92,39 +92,39 @@ OrderManager.viewModel.Search = function () {
             }
         }
     };
-    $.get("/api/Order", model, function (result) {
-        ko.mapping.fromJS(result, {}, OrderManager.viewModel.Page);
-        OrderManager.viewModel.UpdatePagination();
+    $.get("/api/OrderReview", model, function (result) {
+        ko.mapping.fromJS(result, {}, OrderReview.viewModel.Page);
+        OrderReview.viewModel.UpdatePagination();
         $('#searchdialog').modal('hide');
     });
 };
 //弹出搜索框
-OrderManager.viewModel.ShowSearch = function () {
-    OrderManager.viewModel.ClearSearch();
+OrderReview.viewModel.ShowSearch = function () {
+    OrderReview.viewModel.ClearSearch();
     $('#searchdialog').modal({
         show: true,
         backdrop: 'static'
     });
 };
 //清空搜索项
-OrderManager.viewModel.ClearSearch = function () {
-    var model = ko.mapping.toJS(OrderManager.viewModel.OrderModel);
+OrderReview.viewModel.ClearSearch = function () {
+    var model = ko.mapping.toJS(OrderReview.viewModel.OrderModel);
     Helper.ClearObject(model);
-    ko.mapping.fromJS(model, {}, OrderManager.viewModel.OrderModel);
+    ko.mapping.fromJS(model, {}, OrderReview.viewModel.OrderModel);
 };
 //订单详细
-OrderManager.ShowOrderDetail = function () {
+OrderReview.ShowOrderDetail = function () {
     var model = ko.mapping.toJS(this);
     $.get('/api/Order/' + model.Id, function(result) {
-        ko.mapping.fromJS(result, {}, OrderManager.viewModel.OrderModel);
+        ko.mapping.fromJS(result, {}, OrderReview.viewModel.OrderModel);
         $('#detaildialog').modal({
             show: true,
             backdrop: 'static'
         });
     });
-    
 };
-OrderManager.viewModel.Approve = function () {
+//审核通过
+OrderReview.viewModel.Approve = function () {
     var model = ko.mapping.toJS(this);
     Helper.ShowConfirmationDialog({
         message: "是否确认通过?",
@@ -140,18 +140,54 @@ OrderManager.viewModel.Approve = function () {
                         Helper.ShowErrorDialog(result.Message);
                     } else {
                         Helper.ShowSuccessDialog(Messages.Success);
-                        OrderManager.viewModel.ClearSearch();
-                        OrderManager.viewModel.Search();
+                        OrderReview.viewModel.ClearSearch();
+                        OrderReview.viewModel.Search();
                     }
                 }
             });
         }
     });
 };
-
+//退回
+OrderReview.viewModel.Return=function() {
+    var model = ko.mapping.toJS(this);
+    $.get('/api/Order/' + model.Id, function (result) {
+        ko.mapping.fromJS(result, {}, OrderReview.viewModel.OrderModel);
+        $('#returndialog').modal({
+            show: true,
+            backdrop: 'static'
+        });
+    });
+}
+//确认退回
+OrderReview.viewModel.ReturnSave = function () {
+    var model = ko.mapping.toJS(OrderReview.viewModel.OrderModel);
+    Helper.ShowConfirmationDialog({
+        message: "是否确认退回?",
+        confirmFunction: function () {
+            $.ajax({
+                type: 'put',
+                url: '/api/OrderReview',
+                contentType: 'application/json',
+                dataType: "json",
+                data: JSON.stringify(model.CurrentOrderReview),
+                success: function (result) {
+                    if (result.Error) {
+                        Helper.ShowErrorDialog(result.Message);
+                    } else {
+                        Helper.ShowSuccessDialog(Messages.Success);
+                        $('#returndialog').modal("hide");
+                        OrderReview.viewModel.ClearSearch();
+                        OrderReview.viewModel.Search();
+                    }
+                }
+            });
+        }
+    });
+}
 $(function () {
-    ko.applyBindings(OrderManager);
-    OrderManager.viewModel.Search();
+    ko.applyBindings(OrderReview);
+    OrderReview.viewModel.Search();
     //初始化页码
     $('#page-selection').bootpag({
         total: 1,
@@ -170,8 +206,8 @@ $(function () {
         firstClass: 'first'
     }).on("page", function (event, num) {
         if (num != null) {
-            OrderManager.viewModel.Page.CurrentPageIndex(num);
-            OrderManager.viewModel.GotoPage();
+            OrderReview.viewModel.Page.CurrentPageIndex(num);
+            OrderReview.viewModel.GotoPage();
         }
 
     });

@@ -10,6 +10,7 @@ namespace Nicole.Test
 
     public class CodeFirstDbContext : DbContext, IDataContext
     {
+        public IDbSet<Role> Roles { get; set; }
         public IDbSet<OrderReview> OrderReviews { get; set; }
         public IDbSet<AuditLevel> AuditLevels { get; set; }
         public IDbSet<Order> Orders { get; set; }
@@ -61,7 +62,7 @@ namespace Nicole.Test
             //modelBuilder.Configurations.Add(new AvatarMapping());
             //modelBuilder.Configurations.Add(new LetterMapping());
             //modelBuilder.Configurations.Add(new RetailerMapping());
-            //modelBuilder.Configurations.Add(new SiteMapping());           
+            //modelBuilder.Configurations.Add(new SiteMapping()); 
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -45,13 +45,7 @@ namespace Nicole.Web.MapperHelper
                                     ? "已审核"
                                     : (src.OrderReviews.OrderByDescending(o => o.CreatedTime).FirstOrDefault().IsReturn
                                         ? "被退回"
-                                        : "审核中")))
-                .ForMember(n => n.CanEdit,
-                    opt =>
-                        opt.MapFrom(
-                            src =>
-                                !src.IsApproved &&
-                                src.OrderReviews.OrderByDescending(o => o.CreatedTime).FirstOrDefault().IsReturn))
+                                        : src.OrderReviews.OrderByDescending(o=>o.CreatedTime).FirstOrDefault().SendToRole.Name)))
                 .ForMember(n => n.CurrentOrderReview,
                     opt =>
                         opt.MapFrom(

@@ -17,15 +17,15 @@ namespace Nicole.Web.Controllers.API
 {
     public class OrderController : BaseApiController
     {
-        private readonly ICustomerService _customerService;
+        private readonly IAuditLevelService _auditLevelService;
         private readonly IEnquiryService _enquiryService;
         private readonly IEmployeesService _employeesService;
         private readonly IMapperFactory _mapperFactory;
         private readonly IPositionService _positionService;
         private readonly IOrderService _orderService;
-        public OrderController(ICustomerService customerService, IEnquiryService enquiryService, IMapperFactory mapperFactory, IEmployeesService employeesService, IPositionService positionService, IOrderService orderService)
+        public OrderController(IAuditLevelService auditLevelService, IEnquiryService enquiryService, IMapperFactory mapperFactory, IEmployeesService employeesService, IPositionService positionService, IOrderService orderService)
         {
-            _customerService = customerService;
+            _auditLevelService = auditLevelService;
             _enquiryService = enquiryService;
             _mapperFactory = mapperFactory;
             _employeesService = employeesService;
@@ -61,6 +61,14 @@ namespace Nicole.Web.Controllers.API
             {
                 return Failed("单价超出范围");
             }
+            var parentRole =
+                _auditLevelService.GetAuditLevels()
+                    .Where(n => n.RoleId == currentPosition.Role.Id)
+                    .Select(n => n.ParentRole).FirstOrDefault();
+            if (parentRole == null)
+            {
+                return Failed("找不到上级审核人");
+            }
             try
             {
                 var item = new Order
@@ -76,7 +84,7 @@ namespace Nicole.Web.Controllers.API
                         new OrderReview
                         {
                             Id = Guid.NewGuid(),
-                            SendToPositionId = currentPosition.Parent.Id
+                            SendToRoleId = parentRole.Id
                         }
                     }
                 };
@@ -194,10 +202,23 @@ namespace Nicole.Web.Controllers.API
             {
                 return Failed("单价超出范围");
             }
+            var parentRole =
+                _auditLevelService.GetAuditLevels()
+                    .Where(n => n.RoleId == currentPosition.Role.Id)
+                    .Select(n => n.ParentRole).FirstOrDefault();
+            if (parentRole == null)
+            {
+                return Failed("找不到上级审核人");
+            }
             item.Qty = model.Qty;
             item.UnitPrice = model.UnitPrice;
             item.Remark = model.Remark;
             item.TotalPrice = model.Qty * model.UnitPrice;
+            item.OrderReviews.Add(new OrderReview
+            {
+                Id = Guid.NewGuid(),
+                SendToRoleId = parentRole.Id
+            });
             try
             {
                 _orderService.Update();

@@ -17,12 +17,12 @@ namespace Nicole.Library.Models
         /// </summary>
         [ForeignKey("OrderId")]
         public virtual Order Orders { get; set; }
-        public Guid? SendToPositionId { get; set; }
+        public Guid? SendToRoleId { get; set; }
         /// <summary>
-        /// 发送至审核人
+        /// 发送至审核角色
         /// </summary>
-        [ForeignKey("SendToPositionId")]
-        public virtual Position SendToPosition { get; set; }
+        [ForeignKey("SendToRoleId")]
+        public virtual Role SendToRole { get; set; }
         /// <summary>
         /// 退回原因
         /// </summary>

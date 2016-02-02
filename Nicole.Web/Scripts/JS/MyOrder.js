@@ -12,7 +12,6 @@
             Qty: ko.observable(),
             Remark: ko.observable(),
             State: ko.observable(),
-            CanEdit:ko.observable(),
             EnquiryModel: {
                 Id: ko.observable(),
                 Price: ko.observable(),
@@ -41,6 +40,10 @@
                     Code: ko.observable(),
                     Name: ko.observable()
                 }
+            },
+            CurrentOrderReview: {
+                Id: ko.observable(),
+                ReturnComments: ko.observable()
             }
         }
     }
@@ -66,6 +69,17 @@ ko.bindingHandlers.time = {
         }
     }
 };
+MyOrder.viewModel.OrderModel.TotalPrice = ko.computed({
+    read: function () {
+
+        if (MyOrder.viewModel.OrderModel.Qty() != null && MyOrder.viewModel.OrderModel.UnitPrice() != null) {
+            return MyOrder.viewModel.OrderModel.Qty()*10000 * MyOrder.viewModel.OrderModel.UnitPrice()/10000;
+        }
+        return null;
+    },
+    write: function (value) {
+    }
+});
 MyOrder.viewModel.UpdatePagination = function () {
     var allPage = MyOrder.viewModel.Page.AllPage() == 0 ? 1 : MyOrder.viewModel.Page.AllPage();
     $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: MyOrder.viewModel.Page.CurrentPageIndex() });
@@ -73,8 +87,20 @@ MyOrder.viewModel.UpdatePagination = function () {
 //确定搜索
 MyOrder.viewModel.Search = function () {
     MyOrder.viewModel.Page.CurrentPageIndex(1);
+    var data = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
     var model = {
-        key: ko.mapping.toJS(MyOrder.viewModel.OrderModel)
+        key: {
+            Code:data.Code,
+            EnquiryModel: {
+                CustomerModel: {
+                    Code: data.EnquiryModel.CustomerModel.Code,
+                    Name: data.EnquiryModel.CustomerModel.Name
+                },
+                ProductModel: {
+                    PartNumber: data.EnquiryModel.ProductModel.PartNumber
+                }
+            }
+        }
     };
     $.get("/api/Order", model, function (result) {
         ko.mapping.fromJS(result, {}, MyOrder.viewModel.Page);
@@ -98,9 +124,44 @@ MyOrder.viewModel.ClearSearch = function () {
 
 };
 //编辑合同
-MyOrder.viewModel.Edit = function() {
-    alert("dsa");
+MyOrder.viewModel.Edit = function () {
+    var model = ko.mapping.toJS(this);
+    $.get('/api/Order/' + model.Id, function (result) {
+        ko.mapping.fromJS(result, {}, MyOrder.viewModel.OrderModel);
+        $('#editdialog').modal({
+            show: true,
+            backdrop: 'static'
+        });
+    });
 };
+//提交审核
+MyOrder.viewModel.SubmitAudit = function () {
+    var model = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
+    $.ajax({
+        type: 'put',
+        url: '/api/Order?Id=' + model.Id,
+        contentType: 'application/json',
+        dataType: "json",
+        data: JSON.stringify(model),
+        success: function (result) {
+            if (result.Error) {
+                Helper.ShowErrorDialog(result.Message);
+            } else {
+                Helper.ShowSuccessDialog(Messages.Success);
+                $('#editdialog').modal("hide");
+                MyOrder.viewModel.ClearSearch();
+                MyOrder.viewModel.Search();
+            }
+        }
+    });
+}
+//查看退回原因
+MyOrder.viewModel.Reason = function () {
+    var model = ko.mapping.toJS(this);
+    $.get('/api/Order/' + model.Id, function (result) {
+        Helper.ShowMessageDialog(result.CurrentOrderReview.ReturnComments, result.Code);
+    });
+}
 $(function () {
     ko.applyBindings(MyOrder);
     MyOrder.viewModel.Search();

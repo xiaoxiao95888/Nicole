@@ -12,6 +12,6 @@ namespace Nicole.Library.Models
         public string Name { get; set; }
         public string Url { get; set; }       
         public virtual LeftNavigation Parent { get; set; }
-        public virtual ICollection<Position> Positions { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
     }
 }

@@ -14,5 +14,6 @@ namespace Nicole.Web.Models
         /// 当前人员
         /// </summary>
         public EmployeeModel CurrentEmployeeModel { get; set; }
+        public RoleModel RoleModel { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Nicole.Web.Models
         /// <summary>
         /// 总价
         /// </summary>
-        public decimal TotalPrice => Qty * UnitPrice;
+        public decimal TotalPrice { get; set; }
 
         /// <summary>
         /// 单价
@@ -31,13 +31,10 @@ namespace Nicole.Web.Models
         public bool IsApproved { get; set; }
         public string State { get; set; }
         /// <summary>
-        /// 是否能编辑
-        /// </summary>
-        public bool CanEdit { get; set; }
-        /// <summary>
         /// 最新的审核记录
         /// </summary>
         public OrderReviewModel CurrentOrderReview { get; set; }
+
         public DateTime CreatedTime { get; set; }
     }
 }
