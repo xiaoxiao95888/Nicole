@@ -178,6 +178,7 @@ CustomerManager.viewModel.CreateSave = function () {
     });
 
 };
+//编辑客户
 CustomerManager.viewModel.ShowEdit = function () {
     var model = ko.mapping.toJS(this);
     if (model.CustomerTypeModel != null) {
