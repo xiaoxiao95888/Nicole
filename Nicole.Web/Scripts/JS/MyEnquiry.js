@@ -39,15 +39,17 @@
             UnitPrice: ko.observable(),
             Qty: ko.observable(),
             Remark: ko.observable(),
+            OrderDate: ko.observable(),
             EnquiryModel: ko.observable()
         }
     }
 };
+
 MyEnquiry.viewModel.OrderModel.TotalPrice = ko.computed({
     read: function () {
 
         if (MyEnquiry.viewModel.OrderModel.Qty() != null && MyEnquiry.viewModel.OrderModel.UnitPrice() != null) {
-            return MyEnquiry.viewModel.OrderModel.Qty()*10000 * MyEnquiry.viewModel.OrderModel.UnitPrice()/10000;
+            return MyEnquiry.viewModel.OrderModel.Qty() * 10000 * MyEnquiry.viewModel.OrderModel.UnitPrice() / 10000;
         }
         return null;
     },
@@ -61,7 +63,7 @@ ko.bindingHandlers.time = {
         var valueUnwrapped = ko.utils.unwrapObservable(value);
 
         // Date formats: http://momentjs.com/docs/#/displaying/format/
-        var pattern = allBindings.format || 'YYYY/MM/DD h:m:s';
+        var pattern = allBindings.format || "YYYY/MM/DD h:m:s";
 
         var output = "-";
         if (valueUnwrapped !== null && valueUnwrapped !== undefined && valueUnwrapped.length > 0) {
@@ -85,12 +87,12 @@ MyEnquiry.viewModel.GotoPage = function () {
     $.get("/api/MyEnquiry", model, function (result) {
         ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.Page);
         MyEnquiry.viewModel.UpdatePagination();
-        $('#searchdialog').modal('hide');
+        $("#searchdialog").modal("hide");
     });
 };
 MyEnquiry.viewModel.UpdatePagination = function () {
     var allPage = MyEnquiry.viewModel.Page.AllPage() == 0 ? 1 : MyEnquiry.viewModel.Page.AllPage();
-    $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: MyEnquiry.viewModel.Page.CurrentPageIndex() });
+    $("#page-selection").bootpag({ total: allPage, maxVisible: 10, page: MyEnquiry.viewModel.Page.CurrentPageIndex() });
 };
 //确定搜索
 MyEnquiry.viewModel.Search = function () {
@@ -101,15 +103,15 @@ MyEnquiry.viewModel.Search = function () {
     $.get("/api/MyEnquiry", model, function (result) {
         ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.Page);
         MyEnquiry.viewModel.UpdatePagination();
-        $('#searchdialog').modal('hide');
+        $("#searchdialog").modal("hide");
     });
 };
 //弹出搜索框
 MyEnquiry.viewModel.ShowSearch = function () {
     MyEnquiry.viewModel.ClearSearch();
-    $('#searchdialog').modal({
+    $("#searchdialog").modal({
         show: true,
-        backdrop: 'static'
+        backdrop: "static"
     });
 };
 
@@ -118,16 +120,16 @@ MyEnquiry.viewModel.ClearSearch = function () {
     var model = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);
     Helper.ClearObject(model);
     ko.mapping.fromJS(model, {}, MyEnquiry.viewModel.EnquiryModel);
-  
+
 };
 //生成合同
 MyEnquiry.viewModel.ShowCreateOrder = function () {
     var model = ko.mapping.toJS(this);
-    $.get('/api/MyEnquiry/' + model.Id, function (result) {
+    $.get("/api/MyEnquiry/" + model.Id, function (result) {
         ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.EnquiryModel);
-        $('#createorderdialog').modal({
+        $("#createorderdialog").modal({
             show: true,
-            backdrop: 'static'
+            backdrop: "static"
         });
     });
 };
@@ -136,34 +138,40 @@ MyEnquiry.viewModel.OrderSave = function () {
     var enquirymodel = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);
     var orderModel = ko.mapping.toJS(MyEnquiry.viewModel.OrderModel);
     orderModel.EnquiryModel = enquirymodel;
-    $.post('/api/Order', orderModel, function (result) {
+    orderModel.OrderDate = $("#orderdate").val();
+    $.post("/api/Order", orderModel, function (result) {
         if (result.Error) {
             Helper.ShowErrorDialog(result.Message);
         } else {
             Helper.ShowSuccessDialog(Messages.Success);
-            $('#createorderdialog').modal('hide');
+            $("#createorderdialog").modal("hide");
         }
     });
 };
 $(function () {
     ko.applyBindings(MyEnquiry);
     MyEnquiry.viewModel.Search();
+
+    $("#orderdate").datetimepicker({
+        locale: "zh-cn",
+        format: "YYYY年MM月DD日"
+    });
     //初始化页码
-    $('#page-selection').bootpag({
+    $("#page-selection").bootpag({
         total: 1,
         page: 1,
         maxVisible: 5,
         leaps: true,
         firstLastUse: true,
-        first: 'First',
-        last: 'Last',
-        wrapClass: 'pagination',
-        activeClass: 'active',
-        disabledClass: 'disabled',
-        nextClass: 'next',
-        prevClass: 'prev',
-        lastClass: 'last',
-        firstClass: 'first'
+        first: "First",
+        last: "Last",
+        wrapClass: "pagination",
+        activeClass: "active",
+        disabledClass: "disabled",
+        nextClass: "next",
+        prevClass: "prev",
+        lastClass: "last",
+        firstClass: "first"
     }).on("page", function (event, num) {
         if (num != null) {
             MyEnquiry.viewModel.Page.CurrentPageIndex(num);

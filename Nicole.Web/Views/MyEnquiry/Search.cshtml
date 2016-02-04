@@ -1,4 +1,6 @@
 ﻿@Scripts.Render("~/bundles/MyEnquiry")
+@Styles.Render("~/Content/MyEnquiry")
+
 <div class="row">
     <div class="col-md-12">
         <div class="navbar-form navbar-right">
@@ -150,7 +152,6 @@
     </div>
 </div>
 <!--生成合同 -->
-
 <div class="modal fade" id="createorderdialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -159,7 +160,7 @@
                 <h4 class="modal-title">生成合同</h4>
             </div>
             <div class="modal-body">
-                <div class="form-horizontal">
+                <div class="form-horizontal" style="width: 400px;">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">客户</label>
                         <div class="col-sm-9">
@@ -181,19 +182,25 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">报价</label>
                         <div class="col-sm-9">
-                            <input type="number" style="max-width: 200px;" class="form-control" data-bind="value:MyEnquiry.viewModel.OrderModel.UnitPrice">
+                            <input type="number"  class="form-control" data-bind="value:MyEnquiry.viewModel.OrderModel.UnitPrice">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">数量</label>
                         <div class="col-sm-9">
-                            <input type="number" style="max-width: 200px;" class="form-control" data-bind="value:MyEnquiry.viewModel.OrderModel.Qty">
+                            <input type="number"  class="form-control" data-bind="value:MyEnquiry.viewModel.OrderModel.Qty">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">合同日期</label>
+                        <div class="col-sm-9">
+                            <input type="date"  id="orderdate" class="form-control" >
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">备注</label>
                         <div class="col-sm-9">
-                            <textarea rows="3" style="max-width: 200px;" class="form-control" data-bind="value:MyEnquiry.viewModel.OrderModel.Remark"></textarea>
+                            <textarea rows="3"  class="form-control" data-bind="value:MyEnquiry.viewModel.OrderModel.Remark"></textarea>
                         </div>
                     </div>
                     <div class="form-group">

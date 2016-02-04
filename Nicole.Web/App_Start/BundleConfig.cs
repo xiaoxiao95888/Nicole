@@ -61,7 +61,12 @@ namespace Nicole.Web
             //MyEnquiry
             bundles.Add(new ScriptBundle("~/bundles/MyEnquiry").Include(
                "~/Scripts/JS/MyEnquiry.js",
-               "~/Scripts/jquery.bootpag.min.js"));
+               "~/Scripts/jquery.bootpag.min.js",
+               "~/Scripts/bootstrap-datetimepicker.min.js"));
+
+            //MyEnquiry
+            bundles.Add(new StyleBundle("~/Content/MyEnquiry").Include(
+                "~/Content/bootstrap-datetimepicker.min.css"));
             //LeftNavigationSetting
             bundles.Add(new ScriptBundle("~/bundles/LeftNavigationSetting").Include(
               "~/Scripts/JS/LeftNavigationSetting.js"));
@@ -85,11 +90,16 @@ namespace Nicole.Web
             //MyOrder
             bundles.Add(new ScriptBundle("~/bundles/MyOrder").Include(
                 "~/Scripts/JS/MyOrder.js",
-                "~/Scripts/jquery.bootpag.min.js"));
+                "~/Scripts/jquery.bootpag.min.js",
+              "~/Scripts/bootstrap-datetimepicker.min.js"));
+            //MyOrder
+            bundles.Add(new StyleBundle("~/Content/MyOrder").Include(
+                "~/Content/bootstrap-datetimepicker.min.css"));
             //OrderReview
             bundles.Add(new ScriptBundle("~/bundles/OrderReview").Include(
               "~/Scripts/JS/OrderReview.js",
               "~/Scripts/jquery.bootpag.min.js"));
+           
         }
     }
 }

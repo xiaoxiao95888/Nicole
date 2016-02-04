@@ -12,6 +12,7 @@
             Qty: ko.observable(),
             Remark: ko.observable(),
             State: ko.observable(),
+            OrderDate: ko.observable(),
             EnquiryModel: {
                 Id: ko.observable(),
                 Price: ko.observable(),
@@ -48,6 +49,27 @@
         }
     }
 };
+ko.bindingHandlers.date = {
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = valueAccessor();
+        var allBindings = allBindingsAccessor();
+        var valueUnwrapped = ko.utils.unwrapObservable(value);
+
+        // Date formats: http://momentjs.com/docs/#/displaying/format/
+        var pattern = allBindings.format || "YYYY/MM/DD";
+
+        var output = "-";
+        if (valueUnwrapped !== null && valueUnwrapped !== undefined && valueUnwrapped.length > 0) {
+            output = moment(valueUnwrapped).format(pattern);
+        }
+
+        if ($(element).is("input") === true) {
+            $(element).val(output);
+        } else {
+            $(element).text(output);
+        }
+    }
+};
 ko.bindingHandlers.time = {
     update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
         var value = valueAccessor();
@@ -55,7 +77,7 @@ ko.bindingHandlers.time = {
         var valueUnwrapped = ko.utils.unwrapObservable(value);
 
         // Date formats: http://momentjs.com/docs/#/displaying/format/
-        var pattern = allBindings.format || 'YYYY/MM/DD h:m:s';
+        var pattern = allBindings.format || "YYYY/MM/DD h:m:s";
 
         var output = "-";
         if (valueUnwrapped !== null && valueUnwrapped !== undefined && valueUnwrapped.length > 0) {
@@ -82,7 +104,7 @@ MyOrder.viewModel.OrderModel.TotalPrice = ko.computed({
 });
 MyOrder.viewModel.UpdatePagination = function () {
     var allPage = MyOrder.viewModel.Page.AllPage() == 0 ? 1 : MyOrder.viewModel.Page.AllPage();
-    $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: MyOrder.viewModel.Page.CurrentPageIndex() });
+    $("#page-selection").bootpag({ total: allPage, maxVisible: 10, page: MyOrder.viewModel.Page.CurrentPageIndex() });
 };
 //确定搜索
 MyOrder.viewModel.Search = function () {
@@ -105,15 +127,15 @@ MyOrder.viewModel.Search = function () {
     $.get("/api/Order", model, function (result) {
         ko.mapping.fromJS(result, {}, MyOrder.viewModel.Page);
         MyOrder.viewModel.UpdatePagination();
-        $('#searchdialog').modal('hide');
+        $("#searchdialog").modal("hide");
     });
 };
 //弹出搜索框
 MyOrder.viewModel.ShowSearch = function () {
     MyOrder.viewModel.ClearSearch();
-    $('#searchdialog').modal({
+    $("#searchdialog").modal({
         show: true,
-        backdrop: 'static'
+        backdrop: "static"
     });
 };
 //清空搜索项
@@ -126,21 +148,26 @@ MyOrder.viewModel.ClearSearch = function () {
 //编辑合同
 MyOrder.viewModel.Edit = function () {
     var model = ko.mapping.toJS(this);
-    $.get('/api/Order/' + model.Id, function (result) {
+    $.get("/api/Order/" + model.Id, function (result) {
         ko.mapping.fromJS(result, {}, MyOrder.viewModel.OrderModel);
-        $('#editdialog').modal({
+        $("#orderdate").datetimepicker({
+            locale: "zh-cn",
+            format: "YYYY年MM月DD日"
+        });
+        $("#editdialog").modal({
             show: true,
-            backdrop: 'static'
+            backdrop: "static"
         });
     });
 };
 //提交审核
 MyOrder.viewModel.SubmitAudit = function () {
     var model = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
+    model.OrderDate = $("#orderdate").val();
     $.ajax({
-        type: 'put',
-        url: '/api/Order?Id=' + model.Id,
-        contentType: 'application/json',
+        type: "put",
+        url: "/api/Order?Id=" + model.Id,
+        contentType: "application/json",
         dataType: "json",
         data: JSON.stringify(model),
         success: function (result) {
@@ -148,7 +175,7 @@ MyOrder.viewModel.SubmitAudit = function () {
                 Helper.ShowErrorDialog(result.Message);
             } else {
                 Helper.ShowSuccessDialog(Messages.Success);
-                $('#editdialog').modal("hide");
+                $("#editdialog").modal("hide");
                 MyOrder.viewModel.ClearSearch();
                 MyOrder.viewModel.Search();
             }
@@ -158,29 +185,55 @@ MyOrder.viewModel.SubmitAudit = function () {
 //查看退回原因
 MyOrder.viewModel.Reason = function () {
     var model = ko.mapping.toJS(this);
-    $.get('/api/Order/' + model.Id, function (result) {
+    $.get("/api/Order/" + model.Id, function (result) {
         Helper.ShowMessageDialog(result.CurrentOrderReview.ReturnComments, result.Code);
     });
 }
+//删除合同
+MyOrder.viewModel.DeleteOrder = function() {
+    var model = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
+    Helper.ShowConfirmationDialog({
+        message: "是否确认删除?",
+        confirmFunction: function () {
+            $.ajax({
+                type: "delete",
+                url: "/api/Order?Id=" + model.Id,
+                contentType: "application/json",
+                dataType: "json",
+                success: function (result) {
+                    if (result.Error) {
+                        Helper.ShowErrorDialog(result.Message);
+                    } else {
+                        Helper.ShowSuccessDialog(Messages.Success);
+                        $("#editdialog").modal("hide");
+                        MyOrder.viewModel.ClearSearch();
+                        MyOrder.viewModel.Search();
+                    }
+                }
+            });
+        }
+    });
+};
 $(function () {
     ko.applyBindings(MyOrder);
     MyOrder.viewModel.Search();
+    
     //初始化页码
-    $('#page-selection').bootpag({
+    $("#page-selection").bootpag({
         total: 1,
         page: 1,
         maxVisible: 5,
         leaps: true,
         firstLastUse: true,
-        first: 'First',
-        last: 'Last',
-        wrapClass: 'pagination',
-        activeClass: 'active',
-        disabledClass: 'disabled',
-        nextClass: 'next',
-        prevClass: 'prev',
-        lastClass: 'last',
-        firstClass: 'first'
+        first: "First",
+        last: "Last",
+        wrapClass: "pagination",
+        activeClass: "active",
+        disabledClass: "disabled",
+        nextClass: "next",
+        prevClass: "prev",
+        lastClass: "last",
+        firstClass: "first"
     }).on("page", function (event, num) {
         if (num != null) {
             MyOrder.viewModel.Page.CurrentPageIndex(num);

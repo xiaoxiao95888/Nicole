@@ -30,6 +30,7 @@ namespace Nicole.Web.Models
         public string Remark { get; set; }
         public bool IsApproved { get; set; }
         public string State { get; set; }
+        public DateTime OrderDate { get; set; }
         /// <summary>
         /// 最新的审核记录
         /// </summary>

@@ -43,6 +43,10 @@ namespace Nicole.Web.Controllers.API
             {
                 return Failed("合同不能没有数量");
             }
+            if (model.OrderDate == DateTime.MinValue)
+            {
+                return Failed("合同不能没有日期");
+            }
             var enquiry = _enquiryService.GetEnquiry(model.EnquiryModel.Id);
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentPosition =
@@ -79,6 +83,7 @@ namespace Nicole.Web.Controllers.API
                     UnitPrice = model.UnitPrice,
                     Remark = model.Remark,
                     TotalPrice = model.Qty * model.UnitPrice,
+                    OrderDate = model.OrderDate,
                     OrderReviews = new Collection<OrderReview>
                     {
                         new OrderReview
@@ -178,6 +183,10 @@ namespace Nicole.Web.Controllers.API
             {
                 return Failed("找不到合同");
             }
+            if (model.OrderDate == DateTime.MinValue)
+            {
+                return Failed("不能没有合同日期");
+            }
             if (model.Qty == 0)
             {
                 return Failed("合同不能没有数量");
@@ -214,6 +223,7 @@ namespace Nicole.Web.Controllers.API
             item.UnitPrice = model.UnitPrice;
             item.Remark = model.Remark;
             item.TotalPrice = model.Qty * model.UnitPrice;
+            item.OrderDate = model.OrderDate;
             item.OrderReviews.Add(new OrderReview
             {
                 Id = Guid.NewGuid(),
@@ -229,6 +239,48 @@ namespace Nicole.Web.Controllers.API
                 return Failed(ex.Message);
             }
 
+        }
+
+        public object Delete(Guid id)
+        {
+            var item = _orderService.GetOrder(id);
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentPosition =
+                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
+                    .EmployeePostions.Where(
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                    .Select(n => n.Position)
+                    .FirstOrDefault();
+            if (item == null)
+            {
+                return Failed("找不到合同");
+            }
+            if (currentPosition == null || item.Enquiry.PositionId!=currentPosition.Id)
+            {
+                return Failed("没有权限");
+            }
+            if (item.IsApproved)
+            {
+                return Failed("禁止删除");
+            }
+            var review = item.OrderReviews.OrderByDescending(n => n.UpdateTime).FirstOrDefault();
+            if (review != null)
+            {
+                if (!review.IsReturn)
+                {
+                    return Failed("禁止删除");
+                }
+            }
+            item.IsDeleted = true;
+            try
+            {
+                _orderService.Update();
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                return Failed(ex.Message);
+            }
         }
     }
 }

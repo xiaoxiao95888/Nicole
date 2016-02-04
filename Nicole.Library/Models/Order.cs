@@ -30,6 +30,10 @@ namespace Nicole.Library.Models
         public decimal Qty { get; set; }
         public virtual ICollection<OrderReview> OrderReviews { get; set; }
         /// <summary>
+        /// 合同日期
+        /// </summary>
+        public DateTime OrderDate { get; set; }
+        /// <summary>
         /// 备注
         /// </summary>
         public string Remark { get; set; }
