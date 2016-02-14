@@ -79,8 +79,10 @@
     <Compile Include="Services\IEmployeePostionService.cs" />
     <Compile Include="Services\IEmployeesService.cs" />
     <Compile Include="Services\IEnquiryService.cs" />
+    <Compile Include="Services\IModeOfPaymentService.cs" />
     <Compile Include="Services\IOrderReviewService.cs" />
     <Compile Include="Services\IOrderService.cs" />
+    <Compile Include="Services\IPayPeriodService.cs" />
     <Compile Include="Services\IPositionCustomerService.cs" />
     <Compile Include="Services\IPositionService.cs" />
     <Compile Include="Services\IRoleService.cs" />

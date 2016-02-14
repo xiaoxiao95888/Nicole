@@ -28,7 +28,11 @@ namespace Nicole.Web.MapperHelper
                                     .FirstOrDefault())
                             ));
             Mapper.CreateMap<CustomerType, CustomerTypeModel>();
+            Mapper.CreateMap<PayPeriod, PayPeriodModel>();
+            Mapper.CreateMap<ModeOfPayment, ModeOfPaymentModel>();
             Mapper.CreateMap<Customer, CustomerModel>()
+                .ForMember(n => n.PayPeriodModel, opt => opt.MapFrom(src => src.PayPeriod))
+                .ForMember(n => n.ModeOfPaymentModel, opt => opt.MapFrom(src => src.ModeOfPayment))
                 .ForMember(n => n.CustomerTypeModel, opt => opt.MapFrom(src => src.CustomerType))
                 .ForMember(n => n.PositionModel,
                     opt =>

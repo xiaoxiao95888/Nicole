@@ -10,6 +10,8 @@ namespace Nicole.Test
 
     public class CodeFirstDbContext : DbContext, IDataContext
     {
+        public IDbSet<PayPeriod> PayPeriods { get; set; }
+        public IDbSet<ModeOfPayment> ModeOfPayments { get; set; }
         public IDbSet<Role> Roles { get; set; }
         public IDbSet<OrderReview> OrderReviews { get; set; }
         public IDbSet<AuditLevel> AuditLevels { get; set; }

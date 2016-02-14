@@ -208,10 +208,12 @@
     <Compile Include="Controllers\API\CustomerController.cs" />
     <Compile Include="Controllers\API\CustomerTypeController.cs" />
     <Compile Include="Controllers\API\EnquirySettingController.cs" />
+    <Compile Include="Controllers\API\ModeOfPaymentController.cs" />
     <Compile Include="Controllers\API\MyCustomerController.cs" />
     <Compile Include="Controllers\API\MyEnquiryController.cs" />
     <Compile Include="Controllers\API\OrderController.cs" />
     <Compile Include="Controllers\API\OrderReviewController.cs" />
+    <Compile Include="Controllers\API\PayPeriodController.cs" />
     <Compile Include="Controllers\API\PositionCustomerController.cs" />
     <Compile Include="Controllers\API\LeftNavigationController.cs" />
     <Compile Include="Controllers\API\PositionController.cs" />
@@ -261,9 +263,11 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LeftNavigationModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ModeOfPaymentModel.cs" />
     <Compile Include="Models\OrderManagerModel.cs" />
     <Compile Include="Models\OrderModel.cs" />
     <Compile Include="Models\OrderReviewModel.cs" />
+    <Compile Include="Models\PayPeriodModel.cs" />
     <Compile Include="Models\PositionCustomerModel.cs" />
     <Compile Include="Models\PositionLeftNavigationModel.cs" />
     <Compile Include="Models\PositionModel.cs" />
@@ -316,6 +320,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\JS\AllOrders.js" />
     <Content Include="Scripts\JS\CustomerCreate.js" />
     <Content Include="Scripts\JS\CustomerManager.js" />
     <Content Include="Scripts\JS\MyCustomer.js" />
@@ -381,6 +386,7 @@
     <Content Include="Views\Admin\CustomerManager.cshtml" />
     <Content Include="Views\Order\MyOrder.cshtml" />
     <Content Include="Views\Admin\OrderReview.cshtml" />
+    <Content Include="Views\Admin\AllOrders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

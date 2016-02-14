@@ -19,6 +19,8 @@
             <th>联系人</th>
             <th>电话</th>
             <th>类型</th>
+            <th>账期</th>
+            <th>付款方式</th>
             <th>来源</th>
             @*<th>创建时间</th>*@
             <th>操作</th>
@@ -32,10 +34,13 @@
             <td data-bind="text:ContactPerson"></td>
             <td data-bind="text:TelNumber"></td>
             <td data-bind="text:CustomerTypeModel.Name"></td>
+            <td data-bind="text:PayPeriodModel.Name"></td>
+            <td data-bind="text:ModeOfPaymentModel.Name"></td>
             <td data-bind="text:Origin"></td>
             @*<td data-bind="time:UpdateTime"></td>*@
             <td>
                 <a href="#" data-bind="click:MyCustomer.viewModel.ShowEnquiry">询价</a>
+                <a href="#" data-bind="click:MyCustomer.viewModel.ShowEdit">编辑</a>
             </td>
         </tr>
     </tbody>
@@ -176,6 +181,79 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bind="click:MyCustomer.viewModel.SaveEnquiry">提交</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /编辑 -->
+<div class="modal fade" id="editdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">编辑</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">名称</label>
+                        <div class="col-sm-9">
+                            <label type="text" class="form-control" data-bind="value:MyCustomer.viewModel.SelectedCustomerModel.Name"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地址</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:MyCustomer.viewModel.SelectedCustomerModel.Address">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Email</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" data-bind="value:MyCustomer.viewModel.SelectedCustomerModel.Email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">联系人</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:MyCustomer.viewModel.SelectedCustomerModel.ContactPerson">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">电话</label>
+                        <div class="col-sm-9">
+                            <input type="tel" class="form-control" data-bind="value:MyCustomer.viewModel.SelectedCustomerModel.TelNumber">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">类型</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" data-bind="options: MyCustomer.viewModel.CustomerTypeModels,optionsText: 'Name', optionsCaption: '选择',value:MyCustomer.viewModel.SelectedCustomerModel.CustomerTypeModel"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">来源</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:MyCustomer.viewModel.SelectedCustomerModel.Origin">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">账期</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" data-bind="options: MyCustomer.viewModel.PayPeriodModels,optionsText: 'Name', optionsCaption: '选择',value:MyCustomer.viewModel.SelectedCustomerModel.PayPeriodModel"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">付款类型</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" data-bind="options: MyCustomer.viewModel.ModeOfPaymentModels,optionsText: 'Name', optionsCaption: '选择',value:MyCustomer.viewModel.SelectedCustomerModel.ModeOfPaymentModel"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:MyCustomer.viewModel.EditSave">保存</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>

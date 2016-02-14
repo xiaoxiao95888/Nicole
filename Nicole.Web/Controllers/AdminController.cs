@@ -28,20 +28,30 @@ namespace Nicole.Web.Controllers
         }
         public ActionResult LeftNavigationSetting()
         {
+            ViewBag.Title = _leftNavigationsService.GetLeftNavigation(HttpContext.Request.Path).Name;
             return View();
         }
 
         public ActionResult EnquirySetting()
         {
+            ViewBag.Title = _leftNavigationsService.GetLeftNavigation(HttpContext.Request.Path).Name;
             return View();
         }
         public ActionResult CustomerManager()
         {
+            ViewBag.Title = _leftNavigationsService.GetLeftNavigation(HttpContext.Request.Path).Name;
             return View();
         }
 
         public ActionResult OrderReview()
         {
+            ViewBag.Title = _leftNavigationsService.GetLeftNavigation(HttpContext.Request.Path).Name;
+            return View();
+        }
+
+        public ActionResult AllOrders()
+        {
+            ViewBag.Title = _leftNavigationsService.GetLeftNavigation(HttpContext.Request.Path).Name;
             return View();
         }
     }

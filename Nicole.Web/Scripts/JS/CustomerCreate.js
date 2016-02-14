@@ -14,7 +14,15 @@
             ContactPerson: ko.observable(),
             TelNumber: ko.observable(),
             CustomerTypeModel: ko.observable(),
-            Origin: ko.observable()
+            Origin: ko.observable(),
+            PayPeriodModel: {
+                Id: ko.observable(),
+                Name: ko.observable()
+            },
+            ModeOfPaymentModel: {
+                Id: ko.observable(),
+                Name: ko.observable()
+            }
         },
         CustomerTypeModels: ko.observableArray(),
         PositionModel: {

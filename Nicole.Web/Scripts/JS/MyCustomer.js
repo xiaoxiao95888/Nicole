@@ -17,9 +17,19 @@
                 Id: ko.observable(),
                 Name: ko.observable()
             },
+            PayPeriodModel: {
+                Id: ko.observable(),
+                Name: ko.observable()
+            },
+            ModeOfPaymentModel: {
+                Id: ko.observable(),
+                Name: ko.observable()
+            },
             Origin: ko.observable()
         },
         CustomerTypeModels: ko.observableArray(),
+        PayPeriodModels: ko.observableArray(),
+        ModeOfPaymentModels: ko.observableArray(),
         ProductModel: {
             Id: ko.observable(),
             PartNumber: ko.observable(),
@@ -30,7 +40,11 @@
             Level: ko.observable(),
             SpecificDesign: ko.observable()
         },
-        SelectedCustomerModel: ko.observable()
+        SelectedCustomerModel: {
+            CustomerTypeModel: ko.observable(),
+            PayPeriodModel: ko.observable(),
+            ModeOfPaymentModel: ko.observable()
+        }
     }
 };
 ko.bindingHandlers.time = {
@@ -134,11 +148,69 @@ MyCustomer.viewModel.SearchProduct = function () {
         }
     });
 };
+//弹出编辑
+MyCustomer.viewModel.ShowEdit = function () {
+    var model = ko.mapping.toJS(this);
+
+    if (model.CustomerTypeModel != null) {
+        ko.utils.arrayForEach(MyCustomer.viewModel.CustomerTypeModels(), function (item) {
+            if (item.Id() === model.CustomerTypeModel.Id) {
+                MyCustomer.viewModel.SelectedCustomerModel.CustomerTypeModel(item);
+            }
+        });
+    }
+    if (model.PayPeriodModel != null) {
+        ko.utils.arrayForEach(MyCustomer.viewModel.PayPeriodModels(), function (item) {
+            if (item.Id() === model.PayPeriodModel.Id) {
+                MyCustomer.viewModel.SelectedCustomerModel.PayPeriodModel(item);
+            }
+        });
+    }
+    if (model.ModeOfPaymentModel != null) {
+        ko.utils.arrayForEach(MyCustomer.viewModel.ModeOfPaymentModels(), function (item) {
+            if (item.Id() === model.ModeOfPaymentModel.Id) {
+                MyCustomer.viewModel.SelectedCustomerModel.ModeOfPaymentModel(item);
+            }
+        });
+    }
+    ko.mapping.fromJS(model, {}, MyCustomer.viewModel.SelectedCustomerModel);
+    $("#editdialog").modal({
+        show: true,
+        backdrop: 'static'
+    });
+};
+//保存编辑
+MyCustomer.viewModel.EditSave = function () {
+    var model = ko.mapping.toJS(MyCustomer.viewModel.SelectedCustomerModel);
+    $.ajax({
+        type: "put",
+        url: "/api/Customer",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(model),
+        success: function (result) {
+            if (result.Error) {
+                Helper.ShowErrorDialog(result.Message);
+            } else {
+                Helper.ShowSuccessDialog(Messages.Success);
+                $("#editdialog").modal("hide");
+                MyCustomer.viewModel.ClearSearch();
+                MyCustomer.viewModel.Search();
+            }
+        }
+    });
+};
 $(function () {
     ko.applyBindings(MyCustomer);
-    $.get('/api/CustomerType', function (result) {
-        ko.mapping.fromJS(result, {}, MyCustomer.viewModel.CustomerTypeModels);
-        MyCustomer.viewModel.Search();
+    $.get("/api/CustomerType", function (types) {
+        ko.mapping.fromJS(types, {}, MyCustomer.viewModel.CustomerTypeModels);
+        $.get("/api/PayPeriod", function (payPeriods) {
+            ko.mapping.fromJS(payPeriods, {}, MyCustomer.viewModel.PayPeriodModels);
+            $.get("/api/ModeOfPayment", function (modeOfPayments) {
+                ko.mapping.fromJS(modeOfPayments, {}, MyCustomer.viewModel.ModeOfPaymentModels);
+                MyCustomer.viewModel.Search();
+            });
+        });
     });
 
     //初始化页码

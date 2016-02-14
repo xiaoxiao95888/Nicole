@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace Nicole.Library.Models
+namespace Nicole.Web.Models
 {
-    public class PayPeriod
+    public class PayPeriodModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

@@ -57,7 +57,7 @@ namespace Nicole.Web.Controllers.API
                                        && (key.ContactPerson == null || n.ContactPerson.Contains(key.ContactPerson))
                                        && (key.Email == null || n.Email.Contains(key.Email)));
 
-            if (key.CustomerTypeModel != null)
+            if (key.CustomerTypeModel != null && key.CustomerTypeModel.Id!=Guid.Empty)
             {
                 result = result.Where(n => n.CustomerType != null && n.CustomerTypeId == key.CustomerTypeModel.Id);
             }

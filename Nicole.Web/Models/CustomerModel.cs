@@ -48,6 +48,14 @@ namespace Nicole.Web.Models
         /// 创建人
         /// </summary>
         public PositionModel PositionModel { get; set; }
+        /// <summary>
+        /// 账期
+        /// </summary>
+        public PayPeriodModel PayPeriodModel { get; set; }
+        /// <summary>
+        /// 付款方式
+        /// </summary>
+        public ModeOfPaymentModel ModeOfPaymentModel { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }
 

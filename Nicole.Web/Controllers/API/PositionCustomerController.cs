@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebGrease.Css.Extensions;
 
 namespace Nicole.Web.Controllers.API
 {
@@ -62,10 +63,10 @@ namespace Nicole.Web.Controllers.API
             }
             try
             {
-                var positionCustomer = customer.PositionCustomers.FirstOrDefault(n => n.PositionId == postion.Id);
-                if (positionCustomer != null)
+                var positionCustomers = customer.PositionCustomers.Where(n => n.PositionId == postion.Id).ToArray();
+                if (positionCustomers.Any())
                 {
-                    positionCustomer.IsDeleted = true;
+                    positionCustomers.ForEach(n=>n.IsDeleted=true);
                     _customerService.Update();
                 }
               

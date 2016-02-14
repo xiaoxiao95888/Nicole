@@ -14,7 +14,15 @@
             ContactPerson: ko.observable(),
             TelNumber: ko.observable(),
             CustomerTypeModel: ko.observable(),
-            Origin: ko.observable()
+            Origin: ko.observable(),
+            PayPeriodModel: {
+                Id: ko.observable(),
+                Name: ko.observable()
+            },
+            ModeOfPaymentModel: {
+                Id: ko.observable(),
+                Name: ko.observable()
+            }
         },
         CustomerTypeModels: ko.observableArray(),
         PositionModel: {
@@ -28,7 +36,8 @@
                 JoinDate: ko.observable()
             }
         },
-        PositionModels: ko.observableArray()
+        PositionModels: ko.observableArray(),
+        SelectedCustomerModel: ko.observable({})
     }
 };
 ko.bindingHandlers.time = {
@@ -106,7 +115,7 @@ CustomerManager.viewModel.ShowCreate = function () {
 };
 //确定绑定关系
 CustomerManager.viewModel.AddSave = function () {
-    var selectedCustomerModel = ko.mapping.toJS(CustomerManager.viewModel.CustomerModel);
+    var selectedCustomerModel = ko.mapping.toJS(CustomerManager.viewModel.SelectedCustomerModel);
     var selectedPositionModel = ko.mapping.toJS(this);
     var positionCustomerModel = {
         PositionModel: {
@@ -129,7 +138,7 @@ CustomerManager.viewModel.AddSave = function () {
 };
 //解除绑定
 CustomerManager.viewModel.UnfriendSave = function () {
-    var selectedCustomerModel = ko.mapping.toJS(CustomerManager.viewModel.CustomerModel);
+    var selectedCustomerModel = ko.mapping.toJS(CustomerManager.viewModel.SelectedCustomerModel);
     var selectedPositionModel = ko.mapping.toJS(CustomerManager.viewModel.PositionModel);
     var positionCustomerModel = {
         PositionModel: {
@@ -259,7 +268,7 @@ CustomerManager.viewModel.ShowPositionDetail = function (customerModel, position
     var position = ko.mapping.toJS(positionModel);
     var customer = ko.mapping.toJS(customerModel);
     ko.mapping.fromJS(position, {}, CustomerManager.viewModel.PositionModel);
-    ko.mapping.fromJS(customer, {}, CustomerManager.viewModel.CustomerModel);
+    ko.mapping.fromJS(customer, {}, CustomerManager.viewModel.SelectedCustomerModel);
     $('#positiondetaildialog').modal({
         show: true,
         backdrop: 'static'

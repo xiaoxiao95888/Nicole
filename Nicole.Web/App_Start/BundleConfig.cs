@@ -99,7 +99,11 @@ namespace Nicole.Web
             bundles.Add(new ScriptBundle("~/bundles/OrderReview").Include(
               "~/Scripts/JS/OrderReview.js",
               "~/Scripts/jquery.bootpag.min.js"));
-           
+            //AllOrders
+            bundles.Add(new ScriptBundle("~/bundles/AllOrders").Include(
+              "~/Scripts/JS/AllOrders.js",
+              "~/Scripts/jquery.bootpag.min.js"));
+
         }
     }
 }

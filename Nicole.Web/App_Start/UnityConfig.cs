@@ -40,6 +40,9 @@ namespace Nicole.Web
             container.RegisterType<IAuditLevelService, AuditLevelService>();
             container.RegisterType<IOrderReviewService, OrderReviewService>();
             container.RegisterType<IRoleService, RoleService>();
+            container.RegisterType<IModeOfPaymentService, ModeOfPaymentService>();
+            container.RegisterType<IPayPeriodService, PayPeriodService>();
+
 
             #region mapper inject
             container.RegisterType<IMapperFactory, MapperFactory>();
