@@ -9,7 +9,6 @@ namespace Nicole.Library.Services
     {
         
         IDbSet<PayPeriod> PayPeriods { get; set; }
-        IDbSet<ModeOfPayment> ModeOfPayments { get; set; }
         IDbSet<Role> Roles { get; set; }
         IDbSet<OrderReview> OrderReviews { get; set; }
         IDbSet<AuditLevel> AuditLevels { get; set; }

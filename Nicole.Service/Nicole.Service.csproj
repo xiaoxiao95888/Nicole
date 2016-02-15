@@ -63,7 +63,6 @@
     <Compile Include="Services\EmployeesService.cs" />
     <Compile Include="Services\EnquiryService.cs" />
     <Compile Include="Services\LeftNavigationService.cs" />
-    <Compile Include="Services\ModeOfPaymentService.cs" />
     <Compile Include="Services\OrderReviewService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PayPeriodService.cs" />

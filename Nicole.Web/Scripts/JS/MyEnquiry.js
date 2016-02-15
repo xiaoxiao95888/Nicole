@@ -40,8 +40,10 @@
             Qty: ko.observable(),
             Remark: ko.observable(),
             OrderDate: ko.observable(),
-            EnquiryModel: ko.observable()
-        }
+            EnquiryModel: ko.observable(),
+            PayPeriodModel: ko.observable()
+        },
+        PayPeriodModels: ko.observableArray()
     }
 };
 
@@ -127,9 +129,12 @@ MyEnquiry.viewModel.ShowCreateOrder = function () {
     var model = ko.mapping.toJS(this);
     $.get("/api/MyEnquiry/" + model.Id, function (result) {
         ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.EnquiryModel);
-        $("#createorderdialog").modal({
-            show: true,
-            backdrop: "static"
+        $.get("/api/PayPeriod/", function (payPeriods) {
+            ko.mapping.fromJS(payPeriods, {}, MyEnquiry.viewModel.PayPeriodModels);
+            $("#createorderdialog").modal({
+                show: true,
+                backdrop: "static"
+            });
         });
     });
 };

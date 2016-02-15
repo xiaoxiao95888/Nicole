@@ -24,7 +24,7 @@ namespace Nicole.Web.Controllers.API
         {
             Mapper.Reset();
             Mapper.CreateMap<PayPeriod, PayPeriodModel>();
-            return _payPeriodService.GetPayPeriods().Select(Mapper.Map<PayPeriod, PayPeriodModel>);
+            return _payPeriodService.GetPayPeriods().OrderByDescending(n=>n.Days).Select(Mapper.Map<PayPeriod, PayPeriodModel>);
         }
     }
 }

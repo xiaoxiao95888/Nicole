@@ -52,18 +52,7 @@ namespace Nicole.Library.Models
         /// </summary>
         [ForeignKey("CustomerStateId")]
         public virtual CustomerState CustomerState { get; set; }
-        public Guid? ModeOfPaymentId { get; set; }
-        /// <summary>
-        /// 付款方式
-        /// </summary>
-        [ForeignKey("ModeOfPaymentId")]
-        public virtual ModeOfPayment ModeOfPayment { get; set; }
-        public Guid? PayPeriodId { get; set; }
-        /// <summary>
-        /// 账期
-        /// </summary>
-        [ForeignKey("PayPeriodId")]
-        public virtual PayPeriod PayPeriod { get; set; }
+        
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsDeleted { get; set; }

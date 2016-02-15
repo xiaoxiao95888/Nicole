@@ -47,7 +47,12 @@ namespace Nicole.Web.Controllers.API
             {
                 return Failed("合同不能没有日期");
             }
+            if (model.PayPeriodModel == null || model.PayPeriodModel.Id == Guid.Empty)
+            {
+                return Failed("请选择账期");
+            }
             var enquiry = _enquiryService.GetEnquiry(model.EnquiryModel.Id);
+
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
@@ -84,6 +89,7 @@ namespace Nicole.Web.Controllers.API
                     Remark = model.Remark,
                     TotalPrice = model.Qty * model.UnitPrice,
                     OrderDate = model.OrderDate,
+                    PayPeriodId = model.PayPeriodModel.Id,
                     OrderReviews = new Collection<OrderReview>
                     {
                         new OrderReview
@@ -255,7 +261,7 @@ namespace Nicole.Web.Controllers.API
             {
                 return Failed("找不到合同");
             }
-            if (currentPosition == null || item.Enquiry.PositionId!=currentPosition.Id)
+            if (currentPosition == null || item.Enquiry.PositionId != currentPosition.Id)
             {
                 return Failed("没有权限");
             }

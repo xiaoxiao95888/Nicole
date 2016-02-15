@@ -17,19 +17,9 @@
                 Id: ko.observable(),
                 Name: ko.observable()
             },
-            PayPeriodModel: {
-                Id: ko.observable(),
-                Name: ko.observable()
-            },
-            ModeOfPaymentModel: {
-                Id: ko.observable(),
-                Name: ko.observable()
-            },
             Origin: ko.observable()
         },
         CustomerTypeModels: ko.observableArray(),
-        PayPeriodModels: ko.observableArray(),
-        ModeOfPaymentModels: ko.observableArray(),
         ProductModel: {
             Id: ko.observable(),
             PartNumber: ko.observable(),
@@ -43,7 +33,15 @@
         SelectedCustomerModel: {
             CustomerTypeModel: ko.observable(),
             PayPeriodModel: ko.observable(),
-            ModeOfPaymentModel: ko.observable()
+            ModeOfPaymentModel: ko.observable(),
+            Id: ko.observable(),
+            Code: ko.observable(),
+            Name: ko.observable(),
+            Address: ko.observable(),
+            Email: ko.observable(),
+            ContactPerson: ko.observable(),
+            TelNumber: ko.observable(),
+            Origin: ko.observable()
         }
     }
 };
@@ -151,25 +149,10 @@ MyCustomer.viewModel.SearchProduct = function () {
 //弹出编辑
 MyCustomer.viewModel.ShowEdit = function () {
     var model = ko.mapping.toJS(this);
-
     if (model.CustomerTypeModel != null) {
         ko.utils.arrayForEach(MyCustomer.viewModel.CustomerTypeModels(), function (item) {
             if (item.Id() === model.CustomerTypeModel.Id) {
                 MyCustomer.viewModel.SelectedCustomerModel.CustomerTypeModel(item);
-            }
-        });
-    }
-    if (model.PayPeriodModel != null) {
-        ko.utils.arrayForEach(MyCustomer.viewModel.PayPeriodModels(), function (item) {
-            if (item.Id() === model.PayPeriodModel.Id) {
-                MyCustomer.viewModel.SelectedCustomerModel.PayPeriodModel(item);
-            }
-        });
-    }
-    if (model.ModeOfPaymentModel != null) {
-        ko.utils.arrayForEach(MyCustomer.viewModel.ModeOfPaymentModels(), function (item) {
-            if (item.Id() === model.ModeOfPaymentModel.Id) {
-                MyCustomer.viewModel.SelectedCustomerModel.ModeOfPaymentModel(item);
             }
         });
     }
@@ -204,13 +187,7 @@ $(function () {
     ko.applyBindings(MyCustomer);
     $.get("/api/CustomerType", function (types) {
         ko.mapping.fromJS(types, {}, MyCustomer.viewModel.CustomerTypeModels);
-        $.get("/api/PayPeriod", function (payPeriods) {
-            ko.mapping.fromJS(payPeriods, {}, MyCustomer.viewModel.PayPeriodModels);
-            $.get("/api/ModeOfPayment", function (modeOfPayments) {
-                ko.mapping.fromJS(modeOfPayments, {}, MyCustomer.viewModel.ModeOfPaymentModels);
-                MyCustomer.viewModel.Search();
-            });
-        });
+        MyCustomer.viewModel.Search();
     });
 
     //初始化页码

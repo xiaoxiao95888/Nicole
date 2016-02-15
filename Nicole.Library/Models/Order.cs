@@ -33,6 +33,13 @@ namespace Nicole.Library.Models
         /// 合同日期
         /// </summary>
         public DateTime OrderDate { get; set; }
+
+        public Guid? PayPeriodId { get; set; }
+        /// <summary>
+        /// 账期
+        /// </summary>
+        [ForeignKey("PayPeriodId")]
+        public virtual PayPeriod PayPeriod { get; set; }
         /// <summary>
         /// 备注
         /// </summary>

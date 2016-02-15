@@ -14,6 +14,7 @@
             <th>合同数量</th>
             <th>合同单价</th>
             <th>合同日期</th>
+            <th>合同账期</th>
             @*<th>客户编号</th>*@
             <th>客户米名称</th>
             <th>料号</th>
@@ -39,6 +40,7 @@
             <td data-bind="text:Qty"></td>
             <td data-bind="text:UnitPrice"></td>
             <td data-bind="date:OrderDate"></td>
+            <td data-bind="text:PayPeriodModel.Name"></td>
             @*<td data-bind="text:EnquiryModel.CustomerModel.Code"></td>*@
             <td data-bind="text:EnquiryModel.CustomerModel.Name"></td>
             <td data-bind="text:EnquiryModel.ProductModel.PartNumber"></td>

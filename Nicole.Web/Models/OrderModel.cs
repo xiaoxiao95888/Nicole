@@ -35,6 +35,10 @@ namespace Nicole.Web.Models
         /// 最新的审核记录
         /// </summary>
         public OrderReviewModel CurrentOrderReview { get; set; }
+        /// <summary>
+        /// 账期
+        /// </summary>
+        public PayPeriodModel PayPeriodModel { get; set; }
 
         public DateTime CreatedTime { get; set; }
     }

@@ -173,7 +173,7 @@ OrderReview.viewModel.Approve = function () {
 //退回
 OrderReview.viewModel.Return=function() {
     var model = ko.mapping.toJS(this);
-    $.get('/api/Order/' + model.Id, function (result) {
+    $.get('/api/OrderReview/' + model.Id, function (result) {
         ko.mapping.fromJS(result, {}, OrderReview.viewModel.OrderModel);
         $('#returndialog').modal({
             show: true,

@@ -131,8 +131,6 @@ namespace Nicole.Web.Controllers.API
                     item.TelNumber = string.IsNullOrEmpty(model.TelNumber) ? null : model.TelNumber.Trim();
                     item.Origin = string.IsNullOrEmpty(model.Origin) ? null : model.Origin.Trim();
                     item.CustomerTypeId = model.CustomerTypeModel != null ? model.CustomerTypeModel.Id : (Guid?)null;
-                    item.ModeOfPaymentId = model.ModeOfPaymentModel != null ? model.ModeOfPaymentModel.Id : (Guid?)null;
-                    item.PayPeriodId = model.PayPeriodModel != null ? model.PayPeriodModel.Id : (Guid?)null;
                     try
                     {
                         _customerService.Update();

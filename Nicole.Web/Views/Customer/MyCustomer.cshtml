@@ -19,8 +19,6 @@
             <th>联系人</th>
             <th>电话</th>
             <th>类型</th>
-            <th>账期</th>
-            <th>付款方式</th>
             <th>来源</th>
             @*<th>创建时间</th>*@
             <th>操作</th>
@@ -34,8 +32,6 @@
             <td data-bind="text:ContactPerson"></td>
             <td data-bind="text:TelNumber"></td>
             <td data-bind="text:CustomerTypeModel.Name"></td>
-            <td data-bind="text:PayPeriodModel.Name"></td>
-            <td data-bind="text:ModeOfPaymentModel.Name"></td>
             <td data-bind="text:Origin"></td>
             @*<td data-bind="time:UpdateTime"></td>*@
             <td>
@@ -199,7 +195,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">名称</label>
                         <div class="col-sm-9">
-                            <label type="text" class="form-control" data-bind="value:MyCustomer.viewModel.SelectedCustomerModel.Name"></label>
+                            <label type="text" class="control-label" data-bind="text:MyCustomer.viewModel.SelectedCustomerModel.Name"></label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -236,18 +232,6 @@
                         <label class="col-sm-3 control-label">来源</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" data-bind="value:MyCustomer.viewModel.SelectedCustomerModel.Origin">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">账期</label>
-                        <div class="col-sm-9">
-                            <select class="form-control" data-bind="options: MyCustomer.viewModel.PayPeriodModels,optionsText: 'Name', optionsCaption: '选择',value:MyCustomer.viewModel.SelectedCustomerModel.PayPeriodModel"></select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">付款类型</label>
-                        <div class="col-sm-9">
-                            <select class="form-control" data-bind="options: MyCustomer.viewModel.ModeOfPaymentModels,optionsText: 'Name', optionsCaption: '选择',value:MyCustomer.viewModel.SelectedCustomerModel.ModeOfPaymentModel"></select>
                         </div>
                     </div>
                 </div>

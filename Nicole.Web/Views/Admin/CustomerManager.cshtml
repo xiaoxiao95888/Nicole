@@ -21,8 +21,6 @@
             <th>电话</th>
             <th>类型</th>
             <th>来源</th>
-            <th>账期</th>
-            <th>付款方式</th>
             <th>分配至</th>
             <th>创建人</th>
             <th>创建时间</th>
@@ -38,8 +36,6 @@
             <td data-bind="text:TelNumber"></td>
             <td data-bind="text:CustomerTypeModel.Name"></td>
             <td data-bind="text:Origin"></td>
-            <td data-bind="text:PayPeriodModel.Name"></td>
-            <td data-bind="text:ModeOfPaymentModel.Name"></td>
             <td>
                 <div class="form-inline" data-bind="foreach:PositionModels">
                     <a href="#" data-bind="text:Name,click:function(){CustomerManager.viewModel.ShowPositionDetail($parent,$data)}"></a>

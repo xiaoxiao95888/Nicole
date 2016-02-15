@@ -86,6 +86,28 @@ namespace Nicole.Web.Controllers.API
             };
             return model;
         }
+        public object Get(Guid id)
+        {
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentPosition =
+                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
+                    .EmployeePostions.Where(
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                    .Select(n => n.Position)
+                    .FirstOrDefault();
+
+            var result =
+                _orderService
+                    .GetOrders()
+                    .FirstOrDefault(
+                        n =>
+                            n.Id == id &&
+                            n.OrderReviews.OrderByDescending(p => p.CreatedTime)
+                                .FirstOrDefault(p => p.SendToRoleId == currentPosition.RoleId) != null);
+
+            _mapperFactory.GetOrderMapper().Create();
+            return Mapper.Map<Order, OrderModel>(result);
+        }
         /// <summary>
         /// 通过审核
         /// </summary>
