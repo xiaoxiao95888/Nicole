@@ -41,7 +41,8 @@
             Remark: ko.observable(),
             OrderDate: ko.observable(),
             EnquiryModel: ko.observable(),
-            PayPeriodModel: ko.observable()
+            PayPeriodModel: ko.observable(),
+            EstimatedDeliveryDate: ko.observable()
         },
         PayPeriodModels: ko.observableArray()
     }

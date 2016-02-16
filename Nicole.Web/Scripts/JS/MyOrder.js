@@ -13,10 +13,9 @@
             Remark: ko.observable(),
             State: ko.observable(),
             OrderDate: ko.observable(),
-            PayPeriodModel: {
-                Id: ko.observable(),
-                Name: ko.observable()
-            },
+            //预计交货日期
+            EstimatedDeliveryDate: ko.observable(),
+            PayPeriodModel: ko.observable(),
             EnquiryModel: {
                 Id: ko.observable(),
                 Price: ko.observable(),
@@ -50,7 +49,8 @@
                 Id: ko.observable(),
                 ReturnComments: ko.observable()
             }
-        }
+        },
+        PayPeriodModels: ko.observableArray()
     }
 };
 ko.bindingHandlers.date = {
@@ -110,6 +110,14 @@ MyOrder.viewModel.UpdatePagination = function () {
     var allPage = MyOrder.viewModel.Page.AllPage() == 0 ? 1 : MyOrder.viewModel.Page.AllPage();
     $("#page-selection").bootpag({ total: allPage, maxVisible: 10, page: MyOrder.viewModel.Page.CurrentPageIndex() });
 };
+MyOrder.viewModel.GotoPage = function () {
+    var model = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
+    model.pageIndex = MyOrder.viewModel.Page.CurrentPageIndex();
+    $.get("/api/Order", model, function (result) {
+        ko.mapping.fromJS(result, {}, MyOrder.viewModel.Page);
+        MyOrder.viewModel.UpdatePagination();
+    });
+};
 //确定搜索
 MyOrder.viewModel.Search = function () {
     MyOrder.viewModel.Page.CurrentPageIndex(1);
@@ -154,14 +162,23 @@ MyOrder.viewModel.Edit = function () {
     var model = ko.mapping.toJS(this);
     $.get("/api/Order/" + model.Id, function (result) {
         ko.mapping.fromJS(result, {}, MyOrder.viewModel.OrderModel);
-        $("#orderdate").datetimepicker({
-            locale: "zh-cn",
-            format: "YYYY年MM月DD日"
+        $.get("/api/PayPeriod/", function (payPeriodModels) {
+            ko.mapping.fromJS(payPeriodModels, {}, MyOrder.viewModel.PayPeriodModels);
+            ko.utils.arrayForEach(MyOrder.viewModel.PayPeriodModels(), function (item) {
+                if (item.Id() === model.PayPeriodModel.Id) {
+                    MyOrder.viewModel.OrderModel.PayPeriodModel(item);
+                }
+            });
+            $("#orderdate").datetimepicker({
+                locale: "zh-cn",
+                format: "YYYY年MM月DD日"
+            });
+            $("#editdialog").modal({
+                show: true,
+                backdrop: "static"
+            });
         });
-        $("#editdialog").modal({
-            show: true,
-            backdrop: "static"
-        });
+        
     });
 };
 //提交审核

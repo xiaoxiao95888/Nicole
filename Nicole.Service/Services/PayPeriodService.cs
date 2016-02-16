@@ -13,6 +13,12 @@ namespace Nicole.Service.Services
         public PayPeriodService(NicoleDataContext dbContext) : base(dbContext)
         {
         }
+
+        public PayPeriod GetPayPeriod(Guid id)
+        {
+            return DbContext.PayPeriods.FirstOrDefault(n => n.Id == id);
+        }
+
         public IQueryable<PayPeriod> GetPayPeriods()
         {
             return DbContext.PayPeriods;

@@ -78,7 +78,7 @@ namespace Nicole.Web
             bundles.Add(new ScriptBundle("~/bundles/MyCustomer").Include(
                 "~/Scripts/JS/MyCustomer.js",
                 "~/Scripts/jquery.bootpag.min.js"));
-            
+
             //ProductSearch
             bundles.Add(new ScriptBundle("~/bundles/ProductSearch").Include(
                 "~/Scripts/JS/ProductSearch.js",
@@ -103,7 +103,14 @@ namespace Nicole.Web
             bundles.Add(new ScriptBundle("~/bundles/AllOrders").Include(
               "~/Scripts/JS/AllOrders.js",
               "~/Scripts/jquery.bootpag.min.js"));
-
+            //AccountReceivable
+            bundles.Add(new ScriptBundle("~/bundles/AccountReceivable").Include(
+             "~/Scripts/JS/AccountReceivable.js",
+             "~/Scripts/jquery.bootpag.min.js",
+               "~/Scripts/bootstrap-datetimepicker.min.js"));
+            //AccountReceivable
+            bundles.Add(new StyleBundle("~/Content/AccountReceivable").Include(
+                "~/Content/bootstrap-datetimepicker.min.css"));
         }
     }
 }

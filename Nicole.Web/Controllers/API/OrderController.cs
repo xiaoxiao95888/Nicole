@@ -23,7 +23,11 @@ namespace Nicole.Web.Controllers.API
         private readonly IMapperFactory _mapperFactory;
         private readonly IPositionService _positionService;
         private readonly IOrderService _orderService;
-        public OrderController(IAuditLevelService auditLevelService, IEnquiryService enquiryService, IMapperFactory mapperFactory, IEmployeesService employeesService, IPositionService positionService, IOrderService orderService)
+        private readonly IPayPeriodService _payPeriodService;
+
+        public OrderController(IAuditLevelService auditLevelService, IEnquiryService enquiryService,
+            IMapperFactory mapperFactory, IEmployeesService employeesService, IPositionService positionService,
+            IOrderService orderService, IPayPeriodService payPeriodService)
         {
             _auditLevelService = auditLevelService;
             _enquiryService = enquiryService;
@@ -31,6 +35,7 @@ namespace Nicole.Web.Controllers.API
             _employeesService = employeesService;
             _positionService = positionService;
             _orderService = orderService;
+            _payPeriodService = payPeriodService;
         }
 
         public object Post(OrderModel model)
@@ -47,7 +52,12 @@ namespace Nicole.Web.Controllers.API
             {
                 return Failed("合同不能没有日期");
             }
-            if (model.PayPeriodModel == null || model.PayPeriodModel.Id == Guid.Empty)
+            if (model.PayPeriodModel == null )
+            {
+                return Failed("请选择账期");
+            }
+            var payPeriod = _payPeriodService.GetPayPeriod(model.PayPeriodModel.Id);
+            if (payPeriod == null)
             {
                 return Failed("请选择账期");
             }
@@ -80,6 +90,7 @@ namespace Nicole.Web.Controllers.API
             }
             try
             {
+                
                 var item = new Order
                 {
                     Id = Guid.NewGuid(),
@@ -90,6 +101,8 @@ namespace Nicole.Web.Controllers.API
                     TotalPrice = model.Qty * model.UnitPrice,
                     OrderDate = model.OrderDate,
                     PayPeriodId = model.PayPeriodModel.Id,
+                    EstimatedDeliveryDate = model.EstimatedDeliveryDate,
+                    LastPayDate = model.OrderDate.AddDays(payPeriod.Days),
                     OrderReviews = new Collection<OrderReview>
                     {
                         new OrderReview
@@ -197,6 +210,15 @@ namespace Nicole.Web.Controllers.API
             {
                 return Failed("合同不能没有数量");
             }
+            if (model.PayPeriodModel == null )
+            {
+                return Failed("请选择账期");
+            }
+            var payPeriod = _payPeriodService.GetPayPeriod(model.PayPeriodModel.Id);
+            if (payPeriod == null)
+            {
+                return Failed("请选择账期");
+            }
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
@@ -230,6 +252,9 @@ namespace Nicole.Web.Controllers.API
             item.Remark = model.Remark;
             item.TotalPrice = model.Qty * model.UnitPrice;
             item.OrderDate = model.OrderDate;
+            item.EstimatedDeliveryDate = model.EstimatedDeliveryDate;
+            item.PayPeriodId = model.PayPeriodModel.Id;
+            item.LastPayDate = model.OrderDate.AddDays(payPeriod.Days);
             item.OrderReviews.Add(new OrderReview
             {
                 Id = Guid.NewGuid(),

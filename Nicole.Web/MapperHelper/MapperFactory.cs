@@ -31,5 +31,10 @@ namespace Nicole.Web.MapperHelper
         {
             return new OrderMapper();
         }
+
+        public IFinanceMapper GetFinanceMapper()
+        {
+            return new FinanceMapper();
+        }
     }
 }

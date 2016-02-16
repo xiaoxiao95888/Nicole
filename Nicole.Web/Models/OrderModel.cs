@@ -32,6 +32,10 @@ namespace Nicole.Web.Models
         public string State { get; set; }
         public DateTime OrderDate { get; set; }
         /// <summary>
+        /// 预计交货日期
+        /// </summary>
+        public string EstimatedDeliveryDate { get; set; }
+        /// <summary>
         /// 最新的审核记录
         /// </summary>
         public OrderReviewModel CurrentOrderReview { get; set; }
@@ -39,6 +43,10 @@ namespace Nicole.Web.Models
         /// 账期
         /// </summary>
         public PayPeriodModel PayPeriodModel { get; set; }
+        /// <summary>
+        /// 截止收款日
+        /// </summary>
+        public DateTime LastPayDate { get; set; }
 
         public DateTime CreatedTime { get; set; }
     }

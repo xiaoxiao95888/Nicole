@@ -9,6 +9,7 @@ namespace Nicole.Library.Services
 {
     public interface IPayPeriodService : IDisposable
     {
+        PayPeriod GetPayPeriod(Guid id);
         IQueryable<PayPeriod> GetPayPeriods();
     }
 }

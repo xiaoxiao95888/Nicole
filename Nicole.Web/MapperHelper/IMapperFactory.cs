@@ -14,5 +14,6 @@ namespace Nicole.Web.MapperHelper
         IStandardCostMapper GetStandardCostMapper();
         IEnquiryMapper GetEnquiryMapper();
         IOrderMapper GetOrderMapper();
+        IFinanceMapper GetFinanceMapper();
     }
 }

@@ -208,6 +208,7 @@
     <Compile Include="Controllers\API\CustomerController.cs" />
     <Compile Include="Controllers\API\CustomerTypeController.cs" />
     <Compile Include="Controllers\API\EnquirySettingController.cs" />
+    <Compile Include="Controllers\API\FinanceController.cs" />
     <Compile Include="Controllers\API\MyCustomerController.cs" />
     <Compile Include="Controllers\API\MyEnquiryController.cs" />
     <Compile Include="Controllers\API\OrderController.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="Controllers\API\StandardCostSettingController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\MyEnquiryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -241,11 +243,13 @@
     <Compile Include="MapperHelper\CustomerMapper.cs" />
     <Compile Include="MapperHelper\EmployeeMapper.cs" />
     <Compile Include="MapperHelper\EnquiryMapper.cs" />
+    <Compile Include="MapperHelper\FinanceMapper.cs" />
     <Compile Include="MapperHelper\IMapper.cs" />
     <Compile Include="MapperHelper\IMapperFactory.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\ICustomerMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IEmployeeMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IEnquiryMapper.cs" />
+    <Compile Include="MapperHelper\IMapperInterfaces\IFinanceMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IOrderMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IStandardCostMapper.cs" />
     <Compile Include="MapperHelper\MapperFactory.cs" />
@@ -259,6 +263,7 @@
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\EnquiryManagerModel.cs" />
     <Compile Include="Models\EnquiryModel.cs" />
+    <Compile Include="Models\FinanceModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LeftNavigationModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -321,6 +326,7 @@
     <Content Include="Scripts\JS\AllOrders.js" />
     <Content Include="Scripts\JS\CustomerCreate.js" />
     <Content Include="Scripts\JS\CustomerManager.js" />
+    <Content Include="Scripts\JS\AccountReceivable.js" />
     <Content Include="Scripts\JS\MyCustomer.js" />
     <Content Include="Scripts\JS\EnquirySetting.js" />
     <Content Include="Scripts\JS\Home.js" />
@@ -385,6 +391,7 @@
     <Content Include="Views\Order\MyOrder.cshtml" />
     <Content Include="Views\Admin\OrderReview.cshtml" />
     <Content Include="Views\Admin\AllOrders.cshtml" />
+    <Content Include="Views\Finance\AccountReceivable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

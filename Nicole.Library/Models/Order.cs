@@ -29,10 +29,16 @@ namespace Nicole.Library.Models
         /// </summary>
         public decimal Qty { get; set; }
         public virtual ICollection<OrderReview> OrderReviews { get; set; }
+        public virtual ICollection<Finance> Finances { get; set; }
+
         /// <summary>
         /// 合同日期
         /// </summary>
         public DateTime OrderDate { get; set; }
+        /// <summary>
+        /// 预计交货日期
+        /// </summary>
+        public string EstimatedDeliveryDate { get; set; }
 
         public Guid? PayPeriodId { get; set; }
         /// <summary>
@@ -40,6 +46,10 @@ namespace Nicole.Library.Models
         /// </summary>
         [ForeignKey("PayPeriodId")]
         public virtual PayPeriod PayPeriod { get; set; }
+        /// <summary>
+        /// 截止收款日
+        /// </summary>
+        public DateTime LastPayDate { get; set; }
         /// <summary>
         /// 备注
         /// </summary>

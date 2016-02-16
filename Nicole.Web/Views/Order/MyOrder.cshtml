@@ -15,8 +15,9 @@
             <th>合同单价</th>
             <th>合同日期</th>
             <th>合同账期</th>
+            <th>预计交货日期</th>
             @*<th>客户编号</th>*@
-            <th>客户米名称</th>
+            <th>客户名称</th>
             <th>料号</th>
             @*<th>型号</th>
             <th>电压</th>
@@ -41,6 +42,7 @@
             <td data-bind="text:UnitPrice"></td>
             <td data-bind="date:OrderDate"></td>
             <td data-bind="text:PayPeriodModel.Name"></td>
+            <td data-bind="text:EstimatedDeliveryDate"></td>
             @*<td data-bind="text:EnquiryModel.CustomerModel.Code"></td>*@
             <td data-bind="text:EnquiryModel.CustomerModel.Name"></td>
             <td data-bind="text:EnquiryModel.ProductModel.PartNumber"></td>
@@ -154,6 +156,19 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-3 control-label">合同账期</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" data-bind="options: MyOrder.viewModel.PayPeriodModels,optionsText: 'Name', optionsCaption: '选择',value:MyOrder.viewModel.OrderModel.PayPeriodModel"></select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">预计交货</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" data-bind="value:MyOrder.viewModel.OrderModel.EstimatedDeliveryDate">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-3 control-label">备注</label>
                         <div class="col-sm-9">
                             <textarea rows="3" class="form-control" data-bind="value:MyOrder.viewModel.OrderModel.Remark"></textarea>
@@ -197,6 +212,10 @@
                     <dd data-bind="text:MyOrder.viewModel.OrderModel.TotalPrice"></dd>
                     <dt>合同日期</dt>
                     <dd data-bind="date:MyOrder.viewModel.OrderModel.OrderDate"></dd>
+                    <dt>预计交货日期</dt>
+                    <dd data-bind="text:MyOrder.viewModel.OrderModel.EstimatedDeliveryDate"></dd>
+                    <dt>合同账期</dt>
+                    <dd data-bind="text:MyOrder.viewModel.OrderModel.PayPeriodModel.Name"></dd>
                     <dt>料号</dt>
                     <dd data-bind="text:MyOrder.viewModel.OrderModel.EnquiryModel.ProductModel.PartNumber"></dd>
                     <dt>类型</dt>

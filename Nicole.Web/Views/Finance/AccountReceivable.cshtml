@@ -1,0 +1,150 @@
+﻿@Scripts.Render("~/bundles/AccountReceivable")
+@Styles.Render("~/Content/AccountReceivable")
+<div class="row">
+    <div class="col-md-12">
+        <div class="navbar-form navbar-right">
+            <a class="btn btn-default" data-bind="click:AccountReceivable.viewModel.ShowSearch">搜索</a>
+        </div>
+    </div>
+</div>
+<table class="table table-responsive table-bordered">
+    <thead>
+        <tr>
+            <th>合同编号</th>
+            <th>合同金额</th>
+            <th>合同日期</th>
+            <th>合同账期</th>
+            <th>剩余日期</th>
+            <th>预计交货日期</th>
+            <th>客户名称</th>
+            <th>合同已收款</th>
+            <th>合同备注</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach:viewModel.Page.Models">
+        <tr>
+            <td data-bind="text:OrderModel.Code"></td>
+            <td data-bind="text:OrderModel.TotalPrice"></td>
+            <td data-bind="date:OrderModel.OrderDate"></td>
+            <td data-bind="text:OrderModel.PayPeriodModel.Name"></td>
+            <td data-bind="text:RemainingDays"></td>
+            <td data-bind="text:OrderModel.EstimatedDeliveryDate"></td>
+            <td data-bind="text:CustomerModel.Name"></td>
+            <td>
+                <a href="#" data-bind="text:RealAmount,click:AccountReceivable.viewModel.ShowAmountDetail,visible:RealAmount()!=0"></a>
+            </td>
+            <td data-bind="text:OrderModel.Remark"></td>
+            <td>
+                <a href="#" data-bind="click:AccountReceivable.viewModel.Receipt">收款</a>
+
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div id="page-selection" class="text-center"></div>
+<!--收款-->
+<div class="modal fade" id="receiptdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">收款</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">应收金额</label>
+                        <div class="col-sm-6">
+                            <label class="control-label" data-bind="text:AccountReceivable.viewModel.FinanceModel.TotalPrice"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">收款金额</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" data-bind="value:AccountReceivable.viewModel.FinanceModel.Amount">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">收款日期</label>
+                        <div class="col-sm-6">
+                            <div class="input-group date" data-bind="datepicker:AccountReceivable.viewModel.FinanceModel.PayDate">
+                                <input type="text" class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" data-bind="checked:AccountReceivable.viewModel.FinanceModel.HasFaPiao"> 是否开具发票
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" data-bind="visible:AccountReceivable.viewModel.FinanceModel.HasFaPiao()">
+                        <label class="col-sm-3 control-label">发票编号</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" data-bind="value:AccountReceivable.viewModel.FinanceModel.FaPiaoNumber">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">收款备注</label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" rows="3" data-bind="value:AccountReceivable.viewModel.FinanceModel.Remark"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:AccountReceivable.viewModel.ReceiptSave">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--收款详细-->
+<div class="modal fade" id="amountdetaildialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">收款详细</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>收款金额</th>
+                            <th>收款日期</th>
+                            <th>发票号</th>
+                            <th>操作人</th>
+                            <th>操作时间</th>
+                            <th>收款备注</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach:viewModel.FinanceDetailModels">
+                        <tr>
+                            <td data-bind="text:Amount"></td>
+                            <td data-bind="date:PayDate"></td>
+                            <td data-bind="text:FaPiaoNumber"></td>
+                            <td data-bind="text:PositionModel.Name"></td>
+                            <td data-bind="time:CreatedTime"></td>
+                            <td data-bind="text:Remark"></td>
+                            <td>
+                                <a href="#" data-bind="click:AccountReceivable.viewModel.Remove">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>

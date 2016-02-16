@@ -14,6 +14,11 @@
             State: ko.observable(),
             TotalPrice: ko.observable(),
             OrderDate: ko.observable(),
+            EstimatedDeliveryDate: ko.observable(),
+            PayPeriodModel: {
+                Id: ko.observable(),
+                Name: ko.observable()
+            },
             EnquiryModel: {
                 Id: ko.observable(),
                 Price: ko.observable(),

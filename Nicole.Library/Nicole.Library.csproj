@@ -55,6 +55,7 @@
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AuditLevel.cs" />
     <Compile Include="Models\CustomerState.cs" />
+    <Compile Include="Models\Finance.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderReview.cs" />
     <Compile Include="Models\PayPeriod.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Services\IEmployeePostionService.cs" />
     <Compile Include="Services\IEmployeesService.cs" />
     <Compile Include="Services\IEnquiryService.cs" />
+    <Compile Include="Services\IFinanceService.cs" />
     <Compile Include="Services\IOrderReviewService.cs" />
     <Compile Include="Services\IOrderService.cs" />
     <Compile Include="Services\IPayPeriodService.cs" />
