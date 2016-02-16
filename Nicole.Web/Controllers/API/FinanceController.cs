@@ -61,7 +61,7 @@ namespace Nicole.Web.Controllers.API
             var model = new FinanceManagerModel
             {
                 Models =
-                   result.OrderBy(n => n.Finances.Sum(p => p.Amount))
+                   result.OrderBy(n => n.Finances.Where(p => !p.IsDeleted).Sum(p => p.Amount))
                        .ThenBy(n => n.LastPayDate).ThenByDescending(n => n.UpdateTime)
                        .Skip((pageIndex - 1) * pageSize)
                        .Take(pageSize)
