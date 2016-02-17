@@ -15,6 +15,9 @@
             TotalPrice: ko.observable(),
             OrderDate: ko.observable(),
             EstimatedDeliveryDate: ko.observable(),
+            RealAmount: ko.observable(),
+            //是否已开发票
+            HasFaPiao: ko.observable(false),
             PayPeriodModel: {
                 Id: ko.observable(),
                 Name: ko.observable()
@@ -52,7 +55,8 @@
                 Id: ko.observable(),
                 ReturnComments: ko.observable()
             }
-        }
+        },
+        FinanceDetailModels: ko.observableArray()
     }
 };
 ko.bindingHandlers.date = {
@@ -101,6 +105,28 @@ AllOrders.viewModel.UpdatePagination = function () {
     var allPage = AllOrders.viewModel.Page.AllPage() === 0 ? 1 : AllOrders.viewModel.Page.AllPage();
     $("#page-selection").bootpag({ total: allPage, maxVisible: 10, page: AllOrders.viewModel.Page.CurrentPageIndex() });
 };
+AllOrders.viewModel.GotoPage = function () {
+    var data = ko.mapping.toJS(AllOrders.viewModel.OrderModel);
+    data.pageIndex = AllOrders.viewModel.Page.CurrentPageIndex();
+    var model = {
+        key: {
+            Code: data.Code,
+            EnquiryModel: {
+                ProductModel: {
+                    PartNumber: data.EnquiryModel.ProductModel.PartNumber
+                },
+                CustomerModel: {
+                    Code: data.EnquiryModel.CustomerModel.Code,
+                    Name: data.EnquiryModel.CustomerModel.Name
+                }
+            }
+        }, pageIndex: data.pageIndex
+    };
+    $.get("/api/Order", model, function (result) {
+        ko.mapping.fromJS(result, {}, AllOrders.viewModel.Page);
+        AllOrders.viewModel.UpdatePagination();
+    });
+};
 //确定搜索
 AllOrders.viewModel.Search = function () {
     AllOrders.viewModel.Page.CurrentPageIndex(1);
@@ -117,7 +143,8 @@ AllOrders.viewModel.Search = function () {
                     Name: data.EnquiryModel.CustomerModel.Name
                 }
             }
-        }
+        },
+        pageIndex: 1
     };
     $.get("/api/Order", model, function (result) {
         ko.mapping.fromJS(result, {}, AllOrders.viewModel.Page);
@@ -140,7 +167,7 @@ AllOrders.viewModel.ClearSearch = function () {
     ko.mapping.fromJS(model, {}, AllOrders.viewModel.OrderModel);
 };
 //订单详细
-AllOrders.ShowOrderDetail = function () {
+AllOrders.viewModel.ShowOrderDetail = function () {
     var model = ko.mapping.toJS(this);
     $.get('/api/Order/' + model.Id, function (result) {
         ko.mapping.fromJS(result, {}, AllOrders.viewModel.OrderModel);
@@ -150,7 +177,17 @@ AllOrders.ShowOrderDetail = function () {
         });
     });
 };
-
+//收款详细
+AllOrders.viewModel.ShowAmountDetail=function() {
+    var model = ko.mapping.toJS(this);
+    $.get("/api/FinanceByOrder/" + model.Id, function (result) {
+        ko.mapping.fromJS(result, {}, AllOrders.viewModel.FinanceDetailModels);
+        $("#amountdetaildialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+    });
+}
 $(function () {
     ko.applyBindings(AllOrders);
     AllOrders.viewModel.Search();

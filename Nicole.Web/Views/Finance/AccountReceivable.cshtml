@@ -18,6 +18,7 @@
             <th>预计交货日期</th>
             <th>客户名称</th>
             <th>合同已收款</th>
+            <th>已开票</th>
             <th>合同备注</th>
             <th>操作</th>
         </tr>
@@ -34,10 +35,10 @@
             <td>
                 <a href="#" data-bind="text:RealAmount,click:AccountReceivable.viewModel.ShowAmountDetail,visible:RealAmount()!=0"></a>
             </td>
+            <td data-bind="text:OrderModel.IsApproved()?(OrderModel.HasFaPiao()?'是':'否'):'-'"></td>
             <td data-bind="text:OrderModel.Remark"></td>
             <td>
                 <a href="#" data-bind="click:AccountReceivable.viewModel.Receipt">收款</a>
-
             </td>
         </tr>
     </tbody>
@@ -88,7 +89,7 @@
                     <div class="form-group" data-bind="visible:AccountReceivable.viewModel.FinanceModel.HasFaPiao()">
                         <label class="col-sm-3 control-label">发票编号</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" data-bind="value:AccountReceivable.viewModel.FinanceModel.FaPiaoNumber">
+                            <input type="text" class="form-control" placeholder="多张发票请用,号隔开" data-bind="value:AccountReceivable.viewModel.FinanceModel.FaPiaoNumbers">
                         </div>
                     </div>
                     <div class="form-group">
@@ -122,7 +123,7 @@
                             <th>收款日期</th>
                             <th>发票号</th>
                             <th>操作人</th>
-                            <th>操作时间</th>
+                            @*<th>操作时间</th>*@
                             <th>收款备注</th>
                             <th>操作</th>
                         </tr>
@@ -131,12 +132,15 @@
                         <tr>
                             <td data-bind="text:Amount"></td>
                             <td data-bind="date:PayDate"></td>
-                            <td data-bind="text:FaPiaoNumber"></td>
+                            <td data-bind="foreach:FaPiaoModels">
+                                <span data-bind="text:Code"></span>
+                            </td>
                             <td data-bind="text:PositionModel.Name"></td>
-                            <td data-bind="time:CreatedTime"></td>
+                            @*<td data-bind="time:CreatedTime"></td>*@
                             <td data-bind="text:Remark"></td>
                             <td>
-                                <a href="#" data-bind="click:AccountReceivable.viewModel.Remove">删除</a>
+                                <a href="#" data-bind="click:AccountReceivable.viewModel.Remove">删除收款</a>
+                                <a href="#" data-bind="click:AccountReceivable.viewModel.EditPapiao">编辑发票</a>
                             </td>
                         </tr>
                     </tbody>
@@ -144,6 +148,43 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--编辑发票-->
+<div class="modal fade" id="editfapiaodialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">编辑发票</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" data-bind="visible:AccountReceivable.viewModel.FinanceModel.FaPiaoModels().length>0">
+                    <thead>
+                        <tr>
+                            <th>发票编号</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach:AccountReceivable.viewModel.FinanceModel.FaPiaoModels">
+                        <tr>
+                            <td data-bind="text:Code"></td>
+                            <td>
+                                <a href="#" data-bind="click:AccountReceivable.viewModel.RemovePapiao">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="form-inline text-center">
+                    <input type="text" data-bind="value:AccountReceivable.viewModel.FaPiaoModel.Code" placeholder="输入发票编号" class="form-control">
+                    <a class="btn btn-primary" href="#" data-bind="click:AccountReceivable.viewModel.AddFaPiao">保存</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
             </div>
         </div>
     </div>

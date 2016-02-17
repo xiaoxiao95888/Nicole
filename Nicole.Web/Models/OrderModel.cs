@@ -9,13 +9,11 @@ namespace Nicole.Web.Models
     {
         public Guid Id { get; set; }
         public string Code { get; set; }
-
         public EnquiryModel EnquiryModel { get; set; }
         /// <summary>
         /// 总价
         /// </summary>
         public decimal TotalPrice { get; set; }
-
         /// <summary>
         /// 单价
         /// </summary>
@@ -32,6 +30,10 @@ namespace Nicole.Web.Models
         public string State { get; set; }
         public DateTime OrderDate { get; set; }
         /// <summary>
+        /// 实收款
+        /// </summary>
+        public decimal? RealAmount { get; set; }
+        /// <summary>
         /// 预计交货日期
         /// </summary>
         public string EstimatedDeliveryDate { get; set; }
@@ -47,6 +49,10 @@ namespace Nicole.Web.Models
         /// 截止收款日
         /// </summary>
         public DateTime LastPayDate { get; set; }
+        /// <summary>
+        /// 是否已开发票
+        /// </summary>
+        public bool HasFaPiao { get; set; }
 
         public DateTime CreatedTime { get; set; }
     }

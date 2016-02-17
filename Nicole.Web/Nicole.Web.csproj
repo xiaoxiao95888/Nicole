@@ -208,6 +208,7 @@
     <Compile Include="Controllers\API\CustomerController.cs" />
     <Compile Include="Controllers\API\CustomerTypeController.cs" />
     <Compile Include="Controllers\API\EnquirySettingController.cs" />
+    <Compile Include="Controllers\API\FaPiaoController.cs" />
     <Compile Include="Controllers\API\FinanceController.cs" />
     <Compile Include="Controllers\API\MyCustomerController.cs" />
     <Compile Include="Controllers\API\MyEnquiryController.cs" />
@@ -263,6 +264,7 @@
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\EnquiryManagerModel.cs" />
     <Compile Include="Models\EnquiryModel.cs" />
+    <Compile Include="Models\FaPiaoModel.cs" />
     <Compile Include="Models\FinanceModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LeftNavigationModel.cs" />

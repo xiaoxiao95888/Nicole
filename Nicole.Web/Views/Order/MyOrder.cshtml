@@ -26,6 +26,8 @@
             <th>等级</th>
             <th>特殊设计</th>*@
             <th>报价</th>
+            <th>已收款</th>
+            <th>已开票</th>
             <th>提交日期</th>
             <th>备注</th>
             <th>审核环节</th>
@@ -34,7 +36,6 @@
     </thead>
     <tbody data-bind="foreach:viewModel.Page.Models">
         <tr>
-           
             <td>
                 <a href="#" data-bind="text:Code,click:MyOrder.ShowOrderDetail"></a>
             </td>
@@ -53,6 +54,10 @@
             <td data-bind="text:EnquiryModel.ProductModel.Level"></td>
             <td data-bind="text:EnquiryModel.ProductModel.SpecificDesign"></td>*@
             <td data-bind="text:EnquiryModel.Price"></td>
+            <td>
+                <a href="#" data-bind="text:RealAmount,click:MyOrder.viewModel.ShowAmountDetail,visible:IsApproved()"></a>
+            </td>
+            <td data-bind="text:IsApproved()?(HasFaPiao()?'是':'否'):'-'"></td>
             <td data-bind="time:CreatedTime"></td>
             <td data-bind="text:Remark"></td>
             <td data-bind="text:State"></td>
@@ -236,6 +241,46 @@
 
             </div>
 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--收款详细-->
+<div class="modal fade" id="amountdetaildialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">收款详细</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>收款金额</th>
+                            <th>收款日期</th>
+                            <th>发票号</th>
+                            <th>操作人</th>
+                            @*<th>操作时间</th>*@
+                            <th>收款备注</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach:viewModel.FinanceDetailModels">
+                        <tr>
+                            <td data-bind="text:Amount"></td>
+                            <td data-bind="date:PayDate"></td>
+                            <td data-bind="foreach:FaPiaoModels">
+                                <span data-bind="text:Code"></span>
+                            </td>
+                            <td data-bind="text:PositionModel.Name"></td>
+                            @*<td data-bind="time:CreatedTime"></td>*@
+                            <td data-bind="text:Remark"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>

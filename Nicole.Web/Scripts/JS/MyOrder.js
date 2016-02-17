@@ -13,8 +13,11 @@
             Remark: ko.observable(),
             State: ko.observable(),
             OrderDate: ko.observable(),
+            //是否已开发票
+            HasFaPiao: ko.observable(false),
             //预计交货日期
             EstimatedDeliveryDate: ko.observable(),
+            RealAmount: ko.observable(),
             PayPeriodModel: ko.observable(),
             EnquiryModel: {
                 Id: ko.observable(),
@@ -50,7 +53,8 @@
                 ReturnComments: ko.observable()
             }
         },
-        PayPeriodModels: ko.observableArray()
+        PayPeriodModels: ko.observableArray(),
+        FinanceDetailModels: ko.observableArray()
     }
 };
 ko.bindingHandlers.date = {
@@ -246,6 +250,17 @@ MyOrder.ShowOrderDetail = function () {
         });
     });
 };
+//收款详细
+MyOrder.viewModel.ShowAmountDetail = function () {
+    var model = ko.mapping.toJS(this);
+    $.get("/api/FinanceByOrder/" + model.Id, function (result) {
+        ko.mapping.fromJS(result, {}, MyOrder.viewModel.FinanceDetailModels);
+        $("#amountdetaildialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+    });
+}
 $(function () {
     ko.applyBindings(MyOrder);
     MyOrder.viewModel.Search();

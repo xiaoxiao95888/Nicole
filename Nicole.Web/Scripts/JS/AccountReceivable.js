@@ -12,17 +12,24 @@
             OrderCompleted: ko.observable()
         },
         FinanceModel: {
+            Id: ko.observable(),
             //应收款
             TotalPrice: ko.observable(),
             //收款
             Amount: ko.observable(),
             PayDate: ko.observable(),
             HasFaPiao: ko.observable(false),
-            FaPiaoNumber: ko.observable(),
+            FaPiaoNumbers: ko.observable(),
+            FaPiaoModels: ko.observableArray(),
             OrderId: ko.observable(),
             Remark: ko.observable()
         },
-        FinanceDetailModels: ko.observableArray()
+        FinanceDetailModels: ko.observableArray(),
+        FaPiaoModel: {
+            Id: ko.observable(),
+            Code: ko.observable(),
+            FinanceId: ko.observable()
+        }
     }
 };
 ko.bindingHandlers.datepicker = {
@@ -111,9 +118,9 @@ AccountReceivable.viewModel.Receipt = function () {
         Amount: null,
         PayDate: null,
         HasFaPiao: false,
-        FaPiaoNumber: null,
+        FaPiaoNumbers: null,
         OrderId: model.OrderModel.Id,
-        Remark:null
+        Remark: null
     }
 
     ko.mapping.fromJS(financeModel, {}, AccountReceivable.viewModel.FinanceModel);
@@ -131,14 +138,14 @@ AccountReceivable.viewModel.ReceiptSave = function () {
         } else {
             Helper.ShowSuccessDialog(Messages.Success);
             $("#receiptdialog").modal("hide");
-            AccountReceivable.viewModel.Search();
+            AccountReceivable.viewModel.GotoPage();
         }
     });
 };
 //收款详细
-AccountReceivable.viewModel.ShowAmountDetail= function() {
+AccountReceivable.viewModel.ShowAmountDetail = function () {
     var model = ko.mapping.toJS(this);
-    $.get("/api/Finance/" + model.OrderModel.Id, function(result) {
+    $.get("/api/FinanceByOrder/" + model.OrderModel.Id, function (result) {
         ko.mapping.fromJS(result, {}, AccountReceivable.viewModel.FinanceDetailModels);
         $("#amountdetaildialog").modal({
             show: true,
@@ -147,7 +154,7 @@ AccountReceivable.viewModel.ShowAmountDetail= function() {
     });
 }
 //删除收款
-AccountReceivable.viewModel.Remove = function() {
+AccountReceivable.viewModel.Remove = function () {
     var model = ko.mapping.toJS(this);
     Helper.ShowConfirmationDialog({
         message: "是否确认删除?",
@@ -161,7 +168,7 @@ AccountReceivable.viewModel.Remove = function() {
                     if (result.Error) {
                         Helper.ShowErrorDialog(result.Message);
                     } else {
-                        $.get("/api/Finance/" + model.OrderId, function (data) {
+                        $.get("/api/FinanceByOrder/" + model.OrderId, function (data) {
                             ko.mapping.fromJS(data, {}, AccountReceivable.viewModel.FinanceDetailModels);
                             AccountReceivable.viewModel.GotoPage();
                         });
@@ -171,6 +178,62 @@ AccountReceivable.viewModel.Remove = function() {
         }
     });
 };
+//编辑发票
+AccountReceivable.viewModel.EditPapiao = function () {
+    var finance = ko.mapping.toJS(this);
+    AccountReceivable.viewModel.FaPiaoModel.FinanceId(finance.Id);
+    $.get("/api/Finance/" + finance.Id, function (result) {
+        ko.mapping.fromJS(result, {}, AccountReceivable.viewModel.FinanceModel);
+        $("#editfapiaodialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+    });
+};
+//删除发票
+AccountReceivable.viewModel.RemovePapiao = function () {
+    var model = ko.mapping.toJS(this);
+    Helper.ShowConfirmationDialog({
+        message: "是否确认删除?",
+        confirmFunction: function () {
+            $.ajax({
+                type: "delete",
+                url: "/api/FaPiao?Id=" + model.Id,
+                contentType: "application/json",
+                dataType: "json",
+                success: function (result) {
+                    if (result.Error) {
+                        Helper.ShowErrorDialog(result.Message);
+                    } else {
+                        $.get("/api/Finance/" + model.FinanceId, function (data) {
+                            ko.mapping.fromJS(data, {}, AccountReceivable.viewModel.FinanceModel);
+                            $.get("/api/FinanceByOrder/" + data.OrderId, function (finances) {
+                                ko.mapping.fromJS(finances, {}, AccountReceivable.viewModel.FinanceDetailModels);
+                            });
+                        });
+                    }
+                }
+            });
+        }
+    });
+};
+//新增发票
+AccountReceivable.viewModel.AddFaPiao= function() {
+    var model = ko.mapping.toJS(AccountReceivable.viewModel.FaPiaoModel);
+    $.post("/api/FaPiao", model, function(result) {
+        if (result.Error) {
+            Helper.ShowErrorDialog(result.Message);
+        } else {
+            $.get("/api/Finance/" + model.FinanceId, function (data) {
+                ko.mapping.fromJS(data, {}, AccountReceivable.viewModel.FinanceModel);
+                $.get("/api/FinanceByOrder/" + data.OrderId, function (finances) {
+                    ko.mapping.fromJS(finances, {}, AccountReceivable.viewModel.FinanceDetailModels);
+                    AccountReceivable.viewModel.FaPiaoModel.Code("");
+                });
+            });
+        }
+    });
+}
 $(function () {
     ko.applyBindings(AccountReceivable);
     AccountReceivable.viewModel.Search();

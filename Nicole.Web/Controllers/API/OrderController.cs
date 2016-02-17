@@ -271,7 +271,6 @@ namespace Nicole.Web.Controllers.API
             }
 
         }
-
         public object Delete(Guid id)
         {
             var item = _orderService.GetOrder(id);

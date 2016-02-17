@@ -26,10 +26,7 @@ namespace Nicole.Library.Models
         /// 是否开具发票
         /// </summary>
         public bool HasFaPiao { get; set; }
-        /// <summary>
-        /// 发票编号
-        /// </summary>
-        public string FaPiaoNumber { get; set; }
+        public virtual ICollection<FaPiao> FaPiaos { get; set; }
         public Guid? PositionId { get; set; }
         /// <summary>
         /// 操作人

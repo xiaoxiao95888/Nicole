@@ -37,6 +37,10 @@ namespace Nicole.Web.MapperHelper
             Mapper.CreateMap<PayPeriod, PayPeriodModel>();
             Mapper.CreateMap<OrderReview, OrderReviewModel>();
             Mapper.CreateMap<Order, OrderModel>()
+                .ForMember(n => n.HasFaPiao,
+                    opt => opt.MapFrom(src => src.Finances.Where(p => !p.IsDeleted).Any(p => p.HasFaPiao)))
+                .ForMember(n => n.RealAmount,
+                    opt => opt.MapFrom(src => src.Finances.Where(p => !p.IsDeleted).Sum(p => p.Amount)))
                 .ForMember(n => n.PayPeriodModel, opt => opt.MapFrom(src => src.PayPeriod))
                 .ForMember(n => n.EnquiryModel, opt => opt.MapFrom(src => src.Enquiry))
                 .ForMember(n => n.State,
