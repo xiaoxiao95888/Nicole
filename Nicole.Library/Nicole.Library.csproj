@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\ApplyExpense .cs" />
+    <Compile Include="Models\ApplyExpenseType.cs" />
     <Compile Include="Models\AuditLevel.cs" />
     <Compile Include="Models\CustomerState.cs" />
     <Compile Include="Models\FaPiao.cs" />
@@ -73,6 +75,8 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IAccountService.cs" />
+    <Compile Include="Services\IApplyExpenseService.cs" />
+    <Compile Include="Services\IApplyExpenseTypeService.cs" />
     <Compile Include="Services\IAuditLevelService.cs" />
     <Compile Include="Services\ICustomerService.cs" />
     <Compile Include="Services\ICustomerTypeService.cs" />

@@ -43,6 +43,8 @@ namespace Nicole.Web
             container.RegisterType<IPayPeriodService, PayPeriodService>();
             container.RegisterType<IFinanceService, FinanceService>();
             container.RegisterType<IFaPiaoService, FaPiaoService>();
+            container.RegisterType<IApplyExpenseTypeService, ApplyExpenseTypeService>();
+            container.RegisterType<IApplyExpenseService, ApplyExpenseService>();
 
             #region mapper inject
             container.RegisterType<IMapperFactory, MapperFactory>();

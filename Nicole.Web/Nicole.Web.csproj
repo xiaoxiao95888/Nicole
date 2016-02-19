@@ -257,6 +257,8 @@
     <Compile Include="MapperHelper\OrderMapper.cs" />
     <Compile Include="MapperHelper\StandardCostMapper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ApplyExpenseModel.cs" />
+    <Compile Include="Models\ApplyExpenseTypeModel.cs" />
     <Compile Include="Models\BreadCrumbModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\CustomerModelSettingModel.cs" />

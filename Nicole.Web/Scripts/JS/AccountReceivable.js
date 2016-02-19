@@ -122,7 +122,6 @@ AccountReceivable.viewModel.Receipt = function () {
         OrderId: model.OrderModel.Id,
         Remark: null
     }
-
     ko.mapping.fromJS(financeModel, {}, AccountReceivable.viewModel.FinanceModel);
     $("#receiptdialog").modal({
         show: true,
