@@ -36,5 +36,10 @@ namespace Nicole.Web.MapperHelper
         {
             return new FinanceMapper();
         }
+
+        public IApplyExpenseMapper GetApplyExpenseMapper()
+        {
+            return new ApplyExpenseMapper();
+        }
     }
 }

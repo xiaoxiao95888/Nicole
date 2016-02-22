@@ -204,6 +204,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\API\ApplyExpenseController.cs" />
+    <Compile Include="Controllers\API\ApplyExpenseTypeController.cs" />
     <Compile Include="Controllers\API\BaseApiController.cs" />
     <Compile Include="Controllers\API\CustomerController.cs" />
     <Compile Include="Controllers\API\CustomerTypeController.cs" />
@@ -241,12 +243,14 @@
     <Compile Include="Infrastructure\Extensions.cs" />
     <Compile Include="Infrastructure\Filters\CustomExceptionFilter.cs" />
     <Compile Include="Infrastructure\UserService.cs" />
+    <Compile Include="MapperHelper\ApplyExpenseMapper.cs" />
     <Compile Include="MapperHelper\CustomerMapper.cs" />
     <Compile Include="MapperHelper\EmployeeMapper.cs" />
     <Compile Include="MapperHelper\EnquiryMapper.cs" />
     <Compile Include="MapperHelper\FinanceMapper.cs" />
     <Compile Include="MapperHelper\IMapper.cs" />
     <Compile Include="MapperHelper\IMapperFactory.cs" />
+    <Compile Include="MapperHelper\IMapperInterfaces\IApplyExpenseMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\ICustomerMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IEmployeeMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IEnquiryMapper.cs" />
@@ -263,6 +267,7 @@
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\CustomerModelSettingModel.cs" />
     <Compile Include="Models\CustomerTypeModel.cs" />
+    <Compile Include="Models\DateRangeModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\EnquiryManagerModel.cs" />
     <Compile Include="Models\EnquiryModel.cs" />
@@ -282,6 +287,7 @@
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\ResponseModel.cs" />
     <Compile Include="Models\RoleModel.cs" />
+    <Compile Include="Models\SearchModel\SearchApplyExpenseModel.cs" />
     <Compile Include="Models\StandardCostModel.cs" />
     <Compile Include="Models\StandardCostSettingModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -328,6 +334,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\JS\AllOrders.js" />
+    <Content Include="Scripts\JS\ApplyExpense.js" />
+    <Content Include="Scripts\JS\ApplyExpenseAudit.js" />
     <Content Include="Scripts\JS\CustomerCreate.js" />
     <Content Include="Scripts\JS\CustomerManager.js" />
     <Content Include="Scripts\JS\AccountReceivable.js" />
@@ -396,6 +404,8 @@
     <Content Include="Views\Admin\OrderReview.cshtml" />
     <Content Include="Views\Admin\AllOrders.cshtml" />
     <Content Include="Views\Finance\AccountReceivable.cshtml" />
+    <Content Include="Views\Finance\ApplyExpense.cshtml" />
+    <Content Include="Views\Finance\ApplyExpenseAudit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,152 @@
+﻿@Scripts.Render("~/bundles/ApplyExpense")
+@Styles.Render("~/Content/ApplyExpense")
+<div class="row">
+    <div class="col-md-12">
+        <div class="navbar-form navbar-right">
+            <a class="btn btn-default" data-bind="click:ApplyExpense.viewModel.ShowSearch">搜索</a>
+            <a class="btn  btn-primary" data-bind="click:ApplyExpense.viewModel.ShowCreate">新增</a>
+        </div>
+    </div>
+</div>
+<table class="table table-responsive table-bordered">
+    <thead>
+        <tr>
+            <th>报销日期</th>
+            <th>类别</th>
+            <th>金额</th>
+            <th>报销人</th>
+            <th>明细</th>
+            <th>是否通过</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach:viewModel.Page.Models">
+        <tr>
+            <td data-bind="date:Date"></td>
+            <td data-bind="text:ApplyExpenseTypeModel.Name">类别</td>
+            <td data-bind="text:Amount">金额</td>
+            <td data-bind="text:ConcernedPositionModel.Name">报销人</td>
+            <td data-bind="text:Detail">明细</td>
+            <td data-bind="text:IsApproved()?'是':'否'">是否通过</td>
+        </tr>
+    </tbody>
+</table>
+<div id="page-selection" class="text-center"></div>
+<!--搜索 -->
+<div class="modal fade" id="searchdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">搜索</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报销类别</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" data-bind="options: ApplyExpense.viewModel.ApplyExpenseTypeModels,optionsText: 'Name', optionsCaption: '选择',value:ApplyExpense.viewModel.SearchApplyExpenseModel.ApplyExpenseTypeModel"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报销人</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" data-bind="options: ApplyExpense.viewModel.ConcernedPositionModels,optionsText: 'Name', optionsCaption: '选择',value:ApplyExpense.viewModel.SearchApplyExpenseModel.ConcernedPositionModel"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报销日期</label>
+                        <div class="col-sm-4">
+                            <div class="input-group date" id="datefrom">
+                                <input type="text" class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group date" id="dateto">
+                                <input type="text" class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报销明细</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" rows="3" data-bind="value:ApplyExpense.viewModel.SearchApplyExpenseModel.Detail"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-8">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" data-bind="checked:ApplyExpense.viewModel.SearchApplyExpenseModel.IsApproved"> 是否通过审核
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:ApplyExpense.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--创建-->
+<div class="modal fade" id="createdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">报销</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报销金额</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" data-bind="value:ApplyExpense.viewModel.ApplyExpenseModel.Amount" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报销日期</label>
+                        <div class="col-sm-6">
+                            <div class="input-group date" data-bind="datepicker:ApplyExpense.viewModel.ApplyExpenseModel.Date">
+                                <input type="text" class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报销人</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" data-bind="options: ApplyExpense.viewModel.ConcernedPositionModels,optionsText: 'Name', optionsCaption: '选择',value:ApplyExpense.viewModel.ApplyExpenseModel.ConcernedPositionModel"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报销类型</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" data-bind="options: ApplyExpense.viewModel.ApplyExpenseTypeModels,optionsText: 'Name', optionsCaption: '选择',value:ApplyExpense.viewModel.ApplyExpenseModel.ApplyExpenseTypeModel"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报销明细</label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" rows="3" data-bind="value:ApplyExpense.viewModel.ApplyExpenseModel.Detail"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:ApplyExpense.viewModel.CreateSave">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>

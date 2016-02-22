@@ -45,7 +45,7 @@ namespace Nicole.Web.Controllers.API
                                 p =>
                                     p.Employee.Name.Contains(key.CurrentEmployeeModel.Name) &&
                                     p.StartDate <= currentDate && (p.EndDate >= currentDate || p.EndDate == null) &&
-                                    p.IsDeleted == false));
+                                    p.IsDeleted == false)).OrderByDescending(n => n.RoleId);
             }
             return result.Select(Mapper.Map<Position, PositionModel>);
         }

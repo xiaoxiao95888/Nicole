@@ -8,7 +8,10 @@ namespace Nicole.Web.Models
     public class ApplyExpenseModel
     {
         public Guid Id { get; set; }
-        public decimal Amount { get; set; }
+        /// <summary>
+        /// 报销金额
+        /// </summary>
+        public decimal? Amount { get; set; }
         /// <summary>
         /// 类别
         /// </summary>
@@ -20,7 +23,7 @@ namespace Nicole.Web.Models
         /// <summary>
         /// 报销日期
         /// </summary>
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
         public Guid? PositionId { get; set; }
         /// <summary>
         /// 操作人
@@ -37,5 +40,11 @@ namespace Nicole.Web.Models
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsDeleted { get; set; }
+    }
+    public class ApplyExpenseManagerModel
+    {
+        public ApplyExpenseModel[] Models { get; set; }
+        public int CurrentPageIndex { get; set; }
+        public int AllPage { get; set; }
     }
 }

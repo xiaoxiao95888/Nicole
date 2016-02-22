@@ -13,5 +13,13 @@ namespace Nicole.Web.Controllers
         {
             return View();
         }
+        public ActionResult ApplyExpense()
+        {
+            return View();
+        }
+        public ActionResult ApplyExpenseAudit()
+        {
+            return View();
+        }
     }
 }

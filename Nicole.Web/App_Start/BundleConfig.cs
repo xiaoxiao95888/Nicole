@@ -60,9 +60,9 @@ namespace Nicole.Web
                 "~/Scripts/jquery.bootpag.min.js"));
             //MyEnquiry
             bundles.Add(new ScriptBundle("~/bundles/MyEnquiry").Include(
-               "~/Scripts/JS/MyEnquiry.js",
-               "~/Scripts/jquery.bootpag.min.js",
-               "~/Scripts/bootstrap-datetimepicker.min.js"));
+                "~/Scripts/JS/MyEnquiry.js",
+                "~/Scripts/jquery.bootpag.min.js",
+                "~/Scripts/bootstrap-datetimepicker.min.js"));
 
             //MyEnquiry
             bundles.Add(new StyleBundle("~/Content/MyEnquiry").Include(
@@ -91,26 +91,43 @@ namespace Nicole.Web
             bundles.Add(new ScriptBundle("~/bundles/MyOrder").Include(
                 "~/Scripts/JS/MyOrder.js",
                 "~/Scripts/jquery.bootpag.min.js",
-              "~/Scripts/bootstrap-datetimepicker.min.js"));
+                "~/Scripts/bootstrap-datetimepicker.min.js"));
             //MyOrder
             bundles.Add(new StyleBundle("~/Content/MyOrder").Include(
                 "~/Content/bootstrap-datetimepicker.min.css"));
             //OrderReview
             bundles.Add(new ScriptBundle("~/bundles/OrderReview").Include(
-              "~/Scripts/JS/OrderReview.js",
-              "~/Scripts/jquery.bootpag.min.js"));
+                "~/Scripts/JS/OrderReview.js",
+                "~/Scripts/jquery.bootpag.min.js"));
             //AllOrders
             bundles.Add(new ScriptBundle("~/bundles/AllOrders").Include(
-              "~/Scripts/JS/AllOrders.js",
-              "~/Scripts/jquery.bootpag.min.js"));
+                "~/Scripts/JS/AllOrders.js",
+                "~/Scripts/jquery.bootpag.min.js"));
             //AccountReceivable
             bundles.Add(new ScriptBundle("~/bundles/AccountReceivable").Include(
-             "~/Scripts/JS/AccountReceivable.js",
-             "~/Scripts/jquery.bootpag.min.js",
-               "~/Scripts/bootstrap-datetimepicker.min.js"));
+                "~/Scripts/JS/AccountReceivable.js",
+                "~/Scripts/jquery.bootpag.min.js",
+                "~/Scripts/bootstrap-datetimepicker.min.js"));
             //AccountReceivable
             bundles.Add(new StyleBundle("~/Content/AccountReceivable").Include(
                 "~/Content/bootstrap-datetimepicker.min.css"));
+            //ApplyExpense
+            bundles.Add(new ScriptBundle("~/bundles/ApplyExpense").Include(
+                "~/Scripts/JS/ApplyExpense.js",
+                "~/Scripts/jquery.bootpag.min.js",
+                "~/Scripts/bootstrap-datetimepicker.min.js"));
+            //ApplyExpense
+            bundles.Add(new StyleBundle("~/Content/ApplyExpense").Include(
+                "~/Content/bootstrap-datetimepicker.min.css"));
+            //ApplyExpenseAudit
+            bundles.Add(new ScriptBundle("~/bundles/ApplyExpenseAudit").Include(
+                "~/Scripts/JS/ApplyExpenseAudit.js",
+                "~/Scripts/jquery.bootpag.min.js",
+                "~/Scripts/bootstrap-datetimepicker.min.js"));
+            //ApplyExpenseAudit
+            bundles.Add(new StyleBundle("~/Content/ApplyExpenseAudit").Include(
+                "~/Content/bootstrap-datetimepicker.min.css"));
+
         }
     }
 }
