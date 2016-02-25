@@ -10,6 +10,11 @@ var Helper = {
             show: true
         });
     },
+    GetQueryString: function (name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    },
     ShowSuccessDialog: function (message) {
         var dialog = $("#Dialog");
         dialog.find(".modal-title").text("成功");

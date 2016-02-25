@@ -127,6 +127,9 @@ namespace Nicole.Web
             //ApplyExpenseAudit
             bundles.Add(new StyleBundle("~/Content/ApplyExpenseAudit").Include(
                 "~/Content/bootstrap-datetimepicker.min.css"));
+            //ReconciliationUpload
+            bundles.Add(new ScriptBundle("~/bundles/ReconciliationUpload").Include(
+              "~/Scripts/JS/ReconciliationUpload.js"));
 
         }
     }
