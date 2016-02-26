@@ -41,5 +41,10 @@ namespace Nicole.Web.MapperHelper
         {
             return new ApplyExpenseMapper();
         }
+
+        public ISampleMapper GetSampleMapper()
+        {
+            return new SampleMapper();
+        }
     }
 }

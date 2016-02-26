@@ -130,7 +130,14 @@ namespace Nicole.Web
             //ReconciliationUpload
             bundles.Add(new ScriptBundle("~/bundles/ReconciliationUpload").Include(
               "~/Scripts/JS/ReconciliationUpload.js"));
-
+            //SampleApply
+            bundles.Add(new ScriptBundle("~/bundles/SampleApply").Include(
+                "~/Scripts/JS/SampleApply.js",
+                "~/Scripts/jquery.bootpag.min.js"));
+            //SampleAudit
+            bundles.Add(new ScriptBundle("~/bundles/SampleAudit").Include(
+                "~/Scripts/JS/SampleAudit.js",
+                "~/Scripts/jquery.bootpag.min.js"));
         }
     }
 }

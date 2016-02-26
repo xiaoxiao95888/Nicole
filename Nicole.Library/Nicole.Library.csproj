@@ -68,6 +68,8 @@
     <Compile Include="Models\LeftNavigation.cs" />
     <Compile Include="Models\Enquiry.cs" />
     <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\Sample.cs" />
+    <Compile Include="Models\SampleReview.cs" />
     <Compile Include="Models\StandardCost.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Position.cs" />
@@ -92,6 +94,8 @@
     <Compile Include="Services\IPositionCustomerService.cs" />
     <Compile Include="Services\IPositionService.cs" />
     <Compile Include="Services\IRoleService.cs" />
+    <Compile Include="Services\ISampleReviewService.cs" />
+    <Compile Include="Services\ISampleService.cs" />
     <Compile Include="Services\IStandardCostService.cs" />
     <Compile Include="Services\IProductService.cs" />
     <Compile Include="Services\ILeftNavigationsService.cs" />

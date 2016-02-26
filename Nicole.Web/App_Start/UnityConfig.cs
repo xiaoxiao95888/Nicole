@@ -45,6 +45,8 @@ namespace Nicole.Web
             container.RegisterType<IFaPiaoService, FaPiaoService>();
             container.RegisterType<IApplyExpenseTypeService, ApplyExpenseTypeService>();
             container.RegisterType<IApplyExpenseService, ApplyExpenseService>();
+            container.RegisterType<ISampleReviewService, SampleReviewService>();
+            container.RegisterType<ISampleService, SampleService>();
 
             #region mapper inject
             container.RegisterType<IMapperFactory, MapperFactory>();

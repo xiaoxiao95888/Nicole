@@ -257,6 +257,8 @@
     <Compile Include="Controllers\API\RoleLeftNavigationController.cs" />
     <Compile Include="Controllers\API\ProductSearchController.cs" />
     <Compile Include="Controllers\API\ProductSettingController.cs" />
+    <Compile Include="Controllers\API\SampleReviewController.cs" />
+    <Compile Include="Controllers\API\SampleController.cs" />
     <Compile Include="Controllers\API\StandardCostSettingController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
@@ -265,6 +267,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\SampleController.cs" />
     <Compile Include="Enums\IsPublish.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -289,9 +292,11 @@
     <Compile Include="MapperHelper\IMapperInterfaces\IEnquiryMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IFinanceMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IOrderMapper.cs" />
+    <Compile Include="MapperHelper\IMapperInterfaces\ISampleMapper.cs" />
     <Compile Include="MapperHelper\IMapperInterfaces\IStandardCostMapper.cs" />
     <Compile Include="MapperHelper\MapperFactory.cs" />
     <Compile Include="MapperHelper\OrderMapper.cs" />
+    <Compile Include="MapperHelper\SampleMapper.cs" />
     <Compile Include="MapperHelper\StandardCostMapper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplyExpenseModel.cs" />
@@ -320,7 +325,9 @@
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\ResponseModel.cs" />
     <Compile Include="Models\RoleModel.cs" />
+    <Compile Include="Models\SampleModel.cs" />
     <Compile Include="Models\SearchModel\SearchApplyExpenseModel.cs" />
+    <Compile Include="Models\SearchModel\SearchSampleModel.cs" />
     <Compile Include="Models\StandardCostModel.cs" />
     <Compile Include="Models\StandardCostSettingModel.cs" />
     <Compile Include="Models\UploadReconciliationModel.cs" />
@@ -384,6 +391,8 @@
     <Content Include="Scripts\JS\ProductSearch.js" />
     <Content Include="Scripts\JS\ProductSetting.js" />
     <Content Include="Scripts\JS\ReconciliationUpload.js" />
+    <Content Include="Scripts\JS\SampleApply.js" />
+    <Content Include="Scripts\JS\SampleAudit.js" />
     <Content Include="Scripts\JS\StandardCostSetting.js" />
     <Content Include="Scripts\knockout-3.2.0.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
@@ -442,10 +451,11 @@
     <Content Include="Views\Finance\ApplyExpense.cshtml" />
     <Content Include="Views\Finance\ApplyExpenseAudit.cshtml" />
     <Content Include="Views\Finance\ReconciliationUpload.cshtml" />
+    <Content Include="Views\Sample\SampleApply.cshtml" />
+    <Content Include="Views\Sample\SampleAudit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Role\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -44,7 +44,7 @@ namespace Nicole.Web.Controllers.API
                 _orderService.GetOrders()
                     .Where(
                         n =>
-                            n.OrderReviews.OrderByDescending(p => p.CreatedTime).FirstOrDefault(p => p.IsReturn == false && p.Orders.IsApproved == false && p.IsDeleted == false).SendToRoleId ==
+                            n.OrderReviews.OrderByDescending(p => p.CreatedTime).FirstOrDefault(p => p.IsReturn == false && p.Order.IsApproved == false && p.IsDeleted == false).SendToRoleId ==
                             currentPosition.RoleId);
             if (key.EnquiryModel != null)
             {
@@ -144,7 +144,7 @@ namespace Nicole.Web.Controllers.API
             //最终审核
             if (parentRole == null)
             {
-                item.Orders.IsApproved = true;
+                item.Order.IsApproved = true;
                 item.IsDeleted = true;
             }
             else

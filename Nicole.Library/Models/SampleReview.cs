@@ -8,15 +8,15 @@ using Nicole.Library.Models.Interfaces;
 
 namespace Nicole.Library.Models
 {
-    public class OrderReview: IDtStamped
+    public class SampleReview : IDtStamped
     {
-        public Guid? Id { get; set; }
-        public Guid? OrderId { get; set; }
+        public Guid Id { get; set; }
+        public Guid? SampleId { get; set; }
         /// <summary>
-        /// 等待审核的订单
+        /// 等待审核的样品申请记录
         /// </summary>
-        [ForeignKey("OrderId")]
-        public virtual Order Order { get; set; }
+        [ForeignKey("SampleId")]
+        public virtual Sample Sample { get; set; }
         public Guid? SendToRoleId { get; set; }
         /// <summary>
         /// 发送至审核角色

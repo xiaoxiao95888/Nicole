@@ -1,0 +1,209 @@
+﻿@Scripts.Render("~/bundles/SampleApply")
+<div class="row">
+    <div class="col-md-12">
+        <div class="navbar-form navbar-right">
+            <a class="btn btn-default" data-bind="click:SampleSettingModel.viewModel.ShowSearch">搜索</a>
+            <a class="btn btn-primary" data-bind="click:SampleSettingModel.viewModel.ShowApply">申请</a>
+        </div>
+    </div>
+</div>
+<table class="table table-responsive table-bordered">
+    <thead>
+        <tr>
+            <th>申请编号</th>
+            <th>客户</th>
+            <th>料号</th>
+            <th>数量</th>
+            <th>备注</th>
+            <th>申请人</th>
+            <th>申请时间</th>
+            <th>审核环节</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach:viewModel.Page.Models">
+        <tr>
+            <td data-bind="text:Code"></td>
+            <td data-bind="text:CustomerModel.Name"></td>
+            <td data-bind="text:ProductModel.PartNumber"></td>
+            <td data-bind="text:Qty"></td>
+            <td data-bind="text:Remark"></td>
+            <td data-bind="text:PositionModel.Name"></td>
+            <td data-bind="date:UpdateTime"></td>
+            <td data-bind="text:State"></td>
+        </tr>
+    </tbody>
+</table>
+<div id="page-selection" class="text-center"></div>
+<!-- 新增 -->
+<div class="modal fade" id="createdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">样品申请</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">客户名称</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入客户名称" data-bind="value:SampleSettingModel.viewModel.SampleModel.CustomerModel.Name">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" data-bind="click:SampleSettingModel.viewModel.SearchCustomer">搜索</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">料号</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入料号" data-bind="value:SampleSettingModel.viewModel.SampleModel.ProductModel.PartNumber">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" data-bind="click:SampleSettingModel.viewModel.SearchProduct">搜索</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">申请数量</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" data-bind="value:SampleSettingModel.viewModel.SampleModel.Qty">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" rows="3" data-bind="value:SampleSettingModel.viewModel.SampleModel.Remark"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:SampleSettingModel.viewModel.Submit">提交审核</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 选择客户 -->
+<div class="modal fade" id="selectcustomerdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">选择客户</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>客户编号</th>
+                            <th>客户名称</th>
+                            <th>客户类型</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach:SampleSettingModel.viewModel.CustomerModels">
+                        <tr>
+                            <td data-bind="text:Code"></td>
+                            <td data-bind="text:Name"></td>
+                            <td data-bind="text:CustomerTypeModel.Name"></td>
+                            <td>
+                                <a href="#" data-bind="click:SampleSettingModel.viewModel.SelectCustomer">选择</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 选择产品 -->
+<div class="modal fade" id="selectproductdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">选择产品</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>产品型号</th>
+                        <th>产品料号</th>
+                        <th>产品电压</th>
+                        <th>产品容量</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach:SampleSettingModel.viewModel.ProductModels">
+                    <tr>
+                        <td data-bind="text:ProductType"></td>
+                        <td data-bind="text:PartNumber"></td>
+                        <td data-bind="text:Voltage"></td>
+                        <td data-bind="text:Capacity"></td>
+                        <td>
+                            <a href="#" data-bind="click:SampleSettingModel.viewModel.SelectProduct">选择</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 搜索 -->
+<div class="modal fade" id="searchdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">搜索</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">客户编号</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" data-bind="value:SampleSettingModel.viewModel.SearchSampleModel.CustomerCode"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">客户名称</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" data-bind="value:SampleSettingModel.viewModel.SearchSampleModel.CustomerName"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">料号</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" data-bind="value:SampleSettingModel.viewModel.SearchSampleModel.PartNumber" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-8">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" data-bind="checked:SampleSettingModel.viewModel.SearchSampleModel.IsApproved"> 是否通过审核
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:SampleSettingModel.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
