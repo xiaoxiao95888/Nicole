@@ -17,7 +17,6 @@ namespace Nicole.Web.Controllers.API
 
         public object Get()
         {
-            Mapper.Reset();
             Mapper.CreateMap<CustomerType, CustomerTypeModel>();
             return _customerTypeService.GetCustomerTypes().Select(Mapper.Map<CustomerType, CustomerTypeModel>);
         }

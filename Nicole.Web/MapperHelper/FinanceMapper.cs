@@ -13,7 +13,7 @@ namespace Nicole.Web.MapperHelper
     {
         public void Create()
         {
-            Mapper.Reset();
+            
             Mapper.CreateMap<FaPiao, FaPiaoModel>();
             Mapper.CreateMap<Position, PositionModel>();
             Mapper.CreateMap<Finance, FinanceModel>()
@@ -23,7 +23,7 @@ namespace Nicole.Web.MapperHelper
 
         public void OrderToFinacePage()
         {
-            Mapper.Reset();
+            
             Mapper.CreateMap<PayPeriod, PayPeriodModel>();
             Mapper.CreateMap<Order, OrderModel>().ForMember(n => n.HasFaPiao,
                 opt => opt.MapFrom(src => src.Finances.Where(p => !p.IsDeleted).Any(p => p.HasFaPiao)))

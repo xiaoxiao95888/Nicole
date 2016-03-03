@@ -23,7 +23,6 @@ namespace Nicole.Web.Controllers.API
         public object Get([FromUri] PositionModel key)
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            Mapper.Reset();
             Mapper.CreateMap<Employee, EmployeeModel>();
             Mapper.CreateMap<Position, PositionModel>()
                 .ForMember(n => n.CurrentEmployeeModel,

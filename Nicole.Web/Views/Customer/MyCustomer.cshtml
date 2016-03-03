@@ -115,7 +115,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">新增</h4>
+                <h4 class="modal-title">询价</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
@@ -129,49 +129,89 @@
                         <label class="col-sm-3 control-label">料号</label>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="输入料号" data-bind="value:MyCustomer.viewModel.ProductModel.PartNumber">
+                                <input type="text" class="form-control" placeholder="多个料号请用,号隔开" data-bind="value:MyCustomer.viewModel.PartNumberStr">
                                 <span class="input-group-btn">
                                     <a href="#" class="btn btn-default" data-bind="click:MyCustomer.viewModel.SearchProduct">检索</a>
                                 </span>
                             </div><!-- /input-group -->
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">型号</label>
+                    <div class="form-group" data-bind="visible:MyCustomer.viewModel.ProductModels().length>0">
+                        <label class="col-sm-3 control-label">结果</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="型号" data-bind="value:MyCustomer.viewModel.ProductModel.ProductType">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>料号</th>
+                                        <th>型号</th>
+                                        <th>电压</th>
+                                        <th>容量</th>
+                                        <th>脚距</th>
+                                        <th>等级</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach:MyCustomer.viewModel.ProductModels">
+                                <tr>
+                                    <td data-bind="text:PartNumber"></td>
+                                    <td data-bind="text:ProductType"></td>
+                                    <td data-bind="text:Voltage"></td>
+                                    <td data-bind="text:Capacity"></td>
+                                    <td data-bind="text:Pitch"></td>
+                                    <td data-bind="text:Level"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">电压</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="电压" data-bind="value:MyCustomer.viewModel.ProductModel.Voltage">
+                    
+                    @* <div class="form-group">
+                            <label class="col-sm-3 control-label">料号</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="输入料号" data-bind="value:MyCustomer.viewModel.ProductModel.PartNumber">
+                                    <span class="input-group-btn">
+                                        <a href="#" class="btn btn-default" data-bind="click:MyCustomer.viewModel.SearchProduct">检索</a>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">容量</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="容量" data-bind="value:MyCustomer.viewModel.ProductModel.Capacity">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">型号</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="型号" data-bind="value:MyCustomer.viewModel.ProductModel.ProductType">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">脚距</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="脚距" data-bind="value:MyCustomer.viewModel.ProductModel.Pitch">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">电压</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="电压" data-bind="value:MyCustomer.viewModel.ProductModel.Voltage">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">等级</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="等级" data-bind="value:MyCustomer.viewModel.ProductModel.Level">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">容量</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="容量" data-bind="value:MyCustomer.viewModel.ProductModel.Capacity">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">特殊设计</label>
-                        <div class="col-sm-9">
-                            <textarea placeholder="特殊设计" class="form-control" rows="3" data-bind="value:MyCustomer.viewModel.ProductModel.SpecificDesign"></textarea>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">脚距</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="脚距" data-bind="value:MyCustomer.viewModel.ProductModel.Pitch">
+                            </div>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">等级</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="等级" data-bind="value:MyCustomer.viewModel.ProductModel.Level">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">特殊设计</label>
+                            <div class="col-sm-9">
+                                <textarea placeholder="特殊设计" class="form-control" rows="3" data-bind="value:MyCustomer.viewModel.ProductModel.SpecificDesign"></textarea>
+                            </div>
+                        </div>*@
 
                 </div>
             </div>

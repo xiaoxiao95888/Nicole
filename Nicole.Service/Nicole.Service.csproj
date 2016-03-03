@@ -59,6 +59,7 @@
     <Compile Include="Services\ApplyExpenseService.cs" />
     <Compile Include="Services\ApplyExpenseTypeService.cs" />
     <Compile Include="Services\AuditLevelService.cs" />
+    <Compile Include="Services\ComparisonService.cs" />
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\CustomerTypeService.cs" />
     <Compile Include="Services\EmployeePostionService.cs" />

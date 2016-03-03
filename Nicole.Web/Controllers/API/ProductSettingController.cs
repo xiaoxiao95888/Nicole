@@ -41,8 +41,7 @@ namespace Nicole.Web.Controllers.API
                     n.Price == key.Price)
                 && (key.Voltage == null ||
                     n.Voltage.Contains(key.Voltage.Trim())));
-
-            Mapper.Reset();
+            
             Mapper.CreateMap<Product, ProductModel>();
             var model = new ProductSettingModel
             {

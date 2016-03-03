@@ -12,6 +12,10 @@ namespace Nicole.Service
             : base("NicoleDataContext")
         {
         }
+        public IDbSet<ProductTypeComparison> ProductTypeComparisons { get; set; }
+        public IDbSet<VoltageComparison> VoltageComparisons { get; set; }
+        public IDbSet<LevelComparison> LevelComparisons { get; set; }
+        public IDbSet<PitchComparison> PitchComparisons { get; set; }
         public IDbSet<SampleReview> SampleReviews { get; set; }
         public IDbSet<Sample> Samples { get; set; }
         public IDbSet<ApplyExpense> ApplyExpenses { get; set; }

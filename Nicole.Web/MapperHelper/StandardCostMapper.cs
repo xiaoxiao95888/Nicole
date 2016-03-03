@@ -13,7 +13,7 @@ namespace Nicole.Web.MapperHelper
     {
         public void Create()
         {
-            Mapper.Reset();
+            
             Mapper.CreateMap<Product, ProductModel>();
             Mapper.CreateMap<StandardCost, StandardCostModel>().ForMember(n => n.ProductModel, opt => opt.MapFrom(src => src.Product));
         }

@@ -42,9 +42,26 @@
             ContactPerson: ko.observable(),
             TelNumber: ko.observable(),
             Origin: ko.observable()
-        }
+        },
+        PartNumberStr: ko.observable(),
+        ProductModels: ko.observableArray()
     }
 };
+MyCustomer.viewModel.PartNumbers = ko.computed({
+    read: function () {
+        if (MyCustomer.viewModel.PartNumberStr() != null) {
+            var items = MyCustomer.viewModel.PartNumberStr().split(",");
+            var result = [];
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].length > 0) {
+                    result.push(items[i]);
+                }   
+            }
+            return result;
+        }
+        return null;
+    }
+});
 ko.bindingHandlers.time = {
     update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
         var value = valueAccessor();
@@ -52,7 +69,7 @@ ko.bindingHandlers.time = {
         var valueUnwrapped = ko.utils.unwrapObservable(value);
 
         // Date formats: http://momentjs.com/docs/#/displaying/format/
-        var pattern = allBindings.format || 'YYYY/MM/DD h:m:s';
+        var pattern = allBindings.format || "YYYY/MM/DD h:m:s";
 
         var output = "-";
         if (valueUnwrapped !== null && valueUnwrapped !== undefined && valueUnwrapped.length > 0) {
@@ -70,7 +87,7 @@ ko.bindingHandlers.time = {
 //更新页码
 MyCustomer.viewModel.UpdatePagination = function () {
     var allPage = MyCustomer.viewModel.Page.AllPage() == 0 ? 1 : MyCustomer.viewModel.Page.AllPage();
-    $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: MyCustomer.viewModel.Page.CurrentPageIndex() });
+    $("#page-selection").bootpag({ total: allPage, maxVisible: 10, page: MyCustomer.viewModel.Page.CurrentPageIndex() });
 };
 //确定搜索
 MyCustomer.viewModel.Search = function () {
@@ -80,7 +97,7 @@ MyCustomer.viewModel.Search = function () {
     $.get("/api/MyCustomer", model, function (result) {
         ko.mapping.fromJS(result, {}, MyCustomer.viewModel.Page);
         MyCustomer.viewModel.UpdatePagination();
-        $('#searchdialog').modal('hide');
+        $("#searchdialog").modal("hide");
     });
 };
 MyCustomer.viewModel.GotoPage = function () {
@@ -94,40 +111,43 @@ MyCustomer.viewModel.GotoPage = function () {
 //搜索
 MyCustomer.viewModel.ShowSearch = function () {
     MyCustomer.viewModel.ClearSearch();
-    $('#searchdialog').modal({
+    $("#searchdialog").modal({
         show: true,
-        backdrop: 'static'
+        backdrop: "static"
     });
 };
 //询价
 MyCustomer.viewModel.ShowEnquiry = function () {
+    MyCustomer.viewModel.ProductModels.removeAll();
     var model = ko.mapping.toJS(this);
     MyCustomer.viewModel.CustomerModel.Id(model.Id);
     MyCustomer.viewModel.CustomerModel.Name(model.Name);
-    $('#enquirydialog').modal({
+    $("#enquirydialog").modal({
         show: true,
-        backdrop: 'static'
+        backdrop: "static"
     });
 };
 //提交询价
 MyCustomer.viewModel.SaveEnquiry = function () {
     var customer = ko.mapping.toJS(MyCustomer.viewModel.CustomerModel);
-    var product = ko.mapping.toJS(MyCustomer.viewModel.ProductModel);
-    var model = {
-        CustomerModel: {
-            Id: customer.Id
-        },
-        ProductModel: product
-    };
-    $.post('/api/MyEnquiry', model, function (result) {
-        if (result.Error) {
-            Helper.ShowErrorDialog(result.Message);
-        } else {
-            Helper.ShowSuccessDialog(Messages.Success);
-            MyCustomer.viewModel.ClearSearch();
-            $('#enquirydialog').modal('hide');
-        }
-    });
+    var products = ko.mapping.toJS(MyCustomer.viewModel.ProductModels);
+    for (var i = 0; i < products.length; i++) {
+        var model = {
+            CustomerModel: {
+                Id: customer.Id
+            },
+            ProductModel: products[i]
+        };
+        $.post("/api/MyEnquiry", model, function (result) {
+            if (result.Error) {
+                Helper.ShowErrorDialog(result.Message);
+            } else {
+                Helper.ShowSuccessDialog(Messages.Success);
+                $("#enquirydialog").modal("hide");
+            }
+        });
+    }
+    
 };
 //清空搜索项
 MyCustomer.viewModel.ClearSearch = function () {
@@ -135,16 +155,29 @@ MyCustomer.viewModel.ClearSearch = function () {
     Helper.ClearObject(model);
     ko.mapping.fromJS(model, {}, MyCustomer.viewModel.CustomerModel);
 };
-//根据料号搜索
-MyCustomer.viewModel.SearchProduct = function () {
-    var product = ko.mapping.toJS(MyCustomer.viewModel.ProductModel);
-    $.get("/api/ProductSearch/" + product.PartNumber, function (result) {
+
+function getproduct(partNumber) {
+    $.get("/api/ProductSearch/" + partNumber, function (result) {
         if (result.Error) {
-            Helper.ShowErrorDialog(result.Message);
+            $.get("/api/ProductComparison/" + partNumber, function (data) {
+                if (data.Error) {
+                    Helper.ShowErrorDialog(data.Message);
+                } else {
+                    MyCustomer.viewModel.ProductModels.push(data);
+                }
+            });
         } else {
-            ko.mapping.fromJS(result, {}, MyCustomer.viewModel.ProductModel);
+            MyCustomer.viewModel.ProductModels.push(result);
         }
     });
+}
+//根据料号搜索
+MyCustomer.viewModel.SearchProduct = function () {
+    MyCustomer.viewModel.ProductModels.removeAll();
+    var partNumbers = ko.toJS(MyCustomer.viewModel.PartNumbers);
+    for (var i = 0; i < partNumbers.length; i++) {
+        getproduct(partNumbers[i]);
+    }
 };
 //弹出编辑
 MyCustomer.viewModel.ShowEdit = function () {
@@ -159,7 +192,7 @@ MyCustomer.viewModel.ShowEdit = function () {
     ko.mapping.fromJS(model, {}, MyCustomer.viewModel.SelectedCustomerModel);
     $("#editdialog").modal({
         show: true,
-        backdrop: 'static'
+        backdrop: "static"
     });
 };
 //保存编辑
@@ -191,21 +224,21 @@ $(function () {
     });
 
     //初始化页码
-    $('#page-selection').bootpag({
+    $("#page-selection").bootpag({
         total: 1,
         page: 1,
         maxVisible: 5,
         leaps: true,
         firstLastUse: true,
-        first: 'First',
-        last: 'Last',
-        wrapClass: 'pagination',
-        activeClass: 'active',
-        disabledClass: 'disabled',
-        nextClass: 'next',
-        prevClass: 'prev',
-        lastClass: 'last',
-        firstClass: 'first'
+        first: "First",
+        last: "Last",
+        wrapClass: "pagination",
+        activeClass: "active",
+        disabledClass: "disabled",
+        nextClass: "next",
+        prevClass: "prev",
+        lastClass: "last",
+        firstClass: "first"
     }).on("page", function (event, num) {
         if (num != null) {
             MyCustomer.viewModel.Page.CurrentPageIndex(num);

@@ -14,7 +14,7 @@ namespace Nicole.Web.MapperHelper
         public void Create()
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            Mapper.Reset();
+            
             Mapper.CreateMap<Product, ProductModel>();
             Mapper.CreateMap<Employee, EmployeeModel>();
             Mapper.CreateMap<CustomerType, CustomerTypeModel>();

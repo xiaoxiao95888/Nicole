@@ -61,6 +61,7 @@
     <Compile Include="Models\Finance.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderReview.cs" />
+    <Compile Include="Models\Comparison.cs" />
     <Compile Include="Models\PayPeriod.cs" />
     <Compile Include="Models\PositionCustomer.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Services\IApplyExpenseService.cs" />
     <Compile Include="Services\IApplyExpenseTypeService.cs" />
     <Compile Include="Services\IAuditLevelService.cs" />
+    <Compile Include="Services\IComparisonService.cs" />
     <Compile Include="Services\ICustomerService.cs" />
     <Compile Include="Services\ICustomerTypeService.cs" />
     <Compile Include="Services\IDataContext.cs" />

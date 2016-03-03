@@ -22,7 +22,7 @@ namespace Nicole.Web.Controllers.API
 
         public object Get([FromUri] RoleModel key)
         {
-            Mapper.Reset();
+            
             Mapper.CreateMap<Role, RoleModel>();
             var result = _roleService.GetRoles();
             return result.Select(Mapper.Map<Role, RoleModel>);

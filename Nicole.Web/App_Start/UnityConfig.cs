@@ -47,6 +47,7 @@ namespace Nicole.Web
             container.RegisterType<IApplyExpenseService, ApplyExpenseService>();
             container.RegisterType<ISampleReviewService, SampleReviewService>();
             container.RegisterType<ISampleService, SampleService>();
+            container.RegisterType<IComparisonService, ComparisonService>();
 
             #region mapper inject
             container.RegisterType<IMapperFactory, MapperFactory>();

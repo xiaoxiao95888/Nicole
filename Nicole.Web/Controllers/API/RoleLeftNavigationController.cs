@@ -22,7 +22,7 @@ namespace Nicole.Web.Controllers.API
 
         public object Get()
         {
-            Mapper.Reset();
+            
             Mapper.CreateMap<Role, RoleModel>();
             Mapper.CreateMap<LeftNavigation, LeftNavigationModel>();
             var model =
