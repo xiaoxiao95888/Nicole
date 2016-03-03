@@ -8,8 +8,6 @@
         OrderModel: {
             Id: ko.observable(),
             Code: ko.observable(),
-            UnitPrice: ko.observable(),
-            Qty: ko.observable(),
             Remark: ko.observable(),
             State: ko.observable(),
             OrderDate: ko.observable(),
@@ -19,42 +17,44 @@
             EstimatedDeliveryDate: ko.observable(),
             RealAmount: ko.observable(),
             PayPeriodModel: ko.observable(),
-            EnquiryModel: {
+            PositionModel: {
                 Id: ko.observable(),
-                Price: ko.observable(),
-                ProductModel: {
-                    PartNumber: ko.observable(),
-                    ProductType: ko.observable(),
-                    Voltage: ko.observable(),
-                    Capacity: ko.observable(),
-                    Pitch: ko.observable(),
-                    Level: ko.observable(),
-                    SpecificDesign: ko.observable()
-                },
-                PositionModel: {
+                Name: ko.observable(),
+                CurrentEmployeeModel: {
                     Id: ko.observable(),
                     Name: ko.observable(),
-                    CurrentEmployeeModel: {
-                        Id: ko.observable(),
-                        Name: ko.observable(),
-                        Mail: ko.observable(),
-                        PhoneNumber: ko.observable(),
-                        JoinDate: ko.observable()
-                    }
-                },
-                CustomerModel: {
-                    Id: ko.observable(),
-                    Code: ko.observable(),
-                    Name: ko.observable()
+                    Mail: ko.observable(),
+                    PhoneNumber: ko.observable(),
+                    JoinDate: ko.observable()
                 }
             },
+            CustomerModel: {
+                Id: ko.observable(),
+                Code: ko.observable(),
+                Name: ko.observable()
+            },
+            OrderDetailModels: ko.observableArray(),
             CurrentOrderReview: {
                 Id: ko.observable(),
                 ReturnComments: ko.observable()
             }
         },
         PayPeriodModels: ko.observableArray(),
-        FinanceDetailModels: ko.observableArray()
+        FinanceDetailModels: ko.observableArray(),
+        CustomerModels: ko.observableArray(),
+        EnquiryModels: ko.observableArray(),
+        OrderDetailModel: {
+            EnquiryModel: {
+                Id: ko.observable(),
+                Price: ko.observable(),
+                ProductModel: {
+                    Id: ko.observable(),
+                    PartNumber: ko.observable()
+                }
+            },
+            UnitPrice: ko.observable(),
+            Qty: ko.observable()
+        }
     }
 };
 ko.bindingHandlers.date = {
@@ -99,28 +99,117 @@ ko.bindingHandlers.time = {
         }
     }
 };
-MyOrder.viewModel.OrderModel.TotalPrice = ko.computed({
-    read: function () {
-
-        if (MyOrder.viewModel.OrderModel.Qty() != null && MyOrder.viewModel.OrderModel.UnitPrice() != null) {
-            return MyOrder.viewModel.OrderModel.Qty()*10000 * MyOrder.viewModel.OrderModel.UnitPrice()/10000;
-        }
-        return null;
-    },
-    write: function (value) {
-    }
-});
 MyOrder.viewModel.UpdatePagination = function () {
     var allPage = MyOrder.viewModel.Page.AllPage() == 0 ? 1 : MyOrder.viewModel.Page.AllPage();
     $("#page-selection").bootpag({ total: allPage, maxVisible: 10, page: MyOrder.viewModel.Page.CurrentPageIndex() });
 };
 MyOrder.viewModel.GotoPage = function () {
-    var model = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
+    var data = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
+    var model = {
+        key: {
+            Code: data.Code,
+            CustomerModel: {
+                Code: data.CustomerModel.Code,
+                Name: data.CustomerModel.Name
+            }
+        }
+    };
     model.pageIndex = MyOrder.viewModel.Page.CurrentPageIndex();
     $.get("/api/Order", model, function (result) {
         ko.mapping.fromJS(result, {}, MyOrder.viewModel.Page);
         MyOrder.viewModel.UpdatePagination();
     });
+};
+//生成合同
+MyOrder.viewModel.ShowCreate = function () {
+    $.get("/api/PayPeriod/", function (payPeriodModels) {
+        ko.mapping.fromJS(payPeriodModels, {}, MyOrder.viewModel.PayPeriodModels);
+        $("#orderdate").datetimepicker({
+            locale: "zh-cn",
+            format: "YYYY年MM月DD日"
+        });
+        $("#editdialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+        MyOrder.viewModel.OrderModel.OrderDetailModels.removeAll();
+        $("#createorderdialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+    });
+};
+//搜索客户
+MyOrder.viewModel.SearchCustomer = function () {
+    var customerModel = ko.mapping.toJS(MyOrder.viewModel.OrderModel.CustomerModel);
+    var model = {
+        Name: customerModel.Name
+    }
+    $.get("/api/Customer", model, function (result) {
+        if (result.Models.length > 0) {
+            ko.mapping.fromJS(result.Models, {}, MyOrder.viewModel.CustomerModels);
+            $("#selectcustomerdialog").modal({
+                show: true,
+                backdrop: "static"
+            });
+        } else {
+            Helper.ShowErrorDialog("找不到相关客户");
+        }
+    });
+};
+//选择客户
+MyOrder.viewModel.SelectCustomer = function() {
+    var customer = ko.mapping.toJS(this);
+    MyOrder.viewModel.OrderModel.CustomerModel.Code(customer.Code);
+    MyOrder.viewModel.OrderModel.CustomerModel.Id(customer.Id);
+    MyOrder.viewModel.OrderModel.CustomerModel.Name(customer.Name);
+    $("#selectcustomerdialog").modal("hide");
+};
+//搜索报价
+MyOrder.viewModel.SearchEnquiry = function () {
+    var customerId = MyOrder.viewModel.OrderModel.CustomerModel.Id();
+    if (customerId != null) {
+        $.get("/api/MyEnquiryByCustomer/" + customerId, function (result) {
+           
+            if (result.length > 0) {
+                ko.mapping.fromJS(result, {}, MyOrder.viewModel.EnquiryModels);
+                $("#selectenquirydialog").modal({
+                    show: true,
+                    backdrop: "static"
+                });
+            } else {
+                Helper.ShowErrorDialog("没有相关的询价结果");
+            }
+            
+        });
+    }
+};
+//选择报价
+MyOrder.viewModel.SelectEnquiry = function () {
+    var model = ko.mapping.toJS(this);
+    ko.mapping.fromJS(model, {}, MyOrder.viewModel.OrderDetailModel.EnquiryModel);
+    $("#inputqtypricedialog").modal({
+        show: true,
+        backdrop: "static"
+    });
+};
+//填写数量单价
+MyOrder.viewModel.SaveInputQtyPrice = function() {
+    var orderdetail = ko.mapping.toJS(MyOrder.viewModel.OrderDetailModel);
+    $.post("/api/OrderCheckUnitPrice", orderdetail, function(result) {
+        if (result.Error) {
+            Helper.ShowErrorDialog(result.Message);
+        } else {
+            Helper.ShowSuccessDialog(Messages.Success);
+            $("#inputqtypricedialog").modal("hide");
+            
+            MyOrder.viewModel.OrderModel.OrderDetailModels.push(MyOrder.viewModel.OrderDetailModel);
+        }
+    });
+};
+//移除报价
+MyOrder.viewModel.RemoveOrderDetail = function() {
+    MyOrder.viewModel.OrderModel.OrderDetailModels.remove(this);
 };
 //确定搜索
 MyOrder.viewModel.Search = function () {
@@ -128,15 +217,10 @@ MyOrder.viewModel.Search = function () {
     var data = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
     var model = {
         key: {
-            Code:data.Code,
-            EnquiryModel: {
-                CustomerModel: {
-                    Code: data.EnquiryModel.CustomerModel.Code,
-                    Name: data.EnquiryModel.CustomerModel.Name
-                },
-                ProductModel: {
-                    PartNumber: data.EnquiryModel.ProductModel.PartNumber
-                }
+            Code: data.Code,
+            CustomerModel: {
+                Code: data.CustomerModel.Code,
+                Name: data.CustomerModel.Name
             }
         }
     };
@@ -182,31 +266,52 @@ MyOrder.viewModel.Edit = function () {
                 backdrop: "static"
             });
         });
-        
+
     });
 };
-//提交审核
-MyOrder.viewModel.SubmitAudit = function () {
-    var model = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
-    model.OrderDate = $("#orderdate").val();
+//新增提交审核
+MyOrder.viewModel.SubmitSave = function() {
+    var orderModel = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
+    orderModel.OrderDate = $("#orderdate").val();
     $.ajax({
-        type: "put",
-        url: "/api/Order?Id=" + model.Id,
+        type: "post",
+        url: "/api/Order",
         contentType: "application/json",
         dataType: "json",
-        data: JSON.stringify(model),
-        success: function (result) {
+        data: JSON.stringify(orderModel),
+        success: function(result) {
             if (result.Error) {
                 Helper.ShowErrorDialog(result.Message);
             } else {
                 Helper.ShowSuccessDialog(Messages.Success);
-                $("#editdialog").modal("hide");
-                MyOrder.viewModel.ClearSearch();
-                MyOrder.viewModel.Search();
+                $("#createorderdialog").modal("hide");
+                MyOrder.viewModel.GotoPage();
             }
         }
     });
-}
+};
+////提交审核
+//MyOrder.viewModel.SubmitAudit = function () {
+//    var model = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
+//    model.OrderDate = $("#orderdate").val();
+//    $.ajax({
+//        type: "put",
+//        url: "/api/Order?Id=" + model.Id,
+//        contentType: "application/json",
+//        dataType: "json",
+//        data: JSON.stringify(model),
+//        success: function (result) {
+//            if (result.Error) {
+//                Helper.ShowErrorDialog(result.Message);
+//            } else {
+//                Helper.ShowSuccessDialog(Messages.Success);
+//                $("#editdialog").modal("hide");
+//                MyOrder.viewModel.ClearSearch();
+//                MyOrder.viewModel.Search();
+//            }
+//        }
+//    });
+//}
 //查看退回原因
 MyOrder.viewModel.Reason = function () {
     var model = ko.mapping.toJS(this);
@@ -215,7 +320,7 @@ MyOrder.viewModel.Reason = function () {
     });
 }
 //删除合同
-MyOrder.viewModel.DeleteOrder = function() {
+MyOrder.viewModel.DeleteOrder = function () {
     var model = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
     Helper.ShowConfirmationDialog({
         message: "是否确认删除?",
@@ -242,8 +347,8 @@ MyOrder.viewModel.DeleteOrder = function() {
 //合同详细
 MyOrder.ShowOrderDetail = function () {
     var model = ko.mapping.toJS(this);
-    $.get("/api/Order/" + model.Id, function (result) {
-        ko.mapping.fromJS(result, {}, MyOrder.viewModel.OrderModel);
+    $.get("/api/OrderDetail/GetByOrderId?id=" + model.Id, function (result) {
+        ko.mapping.fromJS(result, {}, MyOrder.viewModel.OrderModel.OrderDetailModels);
         $("#detaildialog").modal({
             show: true,
             backdrop: "static"
@@ -264,7 +369,7 @@ MyOrder.viewModel.ShowAmountDetail = function () {
 $(function () {
     ko.applyBindings(MyOrder);
     MyOrder.viewModel.Search();
-    
+
     //初始化页码
     $("#page-selection").bootpag({
         total: 1,

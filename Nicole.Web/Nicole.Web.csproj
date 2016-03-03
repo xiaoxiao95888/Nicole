@@ -247,6 +247,7 @@
     <Compile Include="Controllers\API\MyCustomerController.cs" />
     <Compile Include="Controllers\API\MyEnquiryController.cs" />
     <Compile Include="Controllers\API\OrderController.cs" />
+    <Compile Include="Controllers\API\OrderDetailController.cs" />
     <Compile Include="Controllers\API\OrderReviewController.cs" />
     <Compile Include="Controllers\API\PayPeriodController.cs" />
     <Compile Include="Controllers\API\PositionCustomerController.cs" />
@@ -314,6 +315,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LeftNavigationModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\OrderDetailModel.cs" />
     <Compile Include="Models\OrderManagerModel.cs" />
     <Compile Include="Models\OrderModel.cs" />
     <Compile Include="Models\OrderReviewModel.cs" />

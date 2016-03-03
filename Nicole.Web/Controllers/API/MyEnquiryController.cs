@@ -37,7 +37,7 @@ namespace Nicole.Web.Controllers.API
             _productService = productService;
             _customerService = customerService;
         }
-        public object Get([FromUri]EnquiryModel key, int pageIndex=1)
+        public object Get([FromUri]EnquiryModel key, int pageIndex = 1)
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentPosition =
@@ -103,24 +103,6 @@ namespace Nicole.Web.Controllers.API
                 AllPage = (result.Count() / pageSize) + (result.Count() % pageSize == 0 ? 0 : 1)
             };
             return model;
-        }
-        public object Get(Guid id)
-        {
-            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            var currentPosition =
-                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
-                    .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
-                    .Select(n => n.Position)
-                    .FirstOrDefault();
-            var subpositions = _positionService.GetPositions().Where(n => n.Parent.Id == currentPosition.Id || n.Id == currentPosition.Id).Select(p => p.Id).ToArray();
-            var result =
-                _enquiryService
-                    .GetEnquiries().FirstOrDefault(n => subpositions.Contains(n.PositionId.Value) && n.Id==id);
-           
-            _mapperFactory.GetEnquiryMapper().Create();
-
-            return Mapper.Map<Enquiry, EnquiryModel>(result);
         }
         public object Post(EnquiryModel model)
         {
@@ -207,6 +189,51 @@ namespace Nicole.Web.Controllers.API
             {
                 return Failed(ex.Message);
             }
+        }
+    }
+    public class MyEnquiryByCustomerController : BaseApiController
+    {
+        private readonly IEnquiryService _enquiryService;
+        private readonly IMapperFactory _mapperFactory;
+        private readonly IEmployeesService _employeesService;
+        private readonly IPositionService _positionService;
+
+        public MyEnquiryByCustomerController(IEnquiryService enquiryService,
+            IMapperFactory mapperFactory,
+            IEmployeesService employeesService,
+            IPositionService positionService)
+        {
+            _enquiryService = enquiryService;
+            _mapperFactory = mapperFactory;
+            _employeesService = employeesService;
+            _positionService = positionService;
+
+        }
+        /// <summary>
+        /// 根据客户Id查找报价，仅显示最新报价
+        /// </summary>
+        /// <param name="id">CustomerId</param>
+        /// <returns></returns>
+        public object Get(Guid id)
+        {
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentPosition =
+                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
+                    .EmployeePostions.Where(
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                    .Select(n => n.Position)
+                    .FirstOrDefault();
+            var subpositions = _positionService.GetPositions().Where(n => n.Parent.Id == currentPosition.Id || n.Id == currentPosition.Id).Select(p => p.Id).ToArray();
+            var result =
+                _enquiryService
+                    .GetEnquiries()
+                    .Where(n => n.CustomerId == id && subpositions.Contains(n.PositionId.Value) && n.Price!=null)
+                    .GroupBy(n => new { n.CustomerId, n.ProductId })
+                    .Select(n => n.OrderByDescending(p => p.UpdateTime).FirstOrDefault());
+
+            _mapperFactory.GetEnquiryMapper().Create();
+
+            return result.Select(Mapper.Map<Enquiry, EnquiryModel>).OrderByDescending(n=>n.ProductModel.PartNumber);
         }
     }
 }

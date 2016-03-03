@@ -12,25 +12,16 @@ namespace Nicole.Library.Models
     {
         public Guid Id { get; set; }
         public string Code { get; set; }
-        public Guid? EnquiryId { get; set; }
-        [ForeignKey("EnquiryId")]
-        public virtual Enquiry Enquiry { get; set; }
         /// <summary>
-        /// 总价
+        /// 合同金额
         /// </summary>
-        public decimal TotalPrice { get; set; }
-
+        public decimal ContractAmount { get; set; }
         /// <summary>
-        /// 单价
+        /// 合同详细
         /// </summary>
-        public decimal UnitPrice { get; set; }
-        /// <summary>
-        /// 数量
-        /// </summary>
-        public decimal Qty { get; set; }
+        public virtual ICollection<OrderDetail>  OrderDetails { get; set; }
         public virtual ICollection<OrderReview> OrderReviews { get; set; }
         public virtual ICollection<Finance> Finances { get; set; }
-
         /// <summary>
         /// 合同日期
         /// </summary>
@@ -55,6 +46,18 @@ namespace Nicole.Library.Models
         /// </summary>
         public string Remark { get; set; }
         public bool IsApproved { get; set; }
+        public Guid? PositionId { get; set; }
+        /// <summary>
+        /// 合同申请人
+        /// </summary>
+        [ForeignKey("PositionId")]
+        public virtual Position Position { get; set; }
+        public Guid? CustomerId { get; set; }
+        /// <summary>
+        /// 客户
+        /// </summary>
+        [ForeignKey("CustomerId")]
+        public virtual Customer Customer { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsDeleted { get; set; }

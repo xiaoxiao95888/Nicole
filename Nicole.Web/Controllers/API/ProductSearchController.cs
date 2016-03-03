@@ -58,26 +58,41 @@ namespace Nicole.Web.Controllers.API
             return model;
 
         }
-        public object Get(string id)
-        {
-            if (!string.IsNullOrEmpty(id))
-            {
-                var model = _productService.GetProducts().FirstOrDefault(n => n.PartNumber.Contains(id.ToLower().Trim()));
-                if (model == null)
-                {
-                    return Failed("找不到相关料号，请完善数据");
-                }
-                else
-                {
-                    //Mapper.Reset();
-                    Mapper.CreateMap<Product, ProductModel>().ForMember(n => n.Price, opt => opt.Ignore());
-                    Mapper.Map<Product, ProductModel>(model);
-                    return Mapper.Map<Product, ProductModel>(model);
-                }
-            }
-            return Failed("找不到相关料号，请完善数据");
-        }
     }
+    //public class ProductSearchByPartNumberController : BaseApiController
+    //{
+    //    private readonly IProductService _productService;
+
+    //    public ProductSearchByPartNumberController(IProductService productService)
+    //    {
+    //        _productService = productService;
+    //    }
+    //    /// <summary>
+    //    /// PartNumber
+    //    /// </summary>
+    //    /// <param name="id">PartNumber</param>
+    //    /// <returns></returns>
+    //    public object Get(string id)
+    //    {
+    //        if (!string.IsNullOrEmpty(id))
+    //        {
+    //            var model = _productService.GetProducts().FirstOrDefault(n => n.PartNumber.Contains(id.ToLower().Trim()));
+    //            if (model == null)
+    //            {
+    //                return Failed("找不到相关料号，请完善数据");
+    //            }
+    //            else
+    //            {
+    //                //Mapper.Reset();
+    //                Mapper.CreateMap<Product, ProductModel>().ForMember(n => n.Price, opt => opt.Ignore());
+    //                Mapper.Map<Product, ProductModel>(model);
+    //                return Mapper.Map<Product, ProductModel>(model);
+    //            }
+    //        }
+    //        return Failed("找不到相关料号，请完善数据");
+    //    }
+    //}
+
     public class ProductComparisonController : BaseApiController
     {
         private readonly IComparisonService _comparisonService;

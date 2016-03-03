@@ -19,6 +19,7 @@ namespace Nicole.Web.Controllers.API
         {
             _orderService = orderService;
         }
+
         /// <summary>
         /// 销账
         /// </summary>
@@ -29,7 +30,19 @@ namespace Nicole.Web.Controllers.API
             var uploadFilePath = ConfigurationManager.AppSettings["UploadFilePath"];
             var fileFullPath = uploadFilePath + id;
             var excel = new ExcelQueryFactory(fileFullPath);
-            var result = excel.Worksheet<UploadReconciliationModel>(0).ToArray();
+            var result =
+                excel.Worksheet<UploadReconciliationModel>(0)
+                    .ToArray()
+                    .GroupBy(n => new {n.OrderCode, n.PartNumber})
+                    .Select(n => new UploadReconciliationModel
+                    {
+                        PartNumber = n.Key.PartNumber,
+                        Price = n.Max(p => p.Price),
+                        Qty = n.Sum(p => p.Qty),
+                        OrderCode = n.Key.OrderCode,
+                        OrderDate = n.Max(p => p.OrderDate),
+                        State = "未销账"
+                    }).ToArray();
             var orderisd = result.Select(n => n.OrderCode).ToArray().Distinct();
             var orders =
                 _orderService.GetOrders()
@@ -38,18 +51,24 @@ namespace Nicole.Web.Controllers.API
             foreach (var item in result)
             {
                 var order = orders.FirstOrDefault(n => n.Code == item.OrderCode);
-                item.State = "未销账";
+
                 if (order != null)
                 {
                     item.OrderDate = order.OrderDate;
-                    if (string.IsNullOrEmpty(item.PartNumber) == false &&
-                        order.Enquiry.Product.PartNumber.Trim().ToUpper() == item.PartNumber.Trim().ToUpper() &&
-                        order.Qty == item.Qty)
+                    if (string.IsNullOrEmpty(item.PartNumber) == false)
                     {
-                        item.State = "已销账";
+                        var qty =
+                            order.OrderDetails.Where(
+                                n => n.Enquiry.Product.PartNumber == item.PartNumber.Trim().ToUpper()).Sum(p => p.Qty);
+                        if (qty == item.Qty)
+                        {
+                            item.State = "已销账";
+                        }
+
                     }
-                    else if(string.IsNullOrEmpty(item.PartNumber) == false &&
-                        order.Enquiry.Product.PartNumber.Trim().ToUpper() == item.PartNumber.Trim().ToUpper())
+                    else if (string.IsNullOrEmpty(item.PartNumber) == false &&
+                             order.OrderDetails.Any(
+                                 p => p.Enquiry.Product.PartNumber.Trim().ToUpper() == item.PartNumber.Trim().ToUpper()))
                     {
                         item.State = "未完全销账";
                     }
@@ -57,6 +76,7 @@ namespace Nicole.Web.Controllers.API
             }
             return result;
         }
+
         ///// <summary>
         ///// 
         ///// </summary>

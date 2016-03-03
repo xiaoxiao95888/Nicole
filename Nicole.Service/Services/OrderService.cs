@@ -42,13 +42,14 @@ namespace Nicole.Service.Services
 
         public void Insert(Order order)
         {
-            var maxnumber = 1000;
-            var allCode = GetOrderCodes();
-            if (allCode.Any())
-            {
-                maxnumber = Convert.ToInt32(allCode.OrderByDescending(n => n).FirstOrDefault()) + 1;
-            }
-            order.Code = maxnumber.ToString();
+            var date = DateTime.Now;
+            var maxnumber =
+                DbContext.Orders.Count(
+                    n => n.UpdateTime.Value.Year == date.Year && n.UpdateTime.Value.Month == date.Month &&
+                         n.UpdateTime.Value.Day == date.Day) + 1;
+            var code =
+                $"SHFL{date.ToString("yyyyMMdd")}{(maxnumber.ToString().Length == 1 ? "0" + maxnumber : maxnumber.ToString())}";
+            order.Code = code;
             DbContext.Orders.Add(order);
             Update();
         }

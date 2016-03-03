@@ -46,30 +46,19 @@ namespace Nicole.Web.Controllers.API
                         n =>
                             n.OrderReviews.OrderByDescending(p => p.CreatedTime).FirstOrDefault(p => p.IsReturn == false && p.Order.IsApproved == false && p.IsDeleted == false).SendToRoleId ==
                             currentPosition.RoleId);
-            if (key.EnquiryModel != null)
-            {
-                if (key.EnquiryModel.CustomerModel != null)
+           
+                if (key.CustomerModel != null)
                 {
                     result =
                         result.Where(
                             n =>
                                 (
-                                    key.EnquiryModel.CustomerModel.Code == null ||
-                                    n.Enquiry.Customer.Code.Contains(key.EnquiryModel.CustomerModel.Code.Trim()))
+                                    key.CustomerModel.Code == null ||
+                                    n.Customer.Code.Contains(key.CustomerModel.Code.Trim()))
                                 && (
-                                    key.EnquiryModel.CustomerModel.Name == null ||
-                                    n.Enquiry.Customer.Name.Contains(key.EnquiryModel.CustomerModel.Name.Trim())));
+                                    key.CustomerModel.Name == null ||
+                                    n.Customer.Name.Contains(key.CustomerModel.Name.Trim())));
                 }
-                if (key.EnquiryModel.ProductModel != null)
-                {
-                    result =
-                        result.Where(
-                            n =>
-                                key.EnquiryModel.ProductModel.PartNumber == null ||
-                                n.Enquiry.Product.PartNumber.Contains(
-                                    key.EnquiryModel.ProductModel.PartNumber.Trim()));
-                }
-            }
             result = result.Where(n => key.Code == null || n.Code.Contains(key.Code.Trim()));
             _mapperFactory.GetOrderMapper().Create();
             var model = new OrderManagerModel

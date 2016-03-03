@@ -55,7 +55,7 @@ MyCustomer.viewModel.PartNumbers = ko.computed({
             for (var i = 0; i < items.length; i++) {
                 if (items[i].length > 0) {
                     result.push(items[i]);
-                }   
+                }
             }
             return result;
         }
@@ -147,7 +147,7 @@ MyCustomer.viewModel.SaveEnquiry = function () {
             }
         });
     }
-    
+
 };
 //清空搜索项
 MyCustomer.viewModel.ClearSearch = function () {
@@ -157,8 +157,14 @@ MyCustomer.viewModel.ClearSearch = function () {
 };
 
 function getproduct(partNumber) {
-    $.get("/api/ProductSearch/" + partNumber, function (result) {
+    var model = {
+        PartNumber: partNumber,
+        pageIndex: 1
+    }
+    $.get("/api/ProductSearch", model, function (result) {
         if (result.Error) {
+            Helper.ShowErrorDialog(result.Message);
+        } else if (result.ProductModels.length === 0) {
             $.get("/api/ProductComparison/" + partNumber, function (data) {
                 if (data.Error) {
                     Helper.ShowErrorDialog(data.Message);
@@ -167,17 +173,22 @@ function getproduct(partNumber) {
                 }
             });
         } else {
-            MyCustomer.viewModel.ProductModels.push(result);
-        }
+            MyCustomer.viewModel.ProductModels.push(result.ProductModels[0]);
+
+        };
     });
 }
+
 //根据料号搜索
 MyCustomer.viewModel.SearchProduct = function () {
     MyCustomer.viewModel.ProductModels.removeAll();
     var partNumbers = ko.toJS(MyCustomer.viewModel.PartNumbers);
-    for (var i = 0; i < partNumbers.length; i++) {
-        getproduct(partNumbers[i]);
+    if (partNumbers != null) {
+        for (var i = 0; i < partNumbers.length; i++) {
+            getproduct(partNumbers[i]);
+        }
     }
+
 };
 //弹出编辑
 MyCustomer.viewModel.ShowEdit = function () {

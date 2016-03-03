@@ -68,6 +68,7 @@
     <Compile Include="Services\FaPiaoService.cs" />
     <Compile Include="Services\FinanceService.cs" />
     <Compile Include="Services\LeftNavigationService.cs" />
+    <Compile Include="Services\OrderDetailService.cs" />
     <Compile Include="Services\OrderReviewService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PayPeriodService.cs" />

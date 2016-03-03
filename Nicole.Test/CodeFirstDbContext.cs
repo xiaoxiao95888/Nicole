@@ -10,6 +10,7 @@ namespace Nicole.Test
 
     public class CodeFirstDbContext : DbContext, IDataContext
     {
+        public IDbSet<OrderDetail> OrderDetails { get; set; }
         public IDbSet<ProductTypeComparison> ProductTypeComparisons { get; set; }
         public IDbSet<VoltageComparison> VoltageComparisons { get; set; }
         public IDbSet<LevelComparison> LevelComparisons { get; set; }

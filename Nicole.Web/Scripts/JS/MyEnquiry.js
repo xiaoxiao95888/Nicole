@@ -125,20 +125,6 @@ MyEnquiry.viewModel.ClearSearch = function () {
     ko.mapping.fromJS(model, {}, MyEnquiry.viewModel.EnquiryModel);
 
 };
-//生成合同
-MyEnquiry.viewModel.ShowCreateOrder = function () {
-    var model = ko.mapping.toJS(this);
-    $.get("/api/MyEnquiry/" + model.Id, function (result) {
-        ko.mapping.fromJS(result, {}, MyEnquiry.viewModel.EnquiryModel);
-        $.get("/api/PayPeriod/", function (payPeriods) {
-            ko.mapping.fromJS(payPeriods, {}, MyEnquiry.viewModel.PayPeriodModels);
-            $("#createorderdialog").modal({
-                show: true,
-                backdrop: "static"
-            });
-        });
-    });
-};
 //保存合同
 MyEnquiry.viewModel.OrderSave = function () {
     var enquirymodel = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);

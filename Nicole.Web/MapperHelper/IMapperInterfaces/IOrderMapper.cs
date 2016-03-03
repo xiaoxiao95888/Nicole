@@ -8,5 +8,6 @@ namespace Nicole.Web.MapperHelper.IMapperInterfaces
 {
     public interface IOrderMapper : IMapper
     {
+        void OrderDetail();
     }
 }

@@ -23,7 +23,6 @@
             <th>特殊设计</th>
             <th>报价</th>
             <th>提交日期</th>
-            <th>操作</th>
         </tr>
     </thead>
     <tbody data-bind="foreach:viewModel.Page.EnquiryModels">
@@ -39,9 +38,6 @@
             <td data-bind="text:ProductModel.SpecificDesign"></td>
             <td data-bind="text:Price"></td>
             <td data-bind="time:UpdateTime"></td>
-            <td>
-                <a href="#" data-bind="click:MyEnquiry.viewModel.ShowCreateOrder, visible:Price()!=null">生成合同</a>
-            </td>
         </tr>
     </tbody>
 </table>

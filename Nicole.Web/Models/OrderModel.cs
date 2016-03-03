@@ -9,19 +9,13 @@ namespace Nicole.Web.Models
     {
         public Guid Id { get; set; }
         public string Code { get; set; }
-        public EnquiryModel EnquiryModel { get; set; }
+        public OrderDetailModel[] OrderDetailModels { get; set; }
+        public PositionModel PositionModel { get; set; }
         /// <summary>
-        /// 总价
+        /// 合同金额
         /// </summary>
-        public decimal TotalPrice { get; set; }
-        /// <summary>
-        /// 单价
-        /// </summary>
-        public decimal UnitPrice { get; set; }
-        /// <summary>
-        /// 数量
-        /// </summary>
-        public decimal Qty { get; set; }
+        public decimal ContractAmount { get; set; }
+        public CustomerModel CustomerModel { get; set; }
         /// <summary>
         /// 备注
         /// </summary>

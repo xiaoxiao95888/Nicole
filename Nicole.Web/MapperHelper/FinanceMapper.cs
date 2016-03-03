@@ -31,7 +31,7 @@ namespace Nicole.Web.MapperHelper
             Mapper.CreateMap<Customer, CustomerModel>();
             Mapper.CreateMap<Order, FinancePageModel>()
                 .ForMember(n => n.OrderModel, opt => opt.MapFrom(src => src))
-                .ForMember(n => n.CustomerModel, opt => opt.MapFrom(src => src.Enquiry.Customer))
+                .ForMember(n => n.CustomerModel, opt => opt.MapFrom(src => src.Customer))
                 .ForMember(n => n.RealAmount,
                     opt => opt.MapFrom(src => src.Finances.Where(p => p.IsDeleted == false).Sum(p => p.Amount)));
         }

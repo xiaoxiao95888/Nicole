@@ -60,6 +60,7 @@
     <Compile Include="Models\FaPiao.cs" />
     <Compile Include="Models\Finance.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\OrderReview.cs" />
     <Compile Include="Models\Comparison.cs" />
     <Compile Include="Models\PayPeriod.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Services\IEnquiryService.cs" />
     <Compile Include="Services\IFaPiaoService.cs" />
     <Compile Include="Services\IFinanceService.cs" />
+    <Compile Include="Services\IOrderDetailService.cs" />
     <Compile Include="Services\IOrderReviewService.cs" />
     <Compile Include="Services\IOrderService.cs" />
     <Compile Include="Services\IPayPeriodService.cs" />

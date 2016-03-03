@@ -43,10 +43,10 @@ namespace Nicole.Web.Controllers.API
                            n =>
                                (
                                    key.CustomerModel.Code == null ||
-                                   n.Enquiry.Customer.Code.Contains(key.CustomerModel.Code.Trim()))
+                                   n.Customer.Code.Contains(key.CustomerModel.Code.Trim()))
                                && (
                                    key.CustomerModel.Name == null ||
-                                   n.Enquiry.Customer.Name.Contains(key.CustomerModel.Name.Trim())));
+                                   n.Customer.Name.Contains(key.CustomerModel.Name.Trim())));
             }
             if (key.OrderModel != null)
             {
