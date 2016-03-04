@@ -258,6 +258,7 @@
     <Compile Include="Controllers\API\RoleLeftNavigationController.cs" />
     <Compile Include="Controllers\API\ProductSearchController.cs" />
     <Compile Include="Controllers\API\ProductSettingController.cs" />
+    <Compile Include="Controllers\API\SampleRecordController.cs" />
     <Compile Include="Controllers\API\SampleReviewController.cs" />
     <Compile Include="Controllers\API\SampleController.cs" />
     <Compile Include="Controllers\API\StandardCostSettingController.cs" />
@@ -396,6 +397,7 @@
     <Content Include="Scripts\JS\ReconciliationUpload.js" />
     <Content Include="Scripts\JS\SampleApply.js" />
     <Content Include="Scripts\JS\SampleAudit.js" />
+    <Content Include="Scripts\JS\SampleRecord.js" />
     <Content Include="Scripts\JS\StandardCostSetting.js" />
     <Content Include="Scripts\knockout-3.2.0.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
@@ -456,6 +458,7 @@
     <Content Include="Views\Finance\ReconciliationUpload.cshtml" />
     <Content Include="Views\Sample\SampleApply.cshtml" />
     <Content Include="Views\Sample\SampleAudit.cshtml" />
+    <Content Include="Views\Sample\SampleRecord.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

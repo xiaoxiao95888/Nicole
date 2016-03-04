@@ -138,6 +138,10 @@ namespace Nicole.Web
             bundles.Add(new ScriptBundle("~/bundles/SampleAudit").Include(
                 "~/Scripts/JS/SampleAudit.js",
                 "~/Scripts/jquery.bootpag.min.js"));
+            //SampleRecord
+            bundles.Add(new ScriptBundle("~/bundles/SampleRecord").Include(
+               "~/Scripts/JS/SampleRecord.js",
+               "~/Scripts/jquery.bootpag.min.js"));
         }
     }
 }

@@ -17,5 +17,9 @@ namespace Nicole.Web.Controllers
         {
             return View();
         }
+        public ActionResult SampleRecord()
+        {
+            return View();
+        }
     }
 }
