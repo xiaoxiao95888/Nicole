@@ -39,7 +39,7 @@ namespace Nicole.Web.MapperHelper
                         opt.MapFrom(
                             src =>
                                 src.PositionCustomers.Where(p => p.IsDeleted == false)
-                                    .Select(p => Mapper.Map<Position, PositionModel>(p.Position))));
+                                    .Select(p => p.Position)));
         }
     }
 }
