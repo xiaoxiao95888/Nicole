@@ -125,21 +125,6 @@ MyEnquiry.viewModel.ClearSearch = function () {
     ko.mapping.fromJS(model, {}, MyEnquiry.viewModel.EnquiryModel);
 
 };
-//保存合同
-MyEnquiry.viewModel.OrderSave = function () {
-    var enquirymodel = ko.mapping.toJS(MyEnquiry.viewModel.EnquiryModel);
-    var orderModel = ko.mapping.toJS(MyEnquiry.viewModel.OrderModel);
-    orderModel.EnquiryModel = enquirymodel;
-    orderModel.OrderDate = $("#orderdate").val();
-    $.post("/api/Order", orderModel, function (result) {
-        if (result.Error) {
-            Helper.ShowErrorDialog(result.Message);
-        } else {
-            Helper.ShowSuccessDialog(Messages.Success);
-            $("#createorderdialog").modal("hide");
-        }
-    });
-};
 $(function () {
     ko.applyBindings(MyEnquiry);
     MyEnquiry.viewModel.Search();

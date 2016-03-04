@@ -26,6 +26,7 @@ namespace Nicole.Library.Models
         /// <summary>
         /// 报价
         /// </summary>
+        [Column(TypeName = "MONEY")]
         public decimal? Price { get; set; }
         public Guid? CustomerId { get; set; }
         /// <summary>

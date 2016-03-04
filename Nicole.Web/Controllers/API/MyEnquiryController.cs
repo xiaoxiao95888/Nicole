@@ -43,7 +43,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             var subpositions = _positionService.GetPositions().Where(n => n.Parent.Id == currentPosition.Id || n.Id == currentPosition.Id).Select(p => p.Id).ToArray();
@@ -167,7 +167,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             if (currentPosition == null)
@@ -220,7 +220,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             var subpositions = _positionService.GetPositions().Where(n => n.Parent.Id == currentPosition.Id || n.Id == currentPosition.Id).Select(p => p.Id).ToArray();

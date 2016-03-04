@@ -35,7 +35,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
 
@@ -81,7 +81,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
 
@@ -114,7 +114,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             if (currentPosition == null)
@@ -167,7 +167,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             if (currentPosition == null)

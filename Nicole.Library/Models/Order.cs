@@ -15,6 +15,7 @@ namespace Nicole.Library.Models
         /// <summary>
         /// 合同金额
         /// </summary>
+        [Column(TypeName = "MONEY")]
         public decimal ContractAmount { get; set; }
         /// <summary>
         /// 合同详细

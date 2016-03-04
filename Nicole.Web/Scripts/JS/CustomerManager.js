@@ -47,7 +47,7 @@ ko.bindingHandlers.time = {
         var valueUnwrapped = ko.utils.unwrapObservable(value);
 
         // Date formats: http://momentjs.com/docs/#/displaying/format/
-        var pattern = allBindings.format || 'YYYY/MM/DD h:m:s';
+        var pattern = allBindings.format || "YYYY/MM/DD h:m:s";
 
         var output = "-";
         if (valueUnwrapped !== null && valueUnwrapped !== undefined && valueUnwrapped.length > 0) {
@@ -69,7 +69,7 @@ ko.bindingHandlers.date = {
         var valueUnwrapped = ko.utils.unwrapObservable(value);
 
         // Date formats: http://momentjs.com/docs/#/displaying/format/
-        var pattern = allBindings.format || 'YYYY/MM/DD';
+        var pattern = allBindings.format || "YYYY/MM/DD";
 
         var output = "-";
         if (valueUnwrapped !== null && valueUnwrapped !== undefined && valueUnwrapped.length > 0) {
@@ -86,7 +86,7 @@ ko.bindingHandlers.date = {
 //更新页码
 CustomerManager.viewModel.UpdatePagination = function () {
     var allPage = CustomerManager.viewModel.Page.AllPage() == 0 ? 1 : CustomerManager.viewModel.Page.AllPage();
-    $('#page-selection').bootpag({ total: allPage, maxVisible: 10, page: CustomerManager.viewModel.Page.CurrentPageIndex() });
+    $("#page-selection").bootpag({ total: allPage, maxVisible: 10, page: CustomerManager.viewModel.Page.CurrentPageIndex() });
 };
 //确定搜索
 CustomerManager.viewModel.Search = function () {
@@ -96,7 +96,7 @@ CustomerManager.viewModel.Search = function () {
     $.get("/api/Customer", model, function (result) {
         ko.mapping.fromJS(result, {}, CustomerManager.viewModel.Page);
         CustomerManager.viewModel.UpdatePagination();
-        $('#searchdialog').modal('hide');
+        $("#searchdialog").modal("hide");
     });
 };
 CustomerManager.viewModel.GotoPage = function () {
@@ -108,9 +108,9 @@ CustomerManager.viewModel.GotoPage = function () {
     });
 };
 CustomerManager.viewModel.ShowCreate = function () {
-    $('#createdialog').modal({
+    $("#createdialog").modal({
         show: true,
-        backdrop: 'static'
+        backdrop: "static"
     });
 };
 //确定绑定关系
@@ -125,7 +125,7 @@ CustomerManager.viewModel.AddSave = function () {
             Id: selectedCustomerModel.Id
         }
     };
-    $.post('/api/PositionCustomer/', positionCustomerModel, function (result) {
+    $.post("/api/PositionCustomer/", positionCustomerModel, function (result) {
         if (result.Error) {
             Helper.ShowErrorDialog(result.Message);
         } else {
@@ -152,9 +152,9 @@ CustomerManager.viewModel.UnfriendSave = function () {
         message: "是否确认删除?",
         confirmFunction: function () {
             $.ajax({
-                type: 'delete',
-                url: '/api/PositionCustomer/',
-                contentType: 'application/json',
+                type: "delete",
+                url: "/api/PositionCustomer/",
+                contentType: "application/json",
                 dataType: "json",
                 data: JSON.stringify(positionCustomerModel),
                 success: function (result) {
@@ -164,7 +164,7 @@ CustomerManager.viewModel.UnfriendSave = function () {
                         Helper.ShowSuccessDialog(Messages.Success);
                         CustomerManager.viewModel.ClearSearch();
                         CustomerManager.viewModel.Search();
-                        $('#positiondetaildialog').modal('hide');
+                        $("#positiondetaildialog").modal("hide");
                     }
                 }
             });
@@ -181,7 +181,7 @@ CustomerManager.viewModel.CreateSave = function () {
             Helper.ShowSuccessDialog(Messages.Success);
             CustomerManager.viewModel.ClearSearch();
             CustomerManager.viewModel.Search();
-            $('#createdialog').modal('hide');
+            $("#createdialog").modal("hide");
 
         }
     });
@@ -198,18 +198,18 @@ CustomerManager.viewModel.ShowEdit = function () {
         });
     }
     ko.mapping.fromJS(model, {}, CustomerManager.viewModel.CustomerModel);
-    $('#editdialog').modal({
+    $("#editdialog").modal({
         show: true,
-        backdrop: 'static'
+        backdrop: "static"
     });
 };
 //保存编辑
 CustomerManager.viewModel.EditSave = function () {
     var model = ko.mapping.toJS(CustomerManager.viewModel.CustomerModel);
     $.ajax({
-        type: 'put',
-        url: '/api/Customer',
-        contentType: 'application/json',
+        type: "put",
+        url: "/api/Customer",
+        contentType: "application/json",
         dataType: "json",
         data: JSON.stringify(model),
         success: function (result) {
@@ -217,7 +217,7 @@ CustomerManager.viewModel.EditSave = function () {
                 Helper.ShowErrorDialog(result.Message);
             } else {
                 Helper.ShowSuccessDialog(Messages.Success);
-                $('#editdialog').modal('hide');
+                $("#editdialog").modal("hide");
                 CustomerManager.viewModel.ClearSearch();
                 CustomerManager.viewModel.Search();
             }
@@ -232,9 +232,9 @@ CustomerManager.viewModel.Delete = function () {
         message: "是否确认删除?",
         confirmFunction: function () {
             $.ajax({
-                type: 'delete',
-                url: '/api/Customer/' + model.Id,
-                contentType: 'application/json',
+                type: "delete",
+                url: "/api/Customer/" + model.Id,
+                contentType: "application/json",
                 dataType: "json",
                 success: function (result) {
                     if (result.Error) {
@@ -258,9 +258,9 @@ CustomerManager.viewModel.ClearSearch = function () {
 //搜索
 CustomerManager.viewModel.ShowSearch = function () {
     CustomerManager.viewModel.ClearSearch();
-    $('#searchdialog').modal({
+    $("#searchdialog").modal({
         show: true,
-        backdrop: 'static'
+        backdrop: "static"
     });
 };
 //显示职位详细
@@ -269,9 +269,9 @@ CustomerManager.viewModel.ShowPositionDetail = function (customerModel, position
     var customer = ko.mapping.toJS(customerModel);
     ko.mapping.fromJS(position, {}, CustomerManager.viewModel.PositionModel);
     ko.mapping.fromJS(customer, {}, CustomerManager.viewModel.SelectedCustomerModel);
-    $('#positiondetaildialog').modal({
+    $("#positiondetaildialog").modal({
         show: true,
-        backdrop: 'static'
+        backdrop: "static"
     });
 };
 //弹出分配窗口
@@ -279,36 +279,36 @@ CustomerManager.viewModel.ShowAllocation = function () {
     var model = ko.mapping.toJS(this);
     //绑定选中的CustomerModel
     ko.mapping.fromJS(model, {}, CustomerManager.viewModel.CustomerModel);
-    $.get('/api/Position/', function (result) {
+    $.get("/api/Position/", function (result) {
         ko.mapping.fromJS(result, {}, CustomerManager.viewModel.PositionModels);
-        $('#allocationdialog').modal({
+        $("#allocationdialog").modal({
             show: true,
-            backdrop: 'static'
+            backdrop: "static"
         });
     });
 };
 $(function () {
     ko.applyBindings(CustomerManager);
-    $.get('/api/CustomerType', function (result) {
+    $.get("/api/CustomerType", function (result) {
         ko.mapping.fromJS(result, {}, CustomerManager.viewModel.CustomerTypeModels);
         CustomerManager.viewModel.Search();
     });
     //初始化页码
-    $('#page-selection').bootpag({
+    $("#page-selection").bootpag({
         total: 1,
         page: 1,
         maxVisible: 5,
         leaps: true,
         firstLastUse: true,
-        first: 'First',
-        last: 'Last',
-        wrapClass: 'pagination',
-        activeClass: 'active',
-        disabledClass: 'disabled',
-        nextClass: 'next',
-        prevClass: 'prev',
-        lastClass: 'last',
-        firstClass: 'first'
+        first: "First",
+        last: "Last",
+        wrapClass: "pagination",
+        activeClass: "active",
+        disabledClass: "disabled",
+        nextClass: "next",
+        prevClass: "prev",
+        lastClass: "last",
+        firstClass: "first"
     }).on("page", function (event, num) {
         if (num != null) {
             CustomerManager.viewModel.Page.CurrentPageIndex(num);

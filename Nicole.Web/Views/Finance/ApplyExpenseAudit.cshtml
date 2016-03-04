@@ -13,7 +13,8 @@
             <th>报销日期</th>
             <th>类别</th>
             <th>金额</th>
-            <th>报销人</th>
+            <th>报销岗位</th>
+            <th>当前人员</th>
             <th>明细</th>
             <th>是否通过</th>
             <th>操作</th>
@@ -24,7 +25,8 @@
             <td data-bind="date:Date"></td>
             <td data-bind="text:ApplyExpenseTypeModel.Name">类别</td>
             <td data-bind="text:Amount">金额</td>
-            <td data-bind="text:ConcernedPositionModel.Name">报销人</td>
+            <td data-bind="text:ConcernedPositionModel.Name">报销岗位</td>
+            <td data-bind="text:ConcernedPositionModel.CurrentEmployeeModel.Name">报销岗位</td>
             <td data-bind="text:Detail">明细</td>
             <td data-bind="text:IsApproved()?'是':'否'">是否通过</td>
             <td>

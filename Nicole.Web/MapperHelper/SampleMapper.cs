@@ -14,7 +14,7 @@ namespace Nicole.Web.MapperHelper
         public void Create()
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            
+            Mapper.CreateMap<SampleReview, SampleReviewModel>();
             Mapper.CreateMap<Employee, EmployeeModel>();
             Mapper.CreateMap<Position, PositionModel>()
                 .ForMember(n => n.ParentId, opt => opt.MapFrom(src => src.Parent.Id))
@@ -23,7 +23,7 @@ namespace Nicole.Web.MapperHelper
                         opt.MapFrom(
                             src =>
                                 Mapper.Map<Employee, EmployeeModel>(src.EmployeePostions.Where(
-                                    e => e.StartDate <= currentDate && (e.EndDate == null || e.EndDate >= currentDate))
+                                    e => e.StartDate <= currentDate && (e.EndDate == null || e.EndDate >= currentDate) && e.IsDeleted == false)
                                     .Select(p => p.Employee)
                                     .FirstOrDefault())
                             ));
@@ -44,7 +44,12 @@ namespace Nicole.Web.MapperHelper
                                         ? "被退回"
                                         : src.SampleReviews.OrderByDescending(o => o.CreatedTime)
                                             .FirstOrDefault()
-                                            .SendToRole.Name)));
+                                            .SendToRole.Name))).ForMember(n => n.CurrentSampleReview,
+                                                opt =>
+                                                    opt.MapFrom(
+                                                        src =>
+                                                            src.SampleReviews.OrderByDescending(p => p.CreatedTime)
+                                                                .FirstOrDefault()));
         }
        
     }

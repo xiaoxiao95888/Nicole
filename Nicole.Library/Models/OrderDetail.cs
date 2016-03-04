@@ -26,10 +26,12 @@ namespace Nicole.Library.Models
         /// <summary>
         /// 总价
         /// </summary>
+        [Column(TypeName = "MONEY")]
         public decimal TotalPrice { get; set; }
         /// <summary>
         /// 单价
         /// </summary>
+        [Column(TypeName = "MONEY")]
         public decimal UnitPrice { get; set; }
         /// <summary>
         /// 数量

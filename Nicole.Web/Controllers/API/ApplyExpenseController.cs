@@ -67,7 +67,7 @@ namespace Nicole.Web.Controllers.API
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentUser = HttpContext.Current.User.Identity.GetUser();
-            var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
+            var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false).Select(n => n.Position.Id).FirstOrDefault();
             if (model == null)
             {
                 return Failed("报销数据不能为空");
@@ -137,7 +137,7 @@ namespace Nicole.Web.Controllers.API
             }
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentUser = HttpContext.Current.User.Identity.GetUser();
-            var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
+            var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false).Select(n => n.Position.Id).FirstOrDefault();
             try
             {
                 item.ApplyExpenseTypeId = model.ApplyExpenseTypeModel.Id;
@@ -162,7 +162,7 @@ namespace Nicole.Web.Controllers.API
             var item = _applyExpenseService.GetApplyExpense(id);
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentUser = HttpContext.Current.User.Identity.GetUser();
-            var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
+            var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false).Select(n => n.Position.Id).FirstOrDefault();
             if (item == null)
             {
                 return Failed("找不到报销数据");

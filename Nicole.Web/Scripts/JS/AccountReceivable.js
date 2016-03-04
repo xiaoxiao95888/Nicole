@@ -113,7 +113,7 @@ AccountReceivable.viewModel.Receipt = function () {
     $(".date .form-control").val("");
     var model = ko.mapping.toJS(this);
     var financeModel = {
-        TotalPrice: model.OrderModel.TotalPrice,
+        TotalPrice: model.OrderModel.ContractAmount,
         //收款
         Amount: null,
         PayDate: null,

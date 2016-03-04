@@ -60,17 +60,7 @@ namespace Nicole.Web.Controllers.API
                         var qty =
                             order.OrderDetails.Where(
                                 n => n.Enquiry.Product.PartNumber == item.PartNumber.Trim().ToUpper()).Sum(p => p.Qty);
-                        if (qty == item.Qty)
-                        {
-                            item.State = "已销账";
-                        }
-
-                    }
-                    else if (string.IsNullOrEmpty(item.PartNumber) == false &&
-                             order.OrderDetails.Any(
-                                 p => p.Enquiry.Product.PartNumber.Trim().ToUpper() == item.PartNumber.Trim().ToUpper()))
-                    {
-                        item.State = "未完全销账";
+                        item.State = qty == item.Qty ? "已销账" : "未完全销账";
                     }
                 }
             }

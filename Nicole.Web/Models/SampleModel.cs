@@ -21,6 +21,10 @@ namespace Nicole.Web.Models
         /// 审核状态
         /// </summary>
         public string State { get; set; }
+        /// <summary>
+        /// 最新的审核记录
+        /// </summary>
+        public SampleReviewModel CurrentSampleReview { get; set; }
         public bool IsApproved { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }

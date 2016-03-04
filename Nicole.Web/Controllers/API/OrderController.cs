@@ -12,6 +12,7 @@ using Nicole.Library.Models;
 using Nicole.Web.Infrastructure;
 using Nicole.Web.MapperHelper;
 using Nicole.Web.Models;
+using WebGrease.Css.Extensions;
 
 namespace Nicole.Web.Controllers.API
 {
@@ -67,12 +68,16 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             if (currentPosition == null)
             {
                 return Failed("没有权限");
+            }
+            if (model.OrderDetailModels.Select(n => n.EnquiryModel.CustomerModel.Id).Distinct().Count() != 1)
+            {
+                return Failed("一次合同只限一个客户");
             }
             var orderdetails = new List<OrderDetail>();
             foreach (var item in model.OrderDetailModels)
@@ -158,7 +163,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             var subpositions =
@@ -200,14 +205,13 @@ namespace Nicole.Web.Controllers.API
             };
             return model;
         }
-
         public object Get(Guid id)
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             var subpositions =
@@ -222,86 +226,124 @@ namespace Nicole.Web.Controllers.API
             _mapperFactory.GetOrderMapper().Create();
             return Mapper.Map<Order, OrderModel>(result);
         }
-
         public object Put(Guid id, OrderModel model)
         {
-            return null;
-            //var item = _orderService.GetOrder(id);
-            //var enquiry = _enquiryService.GetEnquiry(model.EnquiryModel.Id);
-            //if (item == null)
-            //{
-            //    return Failed("找不到合同");
-            //}
-            //if (model.OrderDate == DateTime.MinValue)
-            //{
-            //    return Failed("不能没有合同日期");
-            //}
-            //if (model.Qty == 0)
-            //{
-            //    return Failed("合同不能没有数量");
-            //}
-            //if (model.PayPeriodModel == null)
-            //{
-            //    return Failed("请选择账期");
-            //}
-            //var payPeriod = _payPeriodService.GetPayPeriod(model.PayPeriodModel.Id);
-            //if (payPeriod == null)
-            //{
-            //    return Failed("请选择账期");
-            //}
-            //var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            //var currentPosition =
-            //    _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
-            //        .EmployeePostions.Where(
-            //            n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
-            //        .Select(n => n.Position)
-            //        .FirstOrDefault();
-            //if (currentPosition == null)
-            //{
-            //    return Failed("没有权限");
-            //}
-            //if (enquiry == null || enquiry.IsDeleted || enquiry.PositionId != currentPosition.Id || enquiry.Price == null)
-            //{
-            //    return Failed("禁止提交");
-            //}
-
-            //if (model.UnitPrice < enquiry.Price || (Math.Abs(model.UnitPrice) > Math.Abs(enquiry.Price.Value) * (decimal)1.05))
-            //{
-            //    return Failed("单价超出范围");
-            //}
-            //var parentRole =
-            //    _auditLevelService.GetAuditLevels()
-            //        .Where(n => n.RoleId == currentPosition.Role.Id)
-            //        .Select(n => n.ParentRole).FirstOrDefault();
-            //if (parentRole == null)
-            //{
-            //    return Failed("找不到上级审核人");
-            //}
-            //item.Qty = model.Qty;
-            //item.UnitPrice = model.UnitPrice;
-            //item.Remark = model.Remark;
-            //item.TotalPrice = model.Qty * model.UnitPrice;
-            //item.OrderDate = model.OrderDate;
-            //item.EstimatedDeliveryDate = model.EstimatedDeliveryDate;
-            //item.PayPeriodId = model.PayPeriodModel.Id;
-            //item.LastPayDate = model.OrderDate.AddDays(payPeriod.Days);
-            //item.OrderReviews.Add(new OrderReview
-            //{
-            //    Id = Guid.NewGuid(),
-            //    SendToRoleId = parentRole.Id
-            //});
-            //try
-            //{
-            //    _orderService.Update();
-            //    return Success();
-            //}
-            //catch (Exception ex)
-            //{
-            //    return Failed(ex.Message);
-            //}
+            var item = _orderService.GetOrder(id);
+            if (item == null)
+            {
+                return Failed("找不到合同");
+            }
+            if (model.OrderDetailModels == null || model.OrderDetailModels.Any() == false)
+            {
+                return Failed("合同没有具体料号");
+            }
+            if (model.OrderDate == DateTime.MinValue)
+            {
+                return Failed("不能没有合同日期");
+            }
+            if (model.PayPeriodModel == null)
+            {
+                return Failed("请选择账期");
+            }
+            if (model.OrderDetailModels.Select(n => n.EnquiryModel.CustomerModel.Id).Distinct().Count() != 1)
+            {
+                return Failed("一次合同只限一个客户");
+            }
+            if (model.OrderDetailModels.Any(n => n.Qty == null || n.UnitPrice == null))
+            {
+                return Failed("数量金额不得为空");
+            }
+            var payPeriod = _payPeriodService.GetPayPeriod(model.PayPeriodModel.Id);
+            if (payPeriod == null)
+            {
+                return Failed("请选择账期");
+            }
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentPosition =
+                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
+                    .EmployeePostions.Where(
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
+                    .Select(n => n.Position)
+                    .FirstOrDefault();
+            if (currentPosition == null || currentPosition.Id != item.PositionId)
+            {
+                return Failed("没有权限");
+            }
+            var parentRole =
+                _auditLevelService.GetAuditLevels()
+                    .Where(n => n.RoleId == currentPosition.Role.Id)
+                    .Select(n => n.ParentRole).FirstOrDefault();
+            if (parentRole == null)
+            {
+                return Failed("找不到上级审核人");
+            }
+            //更新Detail
+            foreach (var detail in item.OrderDetails)
+            {
+                var detailmodel = model.OrderDetailModels.FirstOrDefault(n => n.Id == detail.Id);
+                if (detailmodel != null)
+                {
+                    if (detail.Enquiry.Price == null || detailmodel.UnitPrice < detail.Enquiry.Price ||
+                    (Math.Abs(Convert.ToDecimal(detailmodel.UnitPrice)) > Math.Abs(detail.Enquiry.Price.Value) * (decimal)1.05))
+                    {
+                        return Failed("单价超出范围");
+                    }
+                    if (detailmodel.Qty != null)
+                    {
+                        detail.Qty = detailmodel.Qty.Value;
+                    }
+                    if (detailmodel.UnitPrice != null)
+                    {
+                        detail.Qty = detailmodel.UnitPrice.Value;
+                    }
+                }
+                else
+                {
+                    detail.IsDeleted = true;
+                }
+            }
+            //新增Detail
+            foreach (var detailmodel in model.OrderDetailModels)
+            {
+                var detail = item.OrderDetails.FirstOrDefault(n => n.Id == detailmodel.Id);
+                if (detail == null)
+                {
+                    item.OrderDetails.Add(new OrderDetail
+                    {
+                        EnquiryId = detailmodel.EnquiryModel.Id,
+                        Id = Guid.NewGuid(),
+                        Qty = Convert.ToDecimal(detailmodel.Qty),
+                        UnitPrice = Convert.ToDecimal(detailmodel.UnitPrice),
+                        TotalPrice = Convert.ToDecimal(detailmodel.Qty * detailmodel.UnitPrice)
+                    });
+                }
+            }
+            item.Remark = model.Remark;
+            var sum = model.OrderDetailModels.Sum(n => n.Qty * n.UnitPrice);
+            if (sum != null)
+            {
+                item.ContractAmount = sum.Value;
+            }
+            item.OrderDate = model.OrderDate;
+            item.EstimatedDeliveryDate = model.EstimatedDeliveryDate;
+            item.PayPeriodId = model.PayPeriodModel.Id;
+            item.LastPayDate = model.OrderDate.AddDays(payPeriod.Days);
+            item.OrderReviews.Add(new OrderReview
+            {
+                Id = Guid.NewGuid(),
+                SendToRoleId = parentRole.Id
+            });
+            try
+            {
+                _orderService.Update();
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                return Failed(ex.Message);
+            }
 
         }
-
         public object Delete(Guid id)
         {
             var item = _orderService.GetOrder(id);
@@ -309,7 +351,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             if (item == null)
@@ -333,6 +375,7 @@ namespace Nicole.Web.Controllers.API
                 }
             }
             item.IsDeleted = true;
+            item.OrderDetails.ForEach(n => n.IsDeleted = true);
             try
             {
                 _orderService.Update();
@@ -364,7 +407,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             var enquiry = _enquiryService.GetEnquiry(model.EnquiryModel.Id);

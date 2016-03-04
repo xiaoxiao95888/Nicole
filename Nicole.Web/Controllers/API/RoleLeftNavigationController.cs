@@ -28,7 +28,7 @@ namespace Nicole.Web.Controllers.API
             var model =
                 _roleService.GetRoles()
                     .SelectMany(n => n.LeftNavigations, (role, navigation) => new { role, navigation })
-                    .OrderBy(n => n.role.Id)
+                    .OrderBy(n => n.role.Id).ThenByDescending(n=>n.navigation.Url)
                     .ThenBy(n => n.navigation.Id).ToArray()
                     .Select(n => new RoleLeftNavigationModel
                     {

@@ -41,13 +41,13 @@ namespace Nicole.Web.Controllers.API
             _orderDetailService = orderDetailService;
         }
 
-        public object GetByOrderId(Guid id)
+        public object Get(Guid id)
         {
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             var subpositions =
@@ -58,7 +58,9 @@ namespace Nicole.Web.Controllers.API
             _mapperFactory.GetOrderMapper().OrderDetail();
             return
                 _orderDetailService.GetOrderDetails(id)
-                    .Where(n => subpositions.Contains(n.Order.PositionId.Value))
+                    .Where(n => subpositions.Contains(n.Order.PositionId.Value) || (
+                        n.Order.OrderReviews.OrderByDescending(p => p.CreatedTime)
+                            .FirstOrDefault(p => p.SendToRoleId == currentPosition.RoleId) != null))
                     .Select(Mapper.Map<OrderDetail, OrderDetailModel>);
         }
     }

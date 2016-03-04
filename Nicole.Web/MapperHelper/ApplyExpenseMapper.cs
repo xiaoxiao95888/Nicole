@@ -24,7 +24,7 @@ namespace Nicole.Web.MapperHelper
                         opt.MapFrom(
                             src =>
                                 Mapper.Map<Employee, EmployeeModel>(src.EmployeePostions.Where(
-                                    e => e.StartDate <= currentDate && (e.EndDate == null || e.EndDate >= currentDate))
+                                    e => e.StartDate <= currentDate && (e.EndDate == null || e.EndDate >= currentDate) && e.IsDeleted == false)
                                     .Select(p => p.Employee)
                                     .FirstOrDefault())
                             ));

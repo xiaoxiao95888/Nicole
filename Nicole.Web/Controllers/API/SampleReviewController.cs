@@ -19,62 +19,70 @@ namespace Nicole.Web.Controllers.API
     public class SampleReviewController : BaseApiController
     {
         private readonly ISampleService _sampleService;
+        private readonly ISampleReviewService _sampleReviewService;
         private readonly IMapperFactory _mapperFactory;
         private readonly IEmployeesService _employeesService;
         private readonly IPositionService _positionService;
         private readonly IAuditLevelService _auditLevelService;
-        public SampleReviewController(ISampleService sampleService, IMapperFactory mapperFactory, IEmployeesService employeesService, IPositionService positionService, IAuditLevelService auditLevelService)
+
+        public SampleReviewController(ISampleService sampleService, IMapperFactory mapperFactory,
+            IEmployeesService employeesService, IPositionService positionService, IAuditLevelService auditLevelService,
+            ISampleReviewService sampleReviewService)
         {
             _sampleService = sampleService;
             _mapperFactory = mapperFactory;
             _employeesService = employeesService;
             _positionService = positionService;
             _auditLevelService = auditLevelService;
+            _sampleReviewService = sampleReviewService;
         }
-        public object Post(SampleModel model)
+
+        /// <summary>
+        /// 通过审核
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public object Post(SampleReviewModel model)
         {
-            if (model == null)
+            var item = _sampleReviewService.GetSampleReview(model.Id);
+            if (item == null)
             {
-                return Failed("申请样品为空");
+                return Failed("找不到审核记录");
             }
-            if (model.CustomerModel.Id == Guid.Empty || model.ProductModel.Id == Guid.Empty || model.ProductModel.Id == Guid.Empty || model.Qty == null)
-            {
-                return Failed("客户、产品、数量必须填写完整");
-            }
+
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             if (currentPosition == null)
             {
-                return Failed("找不到Position");
+                return Failed("没有权限");
             }
-            var parentRole =
-                _auditLevelService.GetAuditLevels()
-                    .Where(n => n.RoleId == currentPosition.Role.Id)
-                    .Select(n => n.ParentRole).FirstOrDefault();
-            if (parentRole == null)
+            if (item.SendToRoleId != currentPosition.RoleId)
             {
-                return Failed("找不到上级审核人");
+                return Failed("没有权限");
             }
+
+            //var parentRole =
+            //    _auditLevelService.GetAuditLevels()
+            //        .Where(n => n.RoleId == currentPosition.Role.Id)
+            //        .Select(n => n.ParentRole).FirstOrDefault();
+            //最终审核
+            if (currentPosition.Parent == null)
+            {
+                item.Sample.IsApproved = true;
+                item.IsDeleted = true;
+            }
+            //else
+            //{
+            //    item.SendToRoleId = parentRole.Id;
+            //}
             try
             {
-                _sampleService.Insert(new Sample
-                {
-                    Id = Guid.NewGuid(),
-                    CustomerId = model.CustomerModel.Id,
-                    ProductId = model.ProductModel.Id,
-                    Qty = Convert.ToDecimal(model.Qty),
-                    PositionId = currentPosition.Id,
-                    Remark = model.Remark,
-                    SampleReviews = new List<SampleReview>
-                    {
-                        new SampleReview {Id = Guid.NewGuid(), SendToRoleId = parentRole.Id}
-                    }
-                });
+                _sampleReviewService.Update();
                 return Success();
             }
             catch (Exception ex)
@@ -89,7 +97,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             var pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
@@ -131,7 +139,45 @@ namespace Nicole.Web.Controllers.API
             };
             return model;
         }
-
+        /// <summary>
+        /// 退回样品审核
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public object Put(SampleReviewModel model)
+        {
+            var item = _sampleReviewService.GetSampleReview(model.Id);
+            if (item == null)
+            {
+                return Failed("找不到审核记录");
+            }
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var currentPosition =
+                _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
+                    .EmployeePostions.Where(
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
+                    .Select(n => n.Position)
+                    .FirstOrDefault();
+            if (currentPosition == null)
+            {
+                return Failed("没有权限");
+            }
+            if (item.SendToRoleId != currentPosition.RoleId)
+            {
+                return Failed("没有权限");
+            }
+            try
+            {
+                item.IsReturn = true;
+                item.ReturnComments = model.ReturnComments;
+                _sampleReviewService.Update();
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                return Failed(ex.Message);
+            }
+        }
 
     }
 }

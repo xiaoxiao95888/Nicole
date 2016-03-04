@@ -2,8 +2,8 @@
 <div class="row">
     <div class="col-md-12">
         <div class="navbar-form navbar-right">
-            <a class="btn btn-default" data-bind="click:SampleSettingModel.viewModel.ShowSearch">搜索</a>
-            <a class="btn btn-primary" data-bind="click:SampleSettingModel.viewModel.ShowApply">申请</a>
+            <a class="btn btn-default" data-bind="click:SampleAudit.viewModel.ShowSearch">搜索</a>
+            <a class="btn btn-primary" data-bind="click:SampleAudit.viewModel.ShowApply">申请</a>
         </div>
     </div>
 </div>
@@ -15,7 +15,8 @@
             <th>料号</th>
             <th>数量</th>
             <th>备注</th>
-            <th>申请人</th>
+            <th>申请岗位</th>
+            <th>当前人员</th>
             <th>申请时间</th>
             <th>操作</th>
         </tr>
@@ -28,10 +29,12 @@
             <td data-bind="text:Qty"></td>
             <td data-bind="text:Remark"></td>
             <td data-bind="text:PositionModel.Name"></td>
+            <td data-bind="text:PositionModel.CurrentEmployeeModel.Name"></td>
             <td data-bind="date:UpdateTime"></td>
             <td>
-                <a href="#" data-bind="click:SampleSettingModel.viewModel.Approve">通过</a>
-                <a href="#" data-bind="click:SampleSettingModel.viewModel.Return">退回</a>
+                <a href="#" data-bind="click:SampleAudit.viewModel.Edit">编辑</a>
+                <a href="#" data-bind="click:SampleAudit.viewModel.Approve">通过</a>
+                <a href="#" data-bind="click:SampleAudit.viewModel.Return">退回</a>
             </td>
         </tr>
     </tbody>
@@ -51,26 +54,26 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">客户编号</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" data-bind="value:SampleSettingModel.viewModel.SearchSampleModel.CustomerCode" />
+                            <input type="text" class="form-control" data-bind="value:SampleAudit.viewModel.SearchSampleModel.CustomerCode"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">客户名称</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" data-bind="value:SampleSettingModel.viewModel.SearchSampleModel.CustomerName" />
+                            <input type="text" class="form-control" data-bind="value:SampleAudit.viewModel.SearchSampleModel.CustomerName"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">料号</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" data-bind="value:SampleSettingModel.viewModel.SearchSampleModel.PartNumber" />
+                            <input type="text" class="form-control" data-bind="value:SampleAudit.viewModel.SearchSampleModel.PartNumber"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-8">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" data-bind="checked:SampleSettingModel.viewModel.SearchSampleModel.IsApproved"> 是否通过审核
+                                    <input type="checkbox" data-bind="checked:SampleAudit.viewModel.SearchSampleModel.IsApproved"> 是否通过审核
                                 </label>
                             </div>
                         </div>
@@ -78,7 +81,67 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bind="click:SampleSettingModel.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-primary" data-bind="click:SampleAudit.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--退回 -->
+<div class="modal fade" id="returndialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">退回样品申请</h4>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" rows="3" placeholder="留言" data-bind="value:SampleAudit.viewModel.SampleModel.CurrentSampleReview.ReturnComments"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:SampleAudit.viewModel.ReturnSave">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--编辑 -->
+<div class="modal fade" id="editdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">编辑样品申请</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">客户</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <label class="control-label" data-bind="text:SampleAudit.viewModel.SampleModel.CustomerModel.Name"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">产品</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <label class="control-label" data-bind="text:SampleAudit.viewModel.SampleModel.ProductModel.PartNumber"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">数量</label>
+                        <div class="col-sm-5">
+                            <input type="number" class="form-control" data-bind="value:SampleAudit.viewModel.SampleModel.Qty">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:SampleAudit.viewModel.EditSave">保存并审核通过</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>

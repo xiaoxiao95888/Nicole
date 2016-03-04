@@ -23,7 +23,7 @@ namespace Nicole.Web.Controllers.API
         public object Get()
         {
             Mapper.CreateMap<LeftNavigation, LeftNavigationModel>();
-            return _leftNavigationsService.GetLeftNavigations().Select(Mapper.Map<LeftNavigation, LeftNavigationModel>);
+            return _leftNavigationsService.GetLeftNavigations().OrderByDescending(n => n.Url).Select(Mapper.Map<LeftNavigation, LeftNavigationModel>);
         }
     }
 }

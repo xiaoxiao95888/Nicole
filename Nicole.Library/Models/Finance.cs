@@ -17,6 +17,7 @@ namespace Nicole.Library.Models
         /// <summary>
         /// 收款金额
         /// </summary>
+        [Column(TypeName = "MONEY")]
         public decimal Amount { get; set; }
         /// <summary>
         /// 收款日期

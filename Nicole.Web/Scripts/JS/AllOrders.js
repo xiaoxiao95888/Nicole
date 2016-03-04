@@ -12,46 +12,27 @@
             Qty: ko.observable(),
             Remark: ko.observable(),
             State: ko.observable(),
-            TotalPrice: ko.observable(),
+            ContractAmount: ko.observable(),
             OrderDate: ko.observable(),
-            EstimatedDeliveryDate: ko.observable(),
-            RealAmount: ko.observable(),
-            //是否已开发票
-            HasFaPiao: ko.observable(false),
-            PayPeriodModel: {
+            PayPeriodModel: ko.observable(),
+            PositionModel: {
                 Id: ko.observable(),
-                Name: ko.observable()
-            },
-            EnquiryModel: {
-                Id: ko.observable(),
-                Price: ko.observable(),
-                ProductModel: {
-                    PartNumber: ko.observable(),
-                    ProductType: ko.observable(),
-                    Voltage: ko.observable(),
-                    Capacity: ko.observable(),
-                    Pitch: ko.observable(),
-                    Level: ko.observable(),
-                    SpecificDesign: ko.observable()
-                },
-                PositionModel: {
+                Name: ko.observable(),
+                CurrentEmployeeModel: {
                     Id: ko.observable(),
                     Name: ko.observable(),
-                    CurrentEmployeeModel: {
-                        Id: ko.observable(),
-                        Name: ko.observable(),
-                        Mail: ko.observable(),
-                        PhoneNumber: ko.observable(),
-                        JoinDate: ko.observable()
-                    }
-                },
-                CustomerModel: {
-                    Id: ko.observable(),
-                    Code: ko.observable(),
-                    Name: ko.observable()
+                    Mail: ko.observable(),
+                    PhoneNumber: ko.observable(),
+                    JoinDate: ko.observable()
                 }
             },
-            CurrentAllOrders: {
+            CustomerModel: {
+                Id: ko.observable(),
+                Code: ko.observable(),
+                Name: ko.observable()
+            },
+            OrderDetailModels: ko.observableArray(),
+            CurrentOrderReview: {
                 Id: ko.observable(),
                 ReturnComments: ko.observable()
             }
@@ -105,20 +86,16 @@ AllOrders.viewModel.UpdatePagination = function () {
     var allPage = AllOrders.viewModel.Page.AllPage() === 0 ? 1 : AllOrders.viewModel.Page.AllPage();
     $("#page-selection").bootpag({ total: allPage, maxVisible: 10, page: AllOrders.viewModel.Page.CurrentPageIndex() });
 };
+
 AllOrders.viewModel.GotoPage = function () {
     var data = ko.mapping.toJS(AllOrders.viewModel.OrderModel);
     data.pageIndex = AllOrders.viewModel.Page.CurrentPageIndex();
     var model = {
         key: {
             Code: data.Code,
-            EnquiryModel: {
-                ProductModel: {
-                    PartNumber: data.EnquiryModel.ProductModel.PartNumber
-                },
-                CustomerModel: {
-                    Code: data.EnquiryModel.CustomerModel.Code,
-                    Name: data.EnquiryModel.CustomerModel.Name
-                }
+            CustomerModel: {
+                Code: data.CustomerModel.Code,
+                Name: data.CustomerModel.Name
             }
         }, pageIndex: data.pageIndex
     };
@@ -134,14 +111,9 @@ AllOrders.viewModel.Search = function () {
     var model = {
         key: {
             Code: data.Code,
-            EnquiryModel: {
-                ProductModel: {
-                    PartNumber: data.EnquiryModel.ProductModel.PartNumber
-                },
-                CustomerModel: {
-                    Code: data.EnquiryModel.CustomerModel.Code,
-                    Name: data.EnquiryModel.CustomerModel.Name
-                }
+            CustomerModel: {
+                Code: data.CustomerModel.Code,
+                Name: data.CustomerModel.Name
             }
         },
         pageIndex: 1
@@ -155,9 +127,9 @@ AllOrders.viewModel.Search = function () {
 //弹出搜索框
 AllOrders.viewModel.ShowSearch = function () {
     AllOrders.viewModel.ClearSearch();
-    $('#searchdialog').modal({
+    $("#searchdialog").modal({
         show: true,
-        backdrop: 'static'
+        backdrop: "static"
     });
 };
 //清空搜索项
@@ -169,11 +141,11 @@ AllOrders.viewModel.ClearSearch = function () {
 //订单详细
 AllOrders.viewModel.ShowOrderDetail = function () {
     var model = ko.mapping.toJS(this);
-    $.get('/api/Order/' + model.Id, function (result) {
-        ko.mapping.fromJS(result, {}, AllOrders.viewModel.OrderModel);
-        $('#detaildialog').modal({
+    $.get("/api/OrderDetail/" + model.Id, function (result) {
+        ko.mapping.fromJS(result, {}, AllOrders.viewModel.OrderModel.OrderDetailModels);
+        $("#detaildialog").modal({
             show: true,
-            backdrop: 'static'
+            backdrop: "static"
         });
     });
 };

@@ -24,7 +24,7 @@ namespace Nicole.Web.MapperHelper
                        opt.MapFrom(
                            src =>
                                Mapper.Map<Employee, EmployeeModel>(src.EmployeePostions.Where(
-                                   e => e.StartDate <= currentDate && (e.EndDate == null || e.EndDate >= currentDate))
+                                   e => e.StartDate <= currentDate && (e.EndDate == null || e.EndDate >= currentDate) && e.IsDeleted==false)
                                    .Select(p => p.Employee)
                                    .FirstOrDefault())
                            ));
@@ -60,11 +60,14 @@ namespace Nicole.Web.MapperHelper
 
         public void OrderDetail()
         {
+            Mapper.CreateMap<Customer, CustomerModel>();
             Mapper.CreateMap<Product, ProductModel>();
             Mapper.CreateMap<Enquiry, EnquiryModel>()
-               .ForMember(n => n.ProductModel, opt => opt.MapFrom(src => src.Product));
+                .ForMember(n => n.ProductModel, opt => opt.MapFrom(src => src.Product))
+                .ForMember(n => n.CustomerModel, opt => opt.MapFrom(src => src.Customer));
             Mapper.CreateMap<OrderDetail, OrderDetailModel>()
-                .ForMember(n => n.EnquiryModel, opt => opt.MapFrom(src => src.Enquiry));
+                .ForMember(n => n.EnquiryModel, opt => opt.MapFrom(src => src.Enquiry))
+                .ForMember(n => n.TotalPrice, opt => opt.MapFrom(src => src.Qty*src.UnitPrice));
         }
     }
 }

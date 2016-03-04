@@ -328,6 +328,7 @@
     <Compile Include="Models\ResponseModel.cs" />
     <Compile Include="Models\RoleModel.cs" />
     <Compile Include="Models\SampleModel.cs" />
+    <Compile Include="Models\SampleReviewModel.cs" />
     <Compile Include="Models\SearchModel\SearchApplyExpenseModel.cs" />
     <Compile Include="Models\SearchModel\SearchSampleModel.cs" />
     <Compile Include="Models\StandardCostModel.cs" />

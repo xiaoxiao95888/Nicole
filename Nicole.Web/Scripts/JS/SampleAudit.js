@@ -1,4 +1,4 @@
-﻿var SampleSettingModel = {
+﻿var SampleAudit = {
     viewModel: {
         Page: {
             CurrentPageIndex: ko.observable(1),
@@ -11,7 +11,11 @@
             Code: ko.observable(),
             PositionModel: {
                 Id: ko.observable(),
-                Name: ko.observable()
+                Name: ko.observable(),
+                CurrentEmployeeModel: {
+                    Name: ko.observable()
+                }
+
             },
             CustomerModel: {
                 Id: ko.observable(),
@@ -21,6 +25,10 @@
             ProductModel: {
                 Id: ko.observable(),
                 PartNumber: ko.observable()
+            },
+            CurrentSampleReview: {
+                Id: ko.observable(),
+                ReturnComments: ko.observable()
             },
             Qty: ko.observable(),
             Remark: ko.observable(),
@@ -75,41 +83,116 @@ ko.bindingHandlers.date = {
     }
 };
 
-SampleSettingModel.viewModel.UpdatePagination = function () {
-    var allPage = SampleSettingModel.viewModel.Page.AllPage() === 0 ? 1 : SampleSettingModel.viewModel.Page.AllPage();
-    $("#page-selection").bootpag({ total: allPage, maxVisible: 10, page: SampleSettingModel.viewModel.Page.CurrentPageIndex() });
+SampleAudit.viewModel.UpdatePagination = function () {
+    var allPage = SampleAudit.viewModel.Page.AllPage() === 0 ? 1 : SampleAudit.viewModel.Page.AllPage();
+    $("#page-selection").bootpag({ total: allPage, maxVisible: 10, page: SampleAudit.viewModel.Page.CurrentPageIndex() });
 };
-SampleSettingModel.viewModel.GotoPage = function () {
-    var model = ko.mapping.toJS(SampleSettingModel.viewModel.SearchSampleModel);
-    model.pageIndex = SampleSettingModel.viewModel.Page.CurrentPageIndex();
+SampleAudit.viewModel.GotoPage = function () {
+    var model = ko.mapping.toJS(SampleAudit.viewModel.SearchSampleModel);
+    model.pageIndex = SampleAudit.viewModel.Page.CurrentPageIndex();
     $.get("/api/SampleReview", model, function (result) {
-        ko.mapping.fromJS(result, {}, SampleSettingModel.viewModel.Page);
-        SampleSettingModel.viewModel.UpdatePagination();
+        ko.mapping.fromJS(result, {}, SampleAudit.viewModel.Page);
+        SampleAudit.viewModel.UpdatePagination();
     });
 };
-SampleSettingModel.viewModel.ShowSearch = function () {
+SampleAudit.viewModel.ShowSearch = function () {
     $("#searchdialog").modal({
         show: true,
         backdrop: "static"
     });
 }
+//通过审核
+SampleAudit.viewModel.Approve = function() {
+    var model = ko.mapping.toJS(this);
+    Helper.ShowConfirmationDialog({
+        message: "是否确认通过?",
+        confirmFunction: function () {
+            $.ajax({
+                type: "post",
+                url: "/api/SampleReview",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(model.CurrentSampleReview),
+                success: function (result) {
+                    if (result.Error) {
+                        Helper.ShowErrorDialog(result.Message);
+                    } else {
+                        Helper.ShowSuccessDialog(Messages.Success);
+                        SampleAudit.viewModel.GotoPage();
+                    }
+                }
+            });
+        }
+    });
+};
+//退回
+SampleAudit.viewModel.Return = function () {
+    var item = ko.mapping.toJS(this);
+    var model = {
+        key: {
+            Id: item.Id
+        }
+    }
+    $.get("/api/Sample",model, function (result) {
+        ko.mapping.fromJS(result.Models[0], {}, SampleAudit.viewModel.SampleModel);
+        $("#returndialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+    });
+}
+//确认退回
+SampleAudit.viewModel.ReturnSave = function () {
+    var model = ko.mapping.toJS(SampleAudit.viewModel.SampleModel);
+    Helper.ShowConfirmationDialog({
+        message: "是否确认退回?",
+        confirmFunction: function () {
+            $.ajax({
+                type: "put",
+                url: "/api/SampleReview",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(model.CurrentSampleReview),
+                success: function (result) {
+                    if (result.Error) {
+                        Helper.ShowErrorDialog(result.Message);
+                    } else {
+                        Helper.ShowSuccessDialog(Messages.Success);
+                        $("#returndialog").modal("hide");
+                        SampleAudit.viewModel.GotoPage();
+                    }
+                }
+            });
+        }
+    });
+}
 //确定搜索
-SampleSettingModel.viewModel.Search = function () {
-    SampleSettingModel.viewModel.Page.CurrentPageIndex(1);
-    var model = ko.mapping.toJS(SampleSettingModel.viewModel.SearchSampleModel);
+SampleAudit.viewModel.Search = function () {
+    SampleAudit.viewModel.Page.CurrentPageIndex(1);
+    var model = ko.mapping.toJS(SampleAudit.viewModel.SearchSampleModel);
     $.get("/api/SampleReview", model, function (result) {
-        ko.mapping.fromJS(result, {}, SampleSettingModel.viewModel.Page);
-        SampleSettingModel.viewModel.UpdatePagination();
+        ko.mapping.fromJS(result, {}, SampleAudit.viewModel.Page);
+        SampleAudit.viewModel.UpdatePagination();
         $("#searchdialog").modal("hide");
     });
 };
-
-//提交
-SampleSettingModel.viewModel.Submit = function () {
-    var model = ko.mapping.toJS(SampleSettingModel.viewModel.SampleModel);
+//编辑申请
+SampleAudit.viewModel.Edit = function() {
+    var model = ko.mapping.toJS(this);
+    $.get("/api/Sample/" + model.Id, function (result) {
+        ko.mapping.fromJS(result, {}, SampleAudit.viewModel.SampleModel);
+        $("#editdialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+    });
+};
+//保存编辑并审核通过
+SampleAudit.viewModel.EditSave = function () {
+    var model = ko.mapping.toJS(SampleAudit.viewModel.SampleModel);
     $.ajax({
-        type: "post",
-        url: "/api/Sample",
+        type: "put",
+        url: "/api/Sample?Id=" + model.Id,
         contentType: "application/json",
         dataType: "json",
         data: JSON.stringify(model),
@@ -118,16 +201,15 @@ SampleSettingModel.viewModel.Submit = function () {
                 Helper.ShowErrorDialog(result.Message);
             } else {
                 Helper.ShowSuccessDialog(Messages.Success);
-                $("#createdialog").modal("hide");
-                SampleSettingModel.viewModel.GotoPage();
+                $("#editdialog").modal("hide");
+                SampleAudit.viewModel.GotoPage();
             }
         }
     });
-
 };
 $(function () {
-    ko.applyBindings(SampleSettingModel);
-    SampleSettingModel.viewModel.Search();
+    ko.applyBindings(SampleAudit);
+    SampleAudit.viewModel.Search();
     //初始化页码
     $("#page-selection").bootpag({
         total: 1,
@@ -146,8 +228,8 @@ $(function () {
         firstClass: "first"
     }).on("page", function (event, num) {
         if (num != null) {
-            SampleSettingModel.viewModel.Page.CurrentPageIndex(num);
-            SampleSettingModel.viewModel.GotoPage();
+            SampleAudit.viewModel.Page.CurrentPageIndex(num);
+            SampleAudit.viewModel.GotoPage();
         }
     });
 });

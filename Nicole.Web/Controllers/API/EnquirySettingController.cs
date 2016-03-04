@@ -74,20 +74,20 @@ namespace Nicole.Web.Controllers.API
                              n.Position.EmployeePostions.Any(
                                  p =>
                                      p.Employee.Name.Contains(key.PositionModel.CurrentEmployeeModel.Name.Trim()) &&
-                                     p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate)))
+                                     p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate) && n.IsDeleted == false))
                             &&
                             (key.PositionModel.CurrentEmployeeModel.Mail == null ||
                              n.Position.EmployeePostions.Any(
                                  p =>
                                      p.Employee.Mail.Contains(key.PositionModel.CurrentEmployeeModel.Mail.Trim()) &&
-                                     p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate)))
+                                     p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate) && n.IsDeleted == false))
                             &&
                             (key.PositionModel.CurrentEmployeeModel.PhoneNumber == null ||
                              n.Position.EmployeePostions.Any(
                                  p =>
                                      p.Employee.PhoneNumber.Contains(
                                          key.PositionModel.CurrentEmployeeModel.PhoneNumber.Trim()) &&
-                                     p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate)))
+                                     p.StartDate <= currentDate && (p.EndDate == null || p.EndDate >= currentDate) && n.IsDeleted == false))
 
                         );
             }

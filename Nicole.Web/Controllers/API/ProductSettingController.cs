@@ -128,6 +128,7 @@ namespace Nicole.Web.Controllers.API
                     item.Pitch = string.IsNullOrEmpty(model.Pitch) ? model.Pitch : model.Pitch.Trim();
                     item.Voltage = string.IsNullOrEmpty(model.Voltage) ? model.Voltage : model.Voltage.Trim();
                     item.SpecificDesign = string.IsNullOrEmpty(model.SpecificDesign) ? model.SpecificDesign : model.SpecificDesign.Trim();
+                    item.Price = model.Price;
                     try
                     {
                         _productService.Update();

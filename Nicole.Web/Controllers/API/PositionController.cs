@@ -30,7 +30,7 @@ namespace Nicole.Web.Controllers.API
                         opt.MapFrom(
                             src =>
                                 src.EmployeePostions.Where(
-                                    p => p.StartDate <= currentDate && (p.EndDate >= currentDate || p.EndDate == null))
+                                    p => p.StartDate <= currentDate && (p.EndDate >= currentDate || p.EndDate == null) && p.IsDeleted == false)
                                     .Select(p => p.Employee)
                                     .FirstOrDefault()));
             var result = _positionService.GetPositions();

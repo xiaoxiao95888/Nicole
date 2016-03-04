@@ -57,6 +57,19 @@
         }
     }
 };
+MyOrder.viewModel.OrderModel.ContractAmount = ko.computed({
+    read: function () {
+        var models = ko.mapping.toJS(MyOrder.viewModel.OrderModel.OrderDetailModels);
+        if (models!=null && models.length > 0) {
+            var amount = 0;
+            for (var i = 0; i < models.length; i++) {
+                amount += models[i].TotalPrice;
+            }
+            return amount;
+        }
+        return null;
+    }
+});
 ko.bindingHandlers.date = {
     update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
         var value = valueAccessor();
@@ -202,8 +215,8 @@ MyOrder.viewModel.SaveInputQtyPrice = function() {
         } else {
             Helper.ShowSuccessDialog(Messages.Success);
             $("#inputqtypricedialog").modal("hide");
-            
-            MyOrder.viewModel.OrderModel.OrderDetailModels.push(MyOrder.viewModel.OrderDetailModel);
+            orderdetail.TotalPrice = (orderdetail.Qty * 10000 * orderdetail.UnitPrice * 10000) / 100000000;
+            MyOrder.viewModel.OrderModel.OrderDetailModels.push(orderdetail);
         }
     });
 };
@@ -249,24 +262,26 @@ MyOrder.viewModel.ClearSearch = function () {
 MyOrder.viewModel.Edit = function () {
     var model = ko.mapping.toJS(this);
     $.get("/api/Order/" + model.Id, function (result) {
-        ko.mapping.fromJS(result, {}, MyOrder.viewModel.OrderModel);
-        $.get("/api/PayPeriod/", function (payPeriodModels) {
-            ko.mapping.fromJS(payPeriodModels, {}, MyOrder.viewModel.PayPeriodModels);
-            ko.utils.arrayForEach(MyOrder.viewModel.PayPeriodModels(), function (item) {
-                if (item.Id() === model.PayPeriodModel.Id) {
-                    MyOrder.viewModel.OrderModel.PayPeriodModel(item);
-                }
-            });
-            $("#orderdate").datetimepicker({
-                locale: "zh-cn",
-                format: "YYYY年MM月DD日"
-            });
-            $("#editdialog").modal({
-                show: true,
-                backdrop: "static"
+        $.get("/api/OrderDetail/" + model.Id, function (details) {
+            result.OrderDetailModels = details;
+            ko.mapping.fromJS(result, {}, MyOrder.viewModel.OrderModel);
+            $.get("/api/PayPeriod/", function (payPeriodModels) {
+                ko.mapping.fromJS(payPeriodModels, {}, MyOrder.viewModel.PayPeriodModels);
+                ko.utils.arrayForEach(MyOrder.viewModel.PayPeriodModels(), function (item) {
+                    if (item.Id() === model.PayPeriodModel.Id) {
+                        MyOrder.viewModel.OrderModel.PayPeriodModel(item);
+                    }
+                });
+                $("#editorderdate").datetimepicker({
+                    locale: "zh-cn",
+                    format: "YYYY年MM月DD日"
+                });
+                $("#editdialog").modal({
+                    show: true,
+                    backdrop: "static"
+                });
             });
         });
-
     });
 };
 //新增提交审核
@@ -290,28 +305,27 @@ MyOrder.viewModel.SubmitSave = function() {
         }
     });
 };
-////提交审核
-//MyOrder.viewModel.SubmitAudit = function () {
-//    var model = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
-//    model.OrderDate = $("#orderdate").val();
-//    $.ajax({
-//        type: "put",
-//        url: "/api/Order?Id=" + model.Id,
-//        contentType: "application/json",
-//        dataType: "json",
-//        data: JSON.stringify(model),
-//        success: function (result) {
-//            if (result.Error) {
-//                Helper.ShowErrorDialog(result.Message);
-//            } else {
-//                Helper.ShowSuccessDialog(Messages.Success);
-//                $("#editdialog").modal("hide");
-//                MyOrder.viewModel.ClearSearch();
-//                MyOrder.viewModel.Search();
-//            }
-//        }
-//    });
-//}
+//提交审核
+MyOrder.viewModel.SubmitAudit = function () {
+    var model = ko.mapping.toJS(MyOrder.viewModel.OrderModel);
+    model.OrderDate = $("#editorderdate").val();
+    $.ajax({
+        type: "put",
+        url: "/api/Order?Id=" + model.Id,
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(model),
+        success: function (result) {
+            if (result.Error) {
+                Helper.ShowErrorDialog(result.Message);
+            } else {
+                Helper.ShowSuccessDialog(Messages.Success);
+                $("#editdialog").modal("hide");
+                MyOrder.viewModel.GotoPage();
+            }
+        }
+    });
+}
 //查看退回原因
 MyOrder.viewModel.Reason = function () {
     var model = ko.mapping.toJS(this);
@@ -347,7 +361,7 @@ MyOrder.viewModel.DeleteOrder = function () {
 //合同详细
 MyOrder.ShowOrderDetail = function () {
     var model = ko.mapping.toJS(this);
-    $.get("/api/OrderDetail/GetByOrderId?id=" + model.Id, function (result) {
+    $.get("/api/OrderDetail/" + model.Id, function (result) {
         ko.mapping.fromJS(result, {}, MyOrder.viewModel.OrderModel.OrderDetailModels);
         $("#detaildialog").modal({
             show: true,
@@ -358,7 +372,7 @@ MyOrder.ShowOrderDetail = function () {
 //收款详细
 MyOrder.viewModel.ShowAmountDetail = function () {
     var model = ko.mapping.toJS(this);
-    $.get("/api/FinanceByOrder/" + model.Id, function (result) {
+    $.get("/api/FinanceByOrder/"+ model.Id, function (result) {
         ko.mapping.fromJS(result, {}, MyOrder.viewModel.FinanceDetailModels);
         $("#amountdetaildialog").modal({
             show: true,

@@ -52,10 +52,11 @@ namespace Nicole.Web.Controllers.API
             {
                 result =
                     result.Where(
-                        n =>
-
-                            key.OrderModel.Code == null ||
-                            n.Code.Contains(key.OrderModel.Code.Trim()));
+                        n => (key.OrderModel.Id == Guid.Empty ||
+                            n.Id == key.OrderModel.Id)
+                        &&
+                            (key.OrderModel.Code == null ||
+                            n.Code.Contains(key.OrderModel.Code.Trim())));
 
             }
 
@@ -81,7 +82,7 @@ namespace Nicole.Web.Controllers.API
             _mapperFactory.GetFinanceMapper().Create();
             return Mapper.Map<Finance, FinanceModel>(result);
         }
-        
+
 
         public object Post(FinanceModel model)
         {
@@ -89,7 +90,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             if (currentPosition == null)
@@ -140,7 +141,7 @@ namespace Nicole.Web.Controllers.API
                     {
                         return Failed("发票编号必须得8位");
                     }
-                    if (fapiaonumbers.Distinct().Count()!=fapiaonumbers.Length)
+                    if (fapiaonumbers.Distinct().Count() != fapiaonumbers.Length)
                     {
                         return Failed("发票编号不得重复");
                     }
@@ -173,7 +174,7 @@ namespace Nicole.Web.Controllers.API
             var currentPosition =
                 _employeesService.GetEmployee(HttpContext.Current.User.Identity.GetUser().EmployeeId)
                     .EmployeePostions.Where(
-                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate))
+                        n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false)
                     .Select(n => n.Position)
                     .FirstOrDefault();
             if (item == null)

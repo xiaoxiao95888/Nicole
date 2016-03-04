@@ -1,6 +1,7 @@
 ﻿using Nicole.Library.Models.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,6 +42,7 @@ namespace Nicole.Library.Models
         /// <summary>
         /// 成本
         /// </summary>
+        [Column(TypeName = "MONEY")]
         public decimal? Price { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime CreatedTime { get; set; }

@@ -19,7 +19,8 @@
             //报销人
             ConcernedPositionModel: {
                 Id: ko.observable(),
-                Name: ko.observable()
+                Name: ko.observable(),
+                ConcernedPositionModel:ko.observable()
             },
             //报销明细
             Detail: ko.observable(),

@@ -2,8 +2,8 @@
 <div class="row">
     <div class="col-md-12">
         <div class="navbar-form navbar-right">
-            <a class="btn btn-default" data-bind="click:SampleSettingModel.viewModel.ShowSearch">搜索</a>
-            <a class="btn btn-primary" data-bind="click:SampleSettingModel.viewModel.ShowApply">申请</a>
+            <a class="btn btn-default" data-bind="click:SampleApply.viewModel.ShowSearch">搜索</a>
+            <a class="btn btn-primary" data-bind="click:SampleApply.viewModel.ShowApply">申请</a>
         </div>
     </div>
 </div>
@@ -18,6 +18,7 @@
             <th>申请人</th>
             <th>申请时间</th>
             <th>审核环节</th>
+            <th>操作</th>
         </tr>
     </thead>
     <tbody data-bind="foreach:viewModel.Page.Models">
@@ -30,6 +31,10 @@
             <td data-bind="text:PositionModel.Name"></td>
             <td data-bind="date:UpdateTime"></td>
             <td data-bind="text:State"></td>
+            <td>
+                <a href="#" data-bind="click:SampleApply.viewModel.Edit,visible:IsApproved()==false && CurrentSampleReview.IsReturn()">编辑</a>
+                <a href="#" data-bind="click:SampleApply.viewModel.Reason,visible:IsApproved()==false && CurrentSampleReview.IsReturn()">原因</a>
+            </td>
         </tr>
     </tbody>
 </table>
@@ -48,9 +53,9 @@
                         <label class="col-sm-2 control-label">客户名称</label>
                         <div class="col-sm-8">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="输入客户名称" data-bind="value:SampleSettingModel.viewModel.SampleModel.CustomerModel.Name">
+                                <input type="text" class="form-control" placeholder="输入客户名称" data-bind="value:SampleApply.viewModel.SampleModel.CustomerModel.Name">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" data-bind="click:SampleSettingModel.viewModel.SearchCustomer">搜索</button>
+                                    <button class="btn btn-default" type="button" data-bind="click:SampleApply.viewModel.SearchCustomer">搜索</button>
                                 </span>
                             </div>
                         </div>
@@ -59,9 +64,9 @@
                         <label class="col-sm-2 control-label">料号</label>
                         <div class="col-sm-8">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="输入料号" data-bind="value:SampleSettingModel.viewModel.SampleModel.ProductModel.PartNumber">
+                                <input type="text" class="form-control" placeholder="输入料号" data-bind="value:SampleApply.viewModel.SampleModel.ProductModel.PartNumber">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" data-bind="click:SampleSettingModel.viewModel.SearchProduct">搜索</button>
+                                    <button class="btn btn-default" type="button" data-bind="click:SampleApply.viewModel.SearchProduct">搜索</button>
                                 </span>
                             </div>
                         </div>
@@ -69,19 +74,19 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">申请数量</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" data-bind="value:SampleSettingModel.viewModel.SampleModel.Qty">
+                            <input type="number" class="form-control" data-bind="value:SampleApply.viewModel.SampleModel.Qty">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">备注</label>
                         <div class="col-sm-8">
-                            <textarea class="form-control" rows="3" data-bind="value:SampleSettingModel.viewModel.SampleModel.Remark"></textarea>
+                            <textarea class="form-control" rows="3" data-bind="value:SampleApply.viewModel.SampleModel.Remark"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bind="click:SampleSettingModel.viewModel.Submit">提交审核</button>
+                <button type="button" class="btn btn-primary" data-bind="click:SampleApply.viewModel.Submit">提交审核</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
@@ -105,13 +110,13 @@
                             <th>操作</th>
                         </tr>
                     </thead>
-                    <tbody data-bind="foreach:SampleSettingModel.viewModel.CustomerModels">
+                    <tbody data-bind="foreach:SampleApply.viewModel.CustomerModels">
                         <tr>
                             <td data-bind="text:Code"></td>
                             <td data-bind="text:Name"></td>
                             <td data-bind="text:CustomerTypeModel.Name"></td>
                             <td>
-                                <a href="#" data-bind="click:SampleSettingModel.viewModel.SelectCustomer">选择</a>
+                                <a href="#" data-bind="click:SampleApply.viewModel.SelectCustomer">选择</a>
                             </td>
                         </tr>
                     </tbody>
@@ -142,14 +147,14 @@
                         <th>操作</th>
                     </tr>
                     </thead>
-                    <tbody data-bind="foreach:SampleSettingModel.viewModel.ProductModels">
+                    <tbody data-bind="foreach:SampleApply.viewModel.ProductModels">
                     <tr>
                         <td data-bind="text:ProductType"></td>
                         <td data-bind="text:PartNumber"></td>
                         <td data-bind="text:Voltage"></td>
                         <td data-bind="text:Capacity"></td>
                         <td>
-                            <a href="#" data-bind="click:SampleSettingModel.viewModel.SelectProduct">选择</a>
+                            <a href="#" data-bind="click:SampleApply.viewModel.SelectProduct">选择</a>
                         </td>
                     </tr>
                     </tbody>
@@ -174,26 +179,26 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">客户编号</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" data-bind="value:SampleSettingModel.viewModel.SearchSampleModel.CustomerCode"/>
+                            <input type="text" class="form-control" data-bind="value:SampleApply.viewModel.SearchSampleModel.CustomerCode"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">客户名称</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" data-bind="value:SampleSettingModel.viewModel.SearchSampleModel.CustomerName"/>
+                            <input type="text" class="form-control" data-bind="value:SampleApply.viewModel.SearchSampleModel.CustomerName"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">料号</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" data-bind="value:SampleSettingModel.viewModel.SearchSampleModel.PartNumber" />
+                            <input type="text" class="form-control" data-bind="value:SampleApply.viewModel.SearchSampleModel.PartNumber"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-8">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" data-bind="checked:SampleSettingModel.viewModel.SearchSampleModel.IsApproved"> 是否通过审核
+                                    <input type="checkbox" data-bind="checked:SampleApply.viewModel.SearchSampleModel.IsApproved"> 是否通过审核
                                 </label>
                             </div>
                         </div>
@@ -201,7 +206,50 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bind="click:SampleSettingModel.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-primary" data-bind="click:SampleApply.viewModel.Search">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--编辑 -->
+<div class="modal fade" id="editdialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">编辑样品申请</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">客户</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <label class="control-label" data-bind="text:SampleApply.viewModel.SampleModel.CustomerModel.Name"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">产品</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <label class="control-label" data-bind="text:SampleApply.viewModel.SampleModel.ProductModel.PartNumber"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">数量</label>
+                        <div class="col-sm-5">
+                            <input type="number" class="form-control" data-bind="value:SampleApply.viewModel.SampleModel.Qty">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:SampleApply.viewModel.EditSave">提交审核</button>
+                <button type="button" class="btn btn-danger" data-bind="click:SampleApply.viewModel.DeleteApply">删除申请</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>

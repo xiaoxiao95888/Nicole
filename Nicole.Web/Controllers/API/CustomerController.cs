@@ -73,7 +73,7 @@ namespace Nicole.Web.Controllers.API
             }
             var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var currentUser = HttpContext.Current.User.Identity.GetUser();
-            var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
+            var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false).Select(n => n.Position.Id).FirstOrDefault();
             var item = new Customer
             {
                 Id = Guid.NewGuid(),
@@ -122,7 +122,7 @@ namespace Nicole.Web.Controllers.API
                 {
                     var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                     var currentUser = HttpContext.Current.User.Identity.GetUser();
-                    var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
+                    var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false).Select(n => n.Position.Id).FirstOrDefault();
                     item.PositionId = positionId;
                     item.Name = model.Name.Trim();
                     item.Address = string.IsNullOrEmpty(model.Address) ? null : model.Address.Trim();
@@ -150,7 +150,7 @@ namespace Nicole.Web.Controllers.API
             {
                 var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                 var currentUser = HttpContext.Current.User.Identity.GetUser();
-                var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate)).Select(n => n.Position.Id).FirstOrDefault();
+                var positionId = _employeesService.GetEmployee(currentUser.EmployeeId).EmployeePostions.Where(n => n.StartDate <= currentDate && (n.EndDate == null || n.EndDate >= currentDate) && n.IsDeleted == false).Select(n => n.Position.Id).FirstOrDefault();
                 var item = _customerService.GetCustomer(id);
                 if (item.PositionCustomers.Any())
                 {
