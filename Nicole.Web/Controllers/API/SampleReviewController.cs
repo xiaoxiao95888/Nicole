@@ -66,20 +66,20 @@ namespace Nicole.Web.Controllers.API
                 return Failed("没有权限");
             }
 
-            //var parentRole =
-            //    _auditLevelService.GetAuditLevels()
-            //        .Where(n => n.RoleId == currentPosition.Role.Id)
-            //        .Select(n => n.ParentRole).FirstOrDefault();
+            var parentRole =
+                _auditLevelService.GetAuditLevels()
+                    .Where(n => n.RoleId == currentPosition.Role.Id)
+                    .Select(n => n.ParentRole).FirstOrDefault();
             //最终审核
-            if (currentPosition.Parent == null)
+            if (parentRole == null)
             {
                 item.Sample.IsApproved = true;
                 item.IsDeleted = true;
             }
-            //else
-            //{
-            //    item.SendToRoleId = parentRole.Id;
-            //}
+            else
+            {
+                item.SendToRoleId = parentRole.Id;
+            }
             try
             {
                 _sampleReviewService.Update();
