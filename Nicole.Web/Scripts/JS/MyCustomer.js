@@ -69,7 +69,7 @@ ko.bindingHandlers.time = {
         var valueUnwrapped = ko.utils.unwrapObservable(value);
 
         // Date formats: http://momentjs.com/docs/#/displaying/format/
-        var pattern = allBindings.format || "YYYY/MM/DD h:m:s";
+        var pattern = allBindings.format || "YYYY/MM/DD H:m:s";
 
         var output = "-";
         if (valueUnwrapped !== null && valueUnwrapped !== undefined && valueUnwrapped.length > 0) {
