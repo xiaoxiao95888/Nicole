@@ -141,10 +141,6 @@ MyOrder.viewModel.ShowCreate = function () {
             locale: "zh-cn",
             format: "YYYY年MM月DD日"
         });
-        $("#editdialog").modal({
-            show: true,
-            backdrop: "static"
-        });
         MyOrder.viewModel.OrderModel.OrderDetailModels.removeAll();
         $("#createorderdialog").modal({
             show: true,

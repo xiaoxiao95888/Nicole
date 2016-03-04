@@ -62,7 +62,7 @@ namespace Nicole.Web.Controllers
                     var excel = new ExcelQueryFactory(fileFullPath);
                     model = excel.Worksheet<UploadReconciliationModel>(0).ToList();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     System.IO.File.Delete(fileFullPath);
                 }
